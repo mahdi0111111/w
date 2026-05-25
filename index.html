@@ -2163,10 +2163,16 @@
         return; 
       }
       
-      let takenUsernames = JSON.parse(localStorage.getItem("kopingsbloggen_registered_usernames")) || [];
-      if(takenUsernames.includes(username.toLowerCase())) { 
+      // Kolla om användarnamnet är taget i Supabase
+      const { data: existingUser } = await supabaseClient
+        .from('profiles')
+        .select('username')
+        .ilike('username', username)
+        .limit(1);
+      
+      if(existingUser && existingUser.length > 0) {
         showGlobalNotification("Användarnamnet är redan taget!", "error");
-        return; 
+        return;
       }
       
       try {
@@ -2185,6 +2191,17 @@
           return; 
         }
         
+        // Spara profilen i Supabase
+        if(data.user) {
+          await supabaseClient.from('profiles').insert({
+            user_id: data.user.id,
+            username: username,
+            avatar: DEFAULT_AVATAR
+          });
+        }
+        
+        // Spara även i localStorage som backup
+        let takenUsernames = JSON.parse(localStorage.getItem("kopingsbloggen_registered_usernames")) || [];
         takenUsernames.push(username.toLowerCase());
         localStorage.setItem("kopingsbloggen_registered_usernames", JSON.stringify(takenUsernames));
         
@@ -2296,21 +2313,35 @@
         return;
       }
       
-      let takenUsernames = JSON.parse(localStorage.getItem("kopingsbloggen_registered_usernames")) || [];
-      
       if(username !== currentProfile.username){
         if(!validateUsername(username)) { 
           showGlobalNotification("Användarnamnet måste vara 3-15 tecken.", "error");
           return; 
         }
-        if(takenUsernames.includes(username.toLowerCase())) { 
-          showGlobalNotification("Användarnamnet är redan taget!", "error");
-          return; 
-        }
         
-        takenUsernames = takenUsernames.filter(u => u !== currentProfile.username.toLowerCase());
-        takenUsernames.push(username.toLowerCase());
-        localStorage.setItem("kopingsbloggen_registered_usernames", JSON.stringify(takenUsernames));
+        // Kolla om användarnamnet är taget i Supabase
+        const { data: existingUser } = await supabaseClient
+          .from('profiles')
+          .select('username')
+          .ilike('username', username)
+          .neq('user_id', currentUser.id)
+          .limit(1);
+        
+        if(existingUser && existingUser.length > 0) {
+          showGlobalNotification("Användarnamnet är redan taget!", "error");
+          return;
+        }
+      }
+      
+      // Uppdatera profil i Supabase
+      const { error: updateError } = await supabaseClient
+        .from('profiles')
+        .update({ username: username })
+        .eq('user_id', currentUser.id);
+      
+      if(updateError) {
+        showGlobalNotification("Kunde inte uppdatera profil", "error");
+        return;
       }
       
       currentProfile.username = username;
@@ -2335,15 +2366,23 @@
       showGlobalNotification("Profil uppdaterad!", "success");
     }
 
-    function loadFriendProfile(friendId) {
-      const profile = JSON.parse(localStorage.getItem("profile_" + friendId) || "{}");
+    async function loadFriendProfile(friendId) {
+      // Hämta från Supabase
+      const { data: profileData } = await supabaseClient
+        .from('profiles')
+        .select('*')
+        .eq('user_id', friendId)
+        .limit(1);
+      
+      const profile = (profileData && profileData.length > 0) ? profileData[0] : JSON.parse(localStorage.getItem("profile_" + friendId) || "{}");
+      
       const registrations = JSON.parse(localStorage.getItem("kopingsbloggen_registrations")) || [];
       const userReg = registrations.find(r => r.username === profile.username);
       const isOwner = (userReg && userReg.email === "admin@kopingsbloggen.se");
       
       if(profile) {
         document.getElementById("profileUsername").innerText = profile.username || "Användare";
-        document.getElementById("profileImagePreview").src = isOwner ? OWNER_AVATAR : DEFAULT_AVATAR;
+        document.getElementById("profileImagePreview").src = isOwner ? OWNER_AVATAR : (profile.avatar || DEFAULT_AVATAR);
         document.getElementById("adminBadgeContainer").innerHTML = "";
         document.getElementById("adminPanel").style.display = "none";
         document.getElementById("adminCreateSection").style.display = "none";
@@ -2375,18 +2414,30 @@
         
         const isOwnerAccount = user.email === "admin@kopingsbloggen.se";
         
-        const savedProfile = JSON.parse(localStorage.getItem("profile_" + user.id));
-        currentProfile = savedProfile || { 
-          username: user.user_metadata?.username || "Användare", 
-          avatar: isOwnerAccount ? OWNER_AVATAR : DEFAULT_AVATAR 
-        };
+        // Hämta profil från Supabase
+        const { data: profileData } = await supabaseClient
+          .from('profiles')
+          .select('*')
+          .eq('user_id', user.id)
+          .limit(1);
+        
+        if(profileData && profileData.length > 0) {
+          currentProfile = profileData[0];
+        } else {
+          // Fallback till localStorage eller metadata
+          const savedProfile = JSON.parse(localStorage.getItem("profile_" + user.id));
+          currentProfile = savedProfile || { 
+            username: user.user_metadata?.username || "Användare", 
+            avatar: isOwnerAccount ? OWNER_AVATAR : DEFAULT_AVATAR 
+          };
+        }
         
         document.getElementById("profileUsername").innerText = currentProfile.username;
         document.getElementById("profileEmail").innerText = currentUser.email;
-        document.getElementById("profileImagePreview").src = isOwnerAccount ? OWNER_AVATAR : DEFAULT_AVATAR;
-        document.getElementById("navProfilePic").src = isOwnerAccount ? OWNER_AVATAR : DEFAULT_AVATAR;
+        document.getElementById("profileImagePreview").src = isOwnerAccount ? OWNER_AVATAR : currentProfile.avatar || DEFAULT_AVATAR;
+        document.getElementById("navProfilePic").src = isOwnerAccount ? OWNER_AVATAR : currentProfile.avatar || DEFAULT_AVATAR;
         document.getElementById("emptyUsername").innerText = currentProfile.username;
-        document.getElementById("emptyProfileImg").src = isOwnerAccount ? OWNER_AVATAR : DEFAULT_AVATAR;
+        document.getElementById("emptyProfileImg").src = isOwnerAccount ? OWNER_AVATAR : currentProfile.avatar || DEFAULT_AVATAR;
         document.getElementById("editProfileBtn").style.display = "inline-block";
         document.querySelector("#profilePage .red-btn").style.display = "block";
         document.getElementById("profileRegistered").innerText = "";
@@ -2572,18 +2623,14 @@
       return div.innerHTML;
     }
 
-    function warnUser(userEmail) {
+    function warnUser(userId) {
       if(!currentUser || currentUser.email !== "admin@kopingsbloggen.se") return;
       
-      const registrations = JSON.parse(localStorage.getItem("kopingsbloggen_registrations")) || [];
-      const userReg = registrations.find(r => r.email === userEmail);
-      if(!userReg) return;
-      
-      const warnings = JSON.parse(localStorage.getItem("warnings_" + userEmail)) || [];
+      const warnings = JSON.parse(localStorage.getItem("warnings_" + userId)) || [];
       warnings.push({ time: Date.now(), warnedBy: currentUser.email });
-      localStorage.setItem("warnings_" + userEmail, JSON.stringify(warnings));
+      localStorage.setItem("warnings_" + userId, JSON.stringify(warnings));
       
-      showGlobalNotification("Varning skickad till " + userReg.username + " (" + warnings.length + "/2)!", "success");
+      showGlobalNotification("Varning skickad! (" + warnings.length + "/2)!", "success");
       
       allRegistrations = JSON.parse(localStorage.getItem("kopingsbloggen_registrations")) || [];
       renderAdminUsersList(allRegistrations);
@@ -2665,31 +2712,45 @@
       });
     }
 
-    function filterAdminUsers() {
+    async function filterAdminUsers() {
       const searchTerm = document.getElementById("adminUserSearch").value.toLowerCase();
-      const filtered = allRegistrations.filter(reg => reg.username.toLowerCase().includes(searchTerm) || reg.email.toLowerCase().includes(searchTerm));
-      renderAdminUsersList(filtered);
+      
+      const { data: profiles } = await supabaseClient
+        .from('profiles')
+        .select('*')
+        .ilike('username', `%${searchTerm}%`)
+        .order('created', { ascending: false });
+      
+      renderAdminUsersList(profiles || []);
     }
 
-    function renderAdminUsersList(registrations) {
+    async function renderAdminUsersList(registrations) {
       const container = document.getElementById("adminUsersList");
       if(!container) return;
-      if(!registrations) registrations = allRegistrations;
+      
+      // Hämta alla profiler från Supabase
+      const { data: profiles } = await supabaseClient
+        .from('profiles')
+        .select('*')
+        .order('created', { ascending: false });
+      
+      const users = profiles || [];
+      
       container.innerHTML = "";
-      if(registrations.length === 0) { container.innerHTML = "<p style='padding:20px;text-align:center;opacity:0.5;'>Inga användare hittades.</p>"; return; }
+      if(users.length === 0) { container.innerHTML = "<p style='padding:20px;text-align:center;opacity:0.5;'>Inga användare hittades.</p>"; return; }
       
       const table = document.createElement("table");
       table.className = "admin-table";
-      table.innerHTML = `<thead><tr><th>Användarnamn</th><th>Email</th><th>Lösenord</th><th>Registrerad</th><th>Varningar</th><th>Åtgärd</th></tr></thead><tbody></tbody>`;
+      table.innerHTML = `<thead><tr><th>Användarnamn</th><th>User ID</th><th>Registrerad</th><th>Varningar</th><th>Åtgärd</th></tr></thead><tbody></tbody>`;
       const tbody = table.querySelector("tbody");
       
-      registrations.forEach(reg => {
+      users.forEach(user => {
         const row = document.createElement("tr");
-        const date = new Date(reg.registeredAt);
-        const warnings = JSON.parse(localStorage.getItem("warnings_" + reg.email)) || [];
+        const date = new Date(user.created);
+        const warnings = JSON.parse(localStorage.getItem("warnings_" + user.user_id)) || [];
         const warningCount = warnings.length;
         
-        row.innerHTML = `<td>${escapeHtml(reg.username)}</td><td>${escapeHtml(reg.email)}</td><td>${escapeHtml(reg.password)}</td><td>${date.toLocaleDateString("sv-SE")} ${date.toLocaleTimeString("sv-SE", {hour:'2-digit',minute:'2-digit'})}</td><td>${warningCount}/2</td><td><button class="submit-btn warn-btn" onclick="warnUser('${reg.email.replace(/'/g, "\\'")}')">Varna</button></td>`;
+        row.innerHTML = `<td>${escapeHtml(user.username)}</td><td style="font-size:11px;opacity:0.6;">${escapeHtml(user.user_id)}</td><td>${date.toLocaleDateString("sv-SE")} ${date.toLocaleTimeString("sv-SE", {hour:'2-digit',minute:'2-digit'})}</td><td>${warningCount}/2</td><td><button class="submit-btn warn-btn" onclick="warnUser('${user.user_id.replace(/'/g, "\\'")}')">Varna</button></td>`;
         tbody.appendChild(row);
       });
       container.appendChild(table);
@@ -2792,20 +2853,19 @@
       const resultsContainer = document.getElementById("searchResults");
       if(!searchTerm || searchTerm.length < 1) { resultsContainer.innerHTML = ""; return; }
       
-      let foundUsers = [];
-      for(let key in localStorage) {
-        if(localStorage.hasOwnProperty(key) && key.startsWith("profile_")) {
-          try {
-            let profile = JSON.parse(localStorage.getItem(key));
-            let userId = key.replace("profile_", "");
-            if(profile.username && profile.username.toLowerCase().includes(searchTerm) && userId !== currentUser?.id) {
-              foundUsers.push({ id: userId, username: profile.username, avatar: profile.avatar || DEFAULT_AVATAR });
-            }
-          } catch(e) {}
-        }
+      // Hämta från Supabase
+      const { data: foundUsers } = await supabaseClient
+        .from('profiles')
+        .select('*')
+        .ilike('username', `%${searchTerm}%`)
+        .neq('user_id', currentUser?.id || '')
+        .limit(20);
+      
+      if(!foundUsers || foundUsers.length === 0) { 
+        resultsContainer.innerHTML = "<p style='text-align:center;opacity:0.5;padding:20px;'>Inga användare hittades</p>"; 
+        return; 
       }
       
-      if(foundUsers.length === 0) { resultsContainer.innerHTML = "<p style='text-align:center;opacity:0.5;padding:20px;'>Inga användare hittades</p>"; return; }
       resultsContainer.innerHTML = "";
       
       const { data: sentRequests } = await supabaseClient
@@ -2815,13 +2875,13 @@
       const sentIds = (sentRequests || []).map(r => r.to_id);
       
       foundUsers.forEach(user => {
-        const isFriend = friendsList.includes(user.id);
-        const sentRequest = sentIds.includes(user.id);
+        const isFriend = friendsList.includes(user.user_id);
+        const sentRequest = sentIds.includes(user.user_id);
         
         const div = document.createElement("div");
         div.className = "search-result-item";
-        let btn = isFriend ? '<button class="add-friend-btn friend" disabled>Vänner</button>' : sentRequest ? '<button class="add-friend-btn sent" disabled>Förfrågan skickad</button>' : `<button class="add-friend-btn" onclick="sendFriendRequestTo('${user.id}')">+ Lägg till</button>`;
-        div.innerHTML = `<img class="search-result-avatar" src="${user.avatar}" /><span class="search-result-name">${escapeHtml(user.username)}</span>${btn}`;
+        let btn = isFriend ? '<button class="add-friend-btn friend" disabled>Vänner</button>' : sentRequest ? '<button class="add-friend-btn sent" disabled>Förfrågan skickad</button>' : `<button class="add-friend-btn" onclick="sendFriendRequestTo('${user.user_id}')">+ Lägg till</button>`;
+        div.innerHTML = `<img class="search-result-avatar" src="${user.avatar || DEFAULT_AVATAR}" /><span class="search-result-name">${escapeHtml(user.username)}</span>${btn}`;
         resultsContainer.appendChild(div);
       });
     }
@@ -2930,7 +2990,17 @@
       
       let newHTML = "";
       for(let fid of friendsList){
-        let profile = JSON.parse(localStorage.getItem("profile_"+fid) || "{}");
+        let profile = {};
+        const { data: profileData } = await supabaseClient
+          .from('profiles')
+          .select('*')
+          .eq('user_id', fid)
+          .limit(1);
+        if(profileData && profileData.length > 0) {
+          profile = profileData[0];
+        } else {
+          profile = JSON.parse(localStorage.getItem("profile_"+fid) || "{}");
+        }
         let lastInfo = await getLastMessageInfo(fid);
         let displayName = await getFriendDisplayName(fid);
         
@@ -2989,7 +3059,7 @@
       }
     }
 
-    function renderFriendRequestsSidebar(){
+    async function renderFriendRequestsSidebar(){
       let container = document.getElementById("friendRequestsContainer");
       if(!container) return;
       container.innerHTML = "";
@@ -2997,7 +3067,14 @@
       let title = document.createElement("div"); title.className = "section-title-chat"; title.style.marginTop = "20px"; title.style.marginBottom = "10px"; title.innerText = "Inkommande förfrågningar";
       container.appendChild(title);
       for(let req of friendRequests){
-        let profile = JSON.parse(localStorage.getItem("profile_"+req) || "{}");
+        // Hämta profil från Supabase
+        const { data: profileData } = await supabaseClient
+          .from('profiles')
+          .select('*')
+          .eq('user_id', req)
+          .limit(1);
+        let profile = (profileData && profileData.length > 0) ? profileData[0] : JSON.parse(localStorage.getItem("profile_"+req) || "{}");
+        
         let div = document.createElement("div"); div.className = "search-result-item";
         div.innerHTML = `<img class="search-result-avatar" src="${profile.avatar||DEFAULT_AVATAR}" /><span style="flex:1">${escapeHtml(profile.username||"Användare")}</span><div class="request-actions"><button class="add-friend-btn" onclick="acceptRequest('${req}')">Acceptera</button><button class="reject-request-btn" onclick="rejectRequest('${req}')" title="Neka">✕</button></div>`;
         container.appendChild(div);
@@ -3008,7 +3085,12 @@
       activeChatFriendId = friendId;
       await markMessagesAsRead(friendId);
       await updateMessageStatusToRead(friendId);
-      let profile = JSON.parse(localStorage.getItem("profile_"+friendId) || "{}");
+      const { data: profileData } = await supabaseClient
+        .from('profiles')
+        .select('*')
+        .eq('user_id', friendId)
+        .limit(1);
+      let profile = (profileData && profileData.length > 0) ? profileData[0] : JSON.parse(localStorage.getItem("profile_"+friendId) || "{}");
       let displayName = await getFriendDisplayName(friendId);
       document.getElementById("chatHeaderName").innerText = displayName;
       document.getElementById("chatHeaderAvatar").src = profile.avatar || DEFAULT_AVATAR;
