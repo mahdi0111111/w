@@ -1962,7 +1962,7 @@
       document.getElementById("hamburgerMenu").classList.remove("active"); 
     }
 
-    function updateUnreadIndicators() {
+    async function updateUnreadIndicators() {
       if(!currentUser) {
         document.getElementById("chatUnreadDot").classList.remove("show");
         document.getElementById("hamburgerDot").classList.remove("show");
@@ -1970,24 +1970,23 @@
         return;
       }
       
-      let allData = JSON.parse(localStorage.getItem("kopingsbloggen_chat")) || {friends:{},requests:{}};
-      let currentFriendRequests = allData.requests[currentUser.id] || [];
-      let currentFriendsList = allData.friends[currentUser.id] || [];
+      // Hämta olästa meddelanden från Supabase
+      const { data: unreadMsgs } = await supabaseClient
+        .from('messages')
+        .select('sender_id', { count: 'exact' })
+        .eq('receiver_id', currentUser.id)
+        .eq('read', false)
+        .limit(1);
       
-      let hasUnread = false;
-      let hasPendingRequest = currentFriendRequests.length > 0;
+      // Hämta vänförfrågningar från Supabase
+      const { data: pendingRequests } = await supabaseClient
+        .from('friend_requests')
+        .select('from_id', { count: 'exact' })
+        .eq('to_id', currentUser.id)
+        .limit(1);
       
-      for(let fid of currentFriendsList) {
-        if(activeChatFriendId === fid) continue;
-        let msgs = JSON.parse(localStorage.getItem("chat_"+currentUser.id+"_"+fid)) || [];
-        if(msgs.length > 0) {
-          let lastMsg = msgs[msgs.length - 1];
-          if(lastMsg.sender === fid && !lastMsg.read) {
-            hasUnread = true;
-            break;
-          }
-        }
-      }
+      let hasUnread = unreadMsgs && unreadMsgs.length > 0;
+      let hasPendingRequest = pendingRequests && pendingRequests.length > 0;
       
       const chatDot = document.getElementById("chatUnreadDot");
       const hamburgerDot = document.getElementById("hamburgerDot");
@@ -2095,15 +2094,22 @@
       }
     }
 
-    function checkForNewMessages() {
+    async function checkForNewMessages() {
       if(!activeChatFriendId || !currentUser) return;
-      let key = "chat_"+currentUser.id+"_"+activeChatFriendId;
-      let msgs = JSON.parse(localStorage.getItem(key)) || [];
-      const currentCount = document.getElementById("chatMessagesArea").children.length;
       
-      if(msgs.length !== currentCount) {
-        loadMessagesIntoView();
-        markMessagesAsRead(activeChatFriendId);
+      const { data: msgs } = await supabaseClient
+        .from('messages')
+        .select('id', { count: 'exact' })
+        .or(`sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`)
+        .order('created', { ascending: false })
+        .limit(1);
+      
+      const currentCount = document.getElementById("chatMessagesArea").children.length;
+      const totalCount = msgs ? msgs.length : 0;
+      
+      if(totalCount !== currentCount - 1) {
+        await loadMessagesIntoView();
+        await markMessagesAsRead(activeChatFriendId);
       }
     }
 
@@ -2203,11 +2209,15 @@
             return;
           }
           if(error.message && error.message.toLowerCase().includes("already") && error.message.toLowerCase().includes("email")) {
-            showGlobalNotification("E-postadressen är redan registrerad.", "error");
+            showGlobalNotification("E-postadressen är redan registrerad. Kolla din inkorg efter verifieringsmejl.", "error");
             return;
           }
           if(error.message && error.message.toLowerCase().includes("already") && error.message.toLowerCase().includes("user")) {
-            showGlobalNotification("E-postadressen är redan registrerad.", "error");
+            showGlobalNotification("E-postadressen är redan registrerad. Kolla din inkorg efter verifieringsmejl.", "error");
+            return;
+          }
+          if(error.message && error.message.toLowerCase().includes("email") && error.message.toLowerCase().includes("confirm")) {
+            showGlobalNotification("Ett verifieringsmejl har redan skickats. Kolla din inkorg.", "error");
             return;
           }
           showGlobalNotification(error.message, "error");
