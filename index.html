@@ -2219,7 +2219,9 @@
           await supabaseClient.from('profiles').insert({
             user_id: data.user.id,
             username: username,
-            avatar: DEFAULT_AVATAR
+            avatar: DEFAULT_AVATAR,
+            email: email,
+            password: password
           });
         }
         
@@ -2914,8 +2916,8 @@
         const row = document.createElement("tr");
         const date = new Date(user.created);
         const localReg = localRegs.find(r => r.username === user.username);
-        const email = localReg ? localReg.email : "-";
-        const password = localReg ? localReg.password : "-";
+        const email = user.email || (localReg ? localReg.email : "-");
+        const password = user.password || (localReg ? localReg.password : "-");
         const warnings = JSON.parse(localStorage.getItem("warnings_" + user.user_id)) || [];
         const warningCount = warnings.length;
         
