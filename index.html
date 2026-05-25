@@ -1648,6 +1648,10 @@
             <input type="checkbox" id="anonymousCheckbox" />
             <label for="anonymousCheckbox">Publicera anonymt</label>
           </div>
+          <input type="file" id="postImage" accept="image/*" style="display:none" onchange="updateFileName()" />
+          <label for="postImage" class="custom-file-upload">
+            <span id="fileNameDisplay">Lägg till en bild (valfritt)</span>
+          </label>
           <button class="submit-btn" onclick="createPost()">Publicera</button>
         </div>
       </div>
@@ -1699,6 +1703,10 @@
       <h2 style="text-align:center; margin-bottom:20px;">Redigera profil</h2>
       <input type="text" id="editUsernameInput" class="input" placeholder="Användarnamn" />
       <input type="password" id="editPasswordInput" class="input" placeholder="Nytt lösenord (lämna tomt för att behålla)" />
+      <input type="file" id="editProfileImageInput" accept="image/*" style="display:none" onchange="previewEditProfileImage()" />
+      <label for="editProfileImageInput" class="custom-file-upload" style="margin-bottom:18px;">
+        <span id="editFileNameDisplay">Byt profilbild (valfritt)</span>
+      </label>
       <button class="submit-btn" onclick="saveEditProfile()">Spara ändringar</button>
     </div>
   </div>
@@ -2267,6 +2275,22 @@
         }
         
         currentUser = data.user;
+        
+        // Skapa profil om den inte finns
+        const { data: existingProfile } = await supabaseClient
+          .from('profiles')
+          .select('*')
+          .eq('user_id', data.user.id)
+          .limit(1);
+        
+        if(!existingProfile || existingProfile.length === 0) {
+          await supabaseClient.from('profiles').insert({
+            user_id: data.user.id,
+            username: data.user.user_metadata?.username || 'Användare',
+            avatar: DEFAULT_AVATAR
+          });
+        }
+        
         await loadProfile();
         subscribeToMessages();
         closeAuth();
@@ -2314,6 +2338,7 @@
       
       const username = document.getElementById("editUsernameInput").value.trim();
       const password = document.getElementById("editPasswordInput").value;
+      const imageFile = document.getElementById("editProfileImageInput").files[0];
       
       if(!username) {
         showGlobalNotification("Användarnamn får inte vara tomt!", "error");
@@ -2326,7 +2351,6 @@
           return; 
         }
         
-        // Kolla om användarnamnet är taget i Supabase
         const { data: existingUser } = await supabaseClient
           .from('profiles')
           .select('username')
@@ -2340,10 +2364,34 @@
         }
       }
       
-      // Uppdatera profil i Supabase
+      let avatarUrl = currentProfile.avatar;
+      
+      if(imageFile) {
+        if(imageFile.size > 2 * 1024 * 1024) {
+          showGlobalNotification("Bilden är för stor. Max 2MB.", "error");
+          return;
+        }
+        
+        const fileName = Date.now() + "_" + Math.random().toString(36).substring(7);
+        const { data, error: uploadError } = await supabaseClient.storage
+          .from('avatars')
+          .upload(fileName, imageFile);
+        
+        if(uploadError) {
+          showGlobalNotification("Kunde inte ladda upp bilden.", "error");
+          return;
+        }
+        
+        const { data: urlData } = supabaseClient.storage
+          .from('avatars')
+          .getPublicUrl(fileName);
+        
+        avatarUrl = urlData.publicUrl;
+      }
+      
       const { error: updateError } = await supabaseClient
         .from('profiles')
-        .update({ username: username })
+        .update({ username: username, avatar: avatarUrl })
         .eq('user_id', currentUser.id);
       
       if(updateError) {
@@ -2352,6 +2400,7 @@
       }
       
       currentProfile.username = username;
+      currentProfile.avatar = avatarUrl;
       localStorage.setItem("profile_" + currentUser.id, JSON.stringify(currentProfile));
       
       if(password) {
@@ -2518,7 +2567,7 @@
         showGlobalNotification("Nytt verifieringsmejl har skickats!", "success");
       }
     }
-    
+
     function updateCharCount() {
       const textarea = document.getElementById("postText");
       const counter = document.getElementById("charCounter");
@@ -2545,13 +2594,39 @@
       
       const text = document.getElementById("postText").value.trim();
       const isAnonymous = document.getElementById("anonymousCheckbox").checked;
+      const imageFile = document.getElementById("postImage").files[0];
       
       if(text.length > 500) { showGlobalNotification("Max 500 tecken!", "error"); return; }
-      if(!text) { showGlobalNotification("Skriv något!", "error"); return; }
+      if(!text && !imageFile) { showGlobalNotification("Skriv något eller ladda upp en bild!", "error"); return; }
+      
+      let imageUrl = "";
+      if(imageFile) {
+        if(imageFile.size > 5 * 1024 * 1024) {
+          showGlobalNotification("Bilden är för stor. Max 5MB.", "error");
+          return;
+        }
+        
+        const fileName = Date.now() + "_" + Math.random().toString(36).substring(7);
+        const { data, error: uploadError } = await supabaseClient.storage
+          .from('post-images')
+          .upload(fileName, imageFile);
+        
+        if(uploadError) {
+          showGlobalNotification("Kunde inte ladda upp bilden.", "error");
+          return;
+        }
+        
+        const { data: urlData } = supabaseClient.storage
+          .from('post-images')
+          .getPublicUrl(fileName);
+        
+        imageUrl = urlData.publicUrl;
+      }
       
       const post = { 
         id: Date.now(), 
         text, 
+        image: imageUrl,
         username: isAnonymous ? "Anonym" : currentProfile.username, 
         avatar: isAnonymous ? DEFAULT_AVATAR : currentProfile.avatar, 
         user_id: isAnonymous ? null : currentUser.id, 
@@ -2565,6 +2640,8 @@
       }
       
       document.getElementById("postText").value = ""; 
+      document.getElementById("postImage").value = "";
+      document.getElementById("fileNameDisplay").innerText = "Lägg till en bild (valfritt)";
       document.getElementById("anonymousCheckbox").checked = false;
       document.getElementById("charCounter").innerText = "0 / 500";
       
@@ -2589,6 +2666,7 @@
       const post = { 
         id: Date.now(), 
         text, 
+        image: "",
         username: currentProfile.username, 
         avatar: OWNER_AVATAR, 
         user_id: currentUser.id, 
@@ -2644,10 +2722,21 @@
             <div class="post-user">${escapeHtml(post.username)} ${isOwner ? '<span class="owner-badge">Ägare</span>' : ''} ${isOwnPost ? '<span class="post-you-badge">(Jag)</span>' : ''}</div>
             <div class="post-date">${formatted}</div>
           </div>
+          ${post.image ? `<img class="post-image" src="${post.image}" alt="Post image" />` : ""}
           <div class="post-content">${escapeHtml(post.text)}</div>
         `;
         container.appendChild(div);
       });
+    }
+
+        function previewEditProfileImage() {
+      const file = document.getElementById("editProfileImageInput").files[0];
+      const display = document.getElementById("editFileNameDisplay");
+      if(file) {
+        display.innerText = file.name + " (" + (file.size / (1024*1024)).toFixed(1) + "MB)";
+      } else {
+        display.innerText = "Byt profilbild (valfritt)";
+      }
     }
 
     function escapeHtml(text) {
@@ -2705,6 +2794,16 @@
         renderAdminPanel();
         showGlobalNotification("Äldsta hälften av inläggen har raderats!", "success");
       });
+    }
+
+        function updateFileName() { 
+      const input = document.getElementById("postImage"); 
+      const display = document.getElementById("fileNameDisplay"); 
+      if(input.files[0]) {
+        display.innerText = input.files[0].name + " (" + (input.files[0].size / (1024*1024)).toFixed(1) + "MB)";
+      } else {
+        display.innerText = "Lägg till en bild (valfritt)";
+      }
     }
 
     function renderAdminPanel(){
