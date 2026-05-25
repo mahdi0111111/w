@@ -97,14 +97,15 @@
 
     .nav-btn .unread-dot {
       position: absolute;
-      top: 2px;
-      right: 6px;
-      width: 8px;
-      height: 8px;
+      top: -3px;
+      right: -3px;
+      width: 10px;
+      height: 10px;
       background: #ff3d3d;
       border-radius: 50%;
       display: none;
-      border: 1px solid rgba(0,0,0,0.5);
+      border: 2px solid rgba(0,0,0,0.8);
+      box-shadow: 0 0 4px rgba(255,0,0,0.3);
     }
 
     .nav-btn .unread-dot.show {
@@ -154,14 +155,15 @@
     }
     .hamburger-dot {
       position: absolute;
-      top: -5px;
-      right: -5px;
+      top: -6px;
+      right: -8px;
       width: 12px;
       height: 12px;
       background: #ff3d3d;
       border-radius: 50%;
       display: none;
       border: 2px solid rgba(0,0,0,0.8);
+      box-shadow: 0 0 4px rgba(255,0,0,0.3);
     }
     .hamburger-dot.show {
       display: block;
@@ -1140,8 +1142,8 @@
     }
     .friend-item .unread-dot {
       position: absolute;
-      top: 8px;
-      left: 8px;
+      top: 6px;
+      left: 6px;
       width: 10px;
       height: 10px;
       background: #ff3d3d;
@@ -1149,6 +1151,7 @@
       display: none;
       border: 2px solid rgba(0,0,0,0.8);
       z-index: 5;
+      box-shadow: 0 0 4px rgba(255,0,0,0.3);
     }
     .friend-item .unread-dot.show {
       display: block;
@@ -1405,6 +1408,50 @@
     }
     .mobile-back-btn:hover {
       background: rgba(255,255,255,0.1);
+    }
+
+        .attach-btn {
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.06);
+      border: 2px solid rgba(255,255,255,0.15);
+      border-radius: 50%;
+      color: rgba(255,255,255,0.7);
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    .attach-btn:hover {
+      background: rgba(255,255,255,0.15);
+      border-color: rgba(255,255,255,0.4);
+      color: white;
+    }
+
+    .custom-file-upload {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.04);
+      border: 2px dashed rgba(255,255,255,0.15);
+      border-radius: 14px;
+      cursor: pointer;
+      margin-bottom: 18px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+    }
+    .custom-file-upload:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.35);
+      color: rgba(255,255,255,0.9);
     }
 
     @media(max-width:768px){
@@ -2082,7 +2129,10 @@
         if(activeChatFriendId) {
           checkForNewMessages();
         }
-        loadChatData();
+        // Uppdatera inte om popup är öppen
+        if(document.getElementById("friendsPopupOverlay").style.display !== "flex") {
+          loadChatData();
+        }
         updateUnreadIndicators();
       }, 100);
     }
@@ -2405,8 +2455,10 @@
           .from('avatars')
           .upload(fileName, imageFile);
         
+        console.log("Upload error:", uploadError);
+        
         if(uploadError) {
-          showGlobalNotification("Kunde inte ladda upp bilden.", "error");
+          showGlobalNotification("Kunde inte ladda upp bilden: " + uploadError.message, "error");
           return;
         }
         
@@ -2720,14 +2772,12 @@
       }, 300);
     }
 
-    async function loadPosts(){
+        async function loadPosts(){
       const { data: supabasePosts, error } = await supabaseClient
         .from('posts')
         .select('*')
         .order('created', { ascending: false })
         .limit(MAX_POSTS);
-      
-      console.log("Inlägg från Supabase:", supabasePosts);
       
       const posts = supabasePosts || [];
       
@@ -2739,11 +2789,13 @@
         return;
       }
       
-      posts.forEach(post => {
+      for(let post of posts) {
         const date = new Date(post.created);
         const formatted = `${date.getMonth()+1}/${date.getDate()}/${date.getFullYear().toString().slice(-2)} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
         const isOwner = (post.avatar === OWNER_AVATAR);
         const isOwnPost = currentUser && (post.user_id === currentUser.id);
+        const likeCount = await getLikeCount(post.id);
+        const liked = await hasUserLiked(post.id);
         
         const div = document.createElement("div");
         div.className = "post" + (isOwner ? " owner-post" : "");
@@ -2755,9 +2807,14 @@
           </div>
           ${post.image ? `<img class="post-image" src="${post.image}" alt="Post image" />` : ""}
           <div class="post-content">${escapeHtml(post.text)}</div>
+          <div style="padding:0 20px 15px; display:flex; align-items:center; gap:8px;">
+            <button onclick="toggleLike(${post.id})" style="background:${liked ? '#ff3d3d' : 'transparent'}; border:2px solid ${liked ? '#ff3d3d' : 'rgba(255,255,255,0.3)'}; color:white; padding:5px 14px; border-radius:20px; cursor:pointer; font-size:13px;">
+              ♥ <span id="like-count-${post.id}">${likeCount}</span>
+            </button>
+          </div>
         `;
         container.appendChild(div);
-      });
+      }
     }
 
         function previewEditProfileImage() {
@@ -3057,17 +3114,16 @@
       document.getElementById("onlineCount").innerText = (hour >= 0 && hour < 7) ? Math.floor(Math.random()*4) : Math.floor(Math.random()*8)+3;
     }
 
-    function toggleFriendsPopup(){
+    async function toggleFriendsPopup(){
       const overlay = document.getElementById("friendsPopupOverlay");
       if(overlay.style.display === "flex") {
         overlay.style.display = "none";
-        document.getElementById("addFriendDot").classList.remove("show");
       } else {
         overlay.style.display = "flex";
         document.getElementById("searchUsername").value = "";
         document.getElementById("searchResults").innerHTML = "";
         document.getElementById("addFriendDot").classList.remove("show");
-        loadChatData();
+        await loadChatData();
       }
     }
 
@@ -3592,6 +3648,47 @@
           }
         )
         .subscribe();
+    }
+
+        async function toggleLike(postId) {
+      if(!currentUser) { openAuth(); return; }
+      
+      // Kolla om redan gillad
+      const { data: existing } = await supabaseClient
+        .from('likes')
+        .select('*')
+        .eq('post_id', postId)
+        .eq('user_id', currentUser.id)
+        .limit(1);
+      
+      if(existing && existing.length > 0) {
+        // Ta bort like
+        await supabaseClient.from('likes').delete().eq('post_id', postId).eq('user_id', currentUser.id);
+      } else {
+        // Lägg till like
+        await supabaseClient.from('likes').insert({ post_id: postId, user_id: currentUser.id });
+      }
+      
+      await loadPosts();
+    }
+    
+    async function getLikeCount(postId) {
+      const { count } = await supabaseClient
+        .from('likes')
+        .select('*', { count: 'exact', head: true })
+        .eq('post_id', postId);
+      return count || 0;
+    }
+    
+    async function hasUserLiked(postId) {
+      if(!currentUser) return false;
+      const { data } = await supabaseClient
+        .from('likes')
+        .select('*')
+        .eq('post_id', postId)
+        .eq('user_id', currentUser.id)
+        .limit(1);
+      return data && data.length > 0;
     }
 
     async function init(){
