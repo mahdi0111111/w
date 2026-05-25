@@ -2858,16 +2858,7 @@
         admin.appendChild(card);
       }
     }
-        
-        card.innerHTML = `
-          <div class="post-top"><img class="profile-pic" src="${post.avatar || DEFAULT_AVATAR}" alt="Profile" /><div class="post-user">${userInfoHTML}</div></div>
-          ${post.image ? `<img src="${post.image}" style="max-width:200px; border-radius:12px; margin:10px 0;" alt="Post image" />` : ''}
-          <div class="post-content">${escapeHtml(post.text)}</div>
-          <button class="delete-btn" onclick="deletePost(${post.id})">Radera Inlägg</button>
-        `;
-        admin.appendChild(card);
-      
-    
+
 
     async function deletePost(id){
       showConfirmPopup("Radera inlägg", "Är du säker på att du vill radera detta inlägg?", async () => {
