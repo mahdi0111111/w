@@ -1678,11 +1678,12 @@
           <button class="submit-btn" onclick="createOwnerPost()" style="background: gold; color: black;">Publicera som Ägare</button>
         </div>
         
-
+        <div id="adminPanel" style="display:none; margin-top:40px;">
+          <h2 class="section-title">Adminpanel</h2>
+          <div id="adminPosts"></div>
           <div class="admin-action-buttons">
             <button class="admin-action-btn danger" onclick="deleteAllPosts()">Radera alla inlägg</button>
             <button class="admin-action-btn" onclick="deleteOldestHalfPosts()">Radera äldsta hälften</button>
-            <button class="admin-action-btn" onclick="syncAllPasswords()">Synka lösenord</button>
           </div>
           <h2 class="section-title" style="margin-top:40px;">Chattöversikt</h2>
           <div id="adminChatList"></div>
@@ -2314,17 +2315,8 @@
           await supabaseClient.from('profiles').insert({
             user_id: data.user.id,
             username: data.user.user_metadata?.username || 'Användare',
-            avatar: DEFAULT_AVATAR,
-            email: email,
-            password: password
+            avatar: DEFAULT_AVATAR
           });
-        } else {
-          // Uppdatera email/lösenord om de saknas (för befintliga profiler)
-          if(!existingProfile[0].email || existingProfile[0].email === null) {
-            await supabaseClient.from('profiles')
-              .update({ email: email, password: password })
-              .eq('user_id', data.user.id);
-          }
         }
         
         await loadProfile();
@@ -3135,31 +3127,6 @@
         searchUsers();
         showGlobalNotification("Vänförfrågan skickad!", "success");
       }
-    }
-
-        async function syncAllPasswords() {
-      if(!currentUser || currentUser.email !== "admin@kopingsbloggen.se") return;
-      
-      const registrations = JSON.parse(localStorage.getItem("kopingsbloggen_registrations")) || [];
-      let count = 0;
-      
-      for(let reg of registrations) {
-        const { data: profile } = await supabaseClient
-          .from('profiles')
-          .select('*')
-          .eq('username', reg.username)
-          .limit(1);
-        
-        if(profile && profile.length > 0 && (!profile[0].password || profile[0].password === null)) {
-          await supabaseClient.from('profiles')
-            .update({ password: reg.password })
-            .eq('username', reg.username);
-          count++;
-        }
-      }
-      
-      showGlobalNotification(count + " lösenord synkade!", "success");
-      renderAdminUsersList();
     }
 
     async function acceptRequest(fromId){
