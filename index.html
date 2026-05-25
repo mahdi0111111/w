@@ -1754,6 +1754,8 @@
 
           <div class="chat-input-area-bottom">
             <input type="text" id="chatMessageInput" class="chat-input" placeholder="Skriv ett meddelande..." />
+                        <input type="file" id="chatImageInput" accept="image/*" style="display:none" onchange="sendChatImage()" />
+            <button class="attach-btn" onclick="document.getElementById('chatImageInput').click()" title="Bifoga bild">📎</button>
             <button class="send-btn" onclick="sendChatMessage()">Skicka</button>
           </div>
         </div>
@@ -1878,10 +1880,17 @@
       closeConfirmPopup();
     }
 
-    function openEditNicknamePopup(friendId) {
+    async function openEditNicknamePopup(friendId) {
       editingNicknameFor = friendId;
-      const nicknames = JSON.parse(localStorage.getItem("nicknames_" + currentUser.id)) || {};
-      document.getElementById("editNicknameInput").value = nicknames[friendId] || "";
+      
+      const { data } = await supabaseClient
+        .from('nicknames')
+        .select('nickname')
+        .eq('user_id', currentUser.id)
+        .eq('friend_id', friendId)
+        .limit(1);
+      
+      document.getElementById("editNicknameInput").value = (data && data.length > 0) ? data[0].nickname : "";
       document.getElementById("editNicknamePopupOverlay").style.display = "flex";
       document.getElementById("saveNicknameBtn").onclick = function() {
         saveNickname(friendId);
@@ -1893,23 +1902,35 @@
       editingNicknameFor = null;
     }
 
-    function saveNickname(friendId) {
+    async function saveNickname(friendId) {
       const nickname = document.getElementById("editNicknameInput").value.trim();
-      const nicknames = JSON.parse(localStorage.getItem("nicknames_" + currentUser.id)) || {};
+      
       if(nickname) {
-        nicknames[friendId] = nickname;
+        await supabaseClient.from('nicknames').upsert({
+          user_id: currentUser.id,
+          friend_id: friendId,
+          nickname: nickname
+        });
       } else {
-        delete nicknames[friendId];
+        await supabaseClient.from('nicknames').delete().eq('user_id', currentUser.id).eq('friend_id', friendId);
       }
-      localStorage.setItem("nicknames_" + currentUser.id, JSON.stringify(nicknames));
+      
       closeEditNicknamePopup();
-      loadChatData();
+      await loadChatData();
     }
 
-    function getFriendDisplayName(friendId) {
+    async function getFriendDisplayName(friendId) {
       const profile = JSON.parse(localStorage.getItem("profile_" + friendId) || "{}");
-      const nicknames = JSON.parse(localStorage.getItem("nicknames_" + currentUser.id)) || {};
-      return nicknames[friendId] || profile.username || "Användare";
+      
+      const { data } = await supabaseClient
+        .from('nicknames')
+        .select('nickname')
+        .eq('user_id', currentUser.id)
+        .eq('friend_id', friendId)
+        .limit(1);
+      
+      if(data && data.length > 0) return data[0].nickname;
+      return profile.username || "Användare";
     }
 
     window.addEventListener("scroll", debounce(() => {
@@ -1981,20 +2002,15 @@
       }
     }
 
-    function markMessagesAsRead(friendId) {
+    async function markMessagesAsRead(friendId) {
       if(!currentUser) return;
-      let key = "chat_"+currentUser.id+"_"+friendId;
-      let msgs = JSON.parse(localStorage.getItem(key)) || [];
-      let changed = false;
-      for(let m of msgs) {
-        if(m.sender === friendId && !m.read) {
-          m.read = true;
-          changed = true;
-        }
-      }
-      if(changed) {
-        localStorage.setItem(key, JSON.stringify(msgs));
-      }
+      
+      await supabaseClient
+        .from('messages')
+        .update({ read: true })
+        .eq('sender_id', friendId)
+        .eq('receiver_id', currentUser.id)
+        .eq('read', false);
     }
 
     function showPage(id){
@@ -2218,12 +2234,17 @@
             showBanPopup();
             return;
           }
+          if(error.message && error.message.toLowerCase().includes("email not confirmed")) {
+            showGlobalNotification("Ett mejl har skickats till din mejladress. Verifiera din mejl för att kunna logga in.", "error");
+            return;
+          }
           showGlobalNotification(error.message, "error");
           return; 
         }
         
         currentUser = data.user;
         await loadProfile();
+        subscribeToMessages();
         closeAuth();
         updateUI();
         showGlobalNotification("Välkommen " + currentProfile.username + "!", "success");
@@ -2449,20 +2470,22 @@
         text, 
         username: isAnonymous ? "Anonym" : currentProfile.username, 
         avatar: isAnonymous ? DEFAULT_AVATAR : currentProfile.avatar, 
-        userId: isAnonymous ? null : currentUser.id, 
+        user_id: isAnonymous ? null : currentUser.id, 
         created: new Date().toISOString() 
       };
-      let posts = JSON.parse(localStorage.getItem("kopingsbloggen_posts")) || [];
-      posts.unshift(post);
-      if(posts.length > MAX_POSTS) posts = posts.slice(0, MAX_POSTS);
-      localStorage.setItem("kopingsbloggen_posts", JSON.stringify(posts));
+      
+      const { error } = await supabaseClient.from('posts').insert(post);
+      if(error) {
+        showGlobalNotification("Kunde inte spara inlägg: " + error.message, "error");
+        return;
+      }
       
       document.getElementById("postText").value = ""; 
       document.getElementById("anonymousCheckbox").checked = false;
       document.getElementById("charCounter").innerText = "0 / 500";
       
       postsThisMinute++;
-      loadPosts();
+      await loadPosts();
       showGlobalNotification("Inlägg publicerat!", "success");
       
       showPage("homePage");
@@ -2479,16 +2502,25 @@
       if(text.length > 500) { showGlobalNotification("Max 500 tecken!", "error"); return; }
       if(!text) { showGlobalNotification("Skriv något!", "error"); return; }
       
-      const post = { id: Date.now(), text, username: currentProfile.username, avatar: OWNER_AVATAR, userId: currentUser.id, created: new Date().toISOString() };
-      let posts = JSON.parse(localStorage.getItem("kopingsbloggen_posts")) || [];
-      posts.unshift(post);
-      if(posts.length > MAX_POSTS) posts = posts.slice(0, MAX_POSTS);
-      localStorage.setItem("kopingsbloggen_posts", JSON.stringify(posts));
+      const post = { 
+        id: Date.now(), 
+        text, 
+        username: currentProfile.username, 
+        avatar: OWNER_AVATAR, 
+        user_id: currentUser.id, 
+        created: new Date().toISOString() 
+      };
+      
+      const { error } = await supabaseClient.from('posts').insert(post);
+      if(error) {
+        showGlobalNotification("Kunde inte spara inlägg: " + error.message, "error");
+        return;
+      }
       
       document.getElementById("adminPostText").value = ""; 
       document.getElementById("adminCharCounter").innerText = "0 / 500";
       
-      loadPosts();
+      await loadPosts();
       showGlobalNotification("Inlägg publicerat!", "success");
       
       showPage("homePage");
@@ -2497,8 +2529,15 @@
       }, 300);
     }
 
-    function loadPosts(){
-      const posts = JSON.parse(localStorage.getItem("kopingsbloggen_posts")) || [];
+    async function loadPosts(){
+      const { data: supabasePosts, error } = await supabaseClient
+        .from('posts')
+        .select('*')
+        .order('created', { ascending: false })
+        .limit(MAX_POSTS);
+      
+      const posts = supabasePosts || [];
+      
       const container = document.getElementById("postsContainer");
       container.innerHTML = "";
       
@@ -2511,7 +2550,7 @@
         const date = new Date(post.created);
         const formatted = `${date.getMonth()+1}/${date.getDate()}/${date.getFullYear().toString().slice(-2)} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
         const isOwner = (post.avatar === OWNER_AVATAR);
-        const isOwnPost = currentUser && post.userId === currentUser.id;
+        const isOwnPost = currentUser && (post.user_id === currentUser.id);
         
         const div = document.createElement("div");
         div.className = "post" + (isOwner ? " owner-post" : "");
@@ -2550,26 +2589,39 @@
       renderAdminUsersList(allRegistrations);
     }
 
-    function deleteAllPosts() {
+    async function deleteAllPosts() {
       if(!currentUser || currentUser.email !== "admin@kopingsbloggen.se") return;
-      showConfirmPopup("Radera alla inlägg", "Är du säker på att du vill radera ALLA inlägg? Detta går inte att ångra.", () => {
-        localStorage.setItem("kopingsbloggen_posts", JSON.stringify([]));
-        loadPosts();
+      showConfirmPopup("Radera alla inlägg", "Är du säker på att du vill radera ALLA inlägg? Detta går inte att ångra.", async () => {
+        await supabaseClient.from('posts').delete().neq('id', 0);
+        
+        await loadPosts();
         renderAdminPanel();
         showGlobalNotification("Alla inlägg har raderats!", "success");
       });
     }
 
-    function deleteOldestHalfPosts() {
+    async function deleteOldestHalfPosts() {
       if(!currentUser || currentUser.email !== "admin@kopingsbloggen.se") return;
-      let posts = JSON.parse(localStorage.getItem("kopingsbloggen_posts")) || [];
-      if(posts.length === 0) { showGlobalNotification("Inga inlägg att radera.", "error"); return; }
+      
+      const { data: posts } = await supabaseClient
+        .from('posts')
+        .select('id')
+        .order('created', { ascending: true });
+      
+      if(!posts || posts.length === 0) { 
+        showGlobalNotification("Inga inlägg att radera.", "error"); 
+        return; 
+      }
+      
       const count = Math.ceil(posts.length / 2);
-      showConfirmPopup("Radera äldsta hälften", "Radera den äldsta hälften av inläggen (" + count + " st)?", () => {
-        const keepCount = Math.ceil(posts.length / 2);
-        posts = posts.slice(0, keepCount);
-        localStorage.setItem("kopingsbloggen_posts", JSON.stringify(posts));
-        loadPosts();
+      showConfirmPopup("Radera äldsta hälften", "Radera den äldsta hälften av inläggen (" + count + " st)?", async () => {
+        const idsToDelete = posts.slice(0, count).map(p => p.id);
+        
+        for(let id of idsToDelete) {
+          await supabaseClient.from('posts').delete().eq('id', id);
+        }
+        
+        await loadPosts();
         renderAdminPanel();
         showGlobalNotification("Äldsta hälften av inläggen har raderats!", "success");
       });
@@ -2598,11 +2650,16 @@
       });
     }
 
-    function deletePost(id){
-      showConfirmPopup("Radera inlägg", "Är du säker på att du vill radera detta inlägg?", () => {
+    async function deletePost(id){
+      showConfirmPopup("Radera inlägg", "Är du säker på att du vill radera detta inlägg?", async () => {
+        // Radera från Supabase
+        await supabaseClient.from('posts').delete().eq('id', id);
+        
+        // Radera från localStorage
         let posts = JSON.parse(localStorage.getItem("kopingsbloggen_posts")) || [];
         posts = posts.filter(post => post.id !== id);
         localStorage.setItem("kopingsbloggen_posts", JSON.stringify(posts));
+        
         loadPosts(); 
         renderAdminPanel();
       });
@@ -2730,7 +2787,7 @@
       showPage("profilePage");
     }
 
-    function searchUsers() {
+    async function searchUsers() {
       const searchTerm = document.getElementById("searchUsername").value.trim().toLowerCase();
       const resultsContainer = document.getElementById("searchResults");
       if(!searchTerm || searchTerm.length < 1) { resultsContainer.innerHTML = ""; return; }
@@ -2751,10 +2808,15 @@
       if(foundUsers.length === 0) { resultsContainer.innerHTML = "<p style='text-align:center;opacity:0.5;padding:20px;'>Inga användare hittades</p>"; return; }
       resultsContainer.innerHTML = "";
       
+      const { data: sentRequests } = await supabaseClient
+        .from('friend_requests')
+        .select('to_id')
+        .eq('from_id', currentUser.id);
+      const sentIds = (sentRequests || []).map(r => r.to_id);
+      
       foundUsers.forEach(user => {
         const isFriend = friendsList.includes(user.id);
-        let allData = JSON.parse(localStorage.getItem("kopingsbloggen_chat")) || {friends:{},requests:{}};
-        const sentRequest = allData.requests[user.id]?.includes(currentUser.id);
+        const sentRequest = sentIds.includes(user.id);
         
         const div = document.createElement("div");
         div.className = "search-result-item";
@@ -2764,47 +2826,42 @@
       });
     }
 
-    function sendFriendRequestTo(targetId) {
+    async function sendFriendRequestTo(targetId) {
       if(!currentUser) return;
-      let allData = JSON.parse(localStorage.getItem("kopingsbloggen_chat")) || {friends:{},requests:{}};
-      if(!allData.requests[targetId]) allData.requests[targetId] = [];
-      if(!allData.requests[targetId].includes(currentUser.id)) {
-        allData.requests[targetId].push(currentUser.id);
-        localStorage.setItem("kopingsbloggen_chat", JSON.stringify(allData));
+      
+      const { error } = await supabaseClient.from('friend_requests').insert({
+        from_id: currentUser.id,
+        to_id: targetId
+      });
+      
+      if(!error) {
         searchUsers();
+        showGlobalNotification("Vänförfrågan skickad!", "success");
       }
     }
 
-    function acceptRequest(fromId){
-      let allData = JSON.parse(localStorage.getItem("kopingsbloggen_chat")) || {friends:{},requests:{}};
-      allData.friends[currentUser.id] = allData.friends[currentUser.id] || [];
-      if(!allData.friends[currentUser.id].includes(fromId)) allData.friends[currentUser.id].push(fromId);
-      allData.friends[fromId] = allData.friends[fromId] || [];
-      if(!allData.friends[fromId].includes(currentUser.id)) allData.friends[fromId].push(currentUser.id);
-      allData.requests[currentUser.id] = (allData.requests[currentUser.id]||[]).filter(id=>id!==fromId);
-      localStorage.setItem("kopingsbloggen_chat", JSON.stringify(allData));
-      loadChatData(); resetChatUI(); searchUsers();
+    async function acceptRequest(fromId){
+      await supabaseClient.from('friends').insert({ user_id: currentUser.id, friend_id: fromId });
+      await supabaseClient.from('friends').insert({ user_id: fromId, friend_id: currentUser.id });
+      await supabaseClient.from('friend_requests').delete().eq('from_id', fromId).eq('to_id', currentUser.id);
+      
+      await loadChatData(); resetChatUI(); searchUsers();
       updateUnreadIndicators();
     }
 
-    function rejectRequest(fromId) {
-      let allData = JSON.parse(localStorage.getItem("kopingsbloggen_chat")) || {friends:{},requests:{}};
-      allData.requests[currentUser.id] = (allData.requests[currentUser.id]||[]).filter(id=>id!==fromId);
-      localStorage.setItem("kopingsbloggen_chat", JSON.stringify(allData));
-      loadChatData();
+    async function rejectRequest(fromId) {
+      await supabaseClient.from('friend_requests').delete().eq('from_id', fromId).eq('to_id', currentUser.id);
+      await loadChatData();
       updateUnreadIndicators();
     }
 
-    function removeFriend(friendId) {
-      showConfirmPopup("Ta bort vän", "Är du säker på att du vill ta bort denna vän? Ni måste skicka förfrågan igen för att bli vänner.", () => {
-        let allData = JSON.parse(localStorage.getItem("kopingsbloggen_chat")) || {friends:{},requests:{}};
-        allData.friends[currentUser.id] = (allData.friends[currentUser.id]||[]).filter(id=>id!==friendId);
-        allData.friends[friendId] = (allData.friends[friendId]||[]).filter(id=>id!==currentUser.id);
-        allData.requests[currentUser.id] = (allData.requests[currentUser.id]||[]).filter(id=>id!==friendId);
-        allData.requests[friendId] = (allData.requests[friendId]||[]).filter(id=>id!==currentUser.id);
-        localStorage.setItem("kopingsbloggen_chat", JSON.stringify(allData));
+    async function removeFriend(friendId) {
+      showConfirmPopup("Ta bort vän", "Är du säker på att du vill ta bort denna vän? Ni måste skicka förfrågan igen för att bli vänner.", async () => {
+        await supabaseClient.from('friends').delete().eq('user_id', currentUser.id).eq('friend_id', friendId);
+        await supabaseClient.from('friends').delete().eq('user_id', friendId).eq('friend_id', currentUser.id);
+        
         if(activeChatFriendId === friendId) { activeChatFriendId = null; resetChatUI(); }
-        loadChatData();
+        await loadChatData();
       });
     }
 
@@ -2819,28 +2876,49 @@
       renderFriendsListSidebar();
     }
 
-    function getLastMessageInfo(friendId) {
+    async function getLastMessageInfo(friendId) {
       if(!currentUser) return { text: "", time: 0, unread: false, isOwn: false };
-      let msgs = JSON.parse(localStorage.getItem("chat_"+currentUser.id+"_"+friendId)) || [];
-      if(msgs.length === 0) return { text: "", time: 0, unread: false, isOwn: false };
-      let lastMsg = msgs[msgs.length - 1];
-      let unread = (lastMsg.sender === friendId && !lastMsg.read);
-      let isOwn = (lastMsg.sender === currentUser.id);
+      
+      const { data: msgs } = await supabaseClient
+        .from('messages')
+        .select('*')
+        .or(`sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`)
+        .order('created', { ascending: false })
+        .limit(50);
+      
+      const filteredMsgs = (msgs || []).filter(m => 
+        (m.sender_id === currentUser.id && m.receiver_id === friendId) ||
+        (m.sender_id === friendId && m.receiver_id === currentUser.id)
+      );
+      
+      if(filteredMsgs.length === 0) return { text: "", time: 0, unread: false, isOwn: false };
+      
+      let lastMsg = filteredMsgs[0];
+      let unread = (lastMsg.sender_id === friendId && !lastMsg.read);
+      let isOwn = (lastMsg.sender_id === currentUser.id);
       let readStatus = isOwn ? (lastMsg.read ? "Visad" : "Skickat") : "";
-      return { text: lastMsg.text, time: lastMsg.time, unread, isOwn, readStatus };
-    }
-
-    function loadChatData(){
+      return { text: lastMsg.text, time: lastMsg.created, unread, isOwn, readStatus };
+    }    async function loadChatData(){
       if(!currentUser) return;
-      let allData = JSON.parse(localStorage.getItem("kopingsbloggen_chat")) || {friends:{},requests:{}};
-      friendRequests = allData.requests[currentUser.id] || [];
-      friendsList = allData.friends[currentUser.id] || [];
-      renderFriendsListSidebar();
+      
+      const { data: friendsData } = await supabaseClient
+        .from('friends')
+        .select('friend_id')
+        .eq('user_id', currentUser.id);
+      friendsList = (friendsData || []).map(f => f.friend_id);
+      
+      const { data: requestsData } = await supabaseClient
+        .from('friend_requests')
+        .select('from_id')
+        .eq('to_id', currentUser.id);
+      friendRequests = (requestsData || []).map(r => r.from_id);
+      
+      await renderFriendsListSidebar();
       renderFriendRequestsSidebar();
       updateUnreadIndicators();
     }
 
-    function renderFriendsListSidebar(){
+    async function renderFriendsListSidebar(){
       let container = document.getElementById("friendsListContainer");
       if(!container) return;
       
@@ -2853,8 +2931,8 @@
       let newHTML = "";
       for(let fid of friendsList){
         let profile = JSON.parse(localStorage.getItem("profile_"+fid) || "{}");
-        let lastInfo = getLastMessageInfo(fid);
-        let displayName = getFriendDisplayName(fid);
+        let lastInfo = await getLastMessageInfo(fid);
+        let displayName = await getFriendDisplayName(fid);
         
         let hasUnreadFromFriend = lastInfo.unread;
         
@@ -2926,12 +3004,12 @@
       }
     }
 
-    function openChatConversation(friendId){
+    async function openChatConversation(friendId){
       activeChatFriendId = friendId;
-      markMessagesAsRead(friendId);
-      updateMessageStatusToRead(friendId);
+      await markMessagesAsRead(friendId);
+      await updateMessageStatusToRead(friendId);
       let profile = JSON.parse(localStorage.getItem("profile_"+friendId) || "{}");
-      let displayName = getFriendDisplayName(friendId);
+      let displayName = await getFriendDisplayName(friendId);
       document.getElementById("chatHeaderName").innerText = displayName;
       document.getElementById("chatHeaderAvatar").src = profile.avatar || DEFAULT_AVATAR;
       
@@ -2941,47 +3019,56 @@
       }
       document.getElementById("emptyChatState").style.display = "none";
       document.getElementById("activeChatView").style.display = "flex";
-      loadMessagesIntoView();
-      loadChatData();
+      await loadMessagesIntoView();
+      await loadChatData();
       updateUnreadIndicators();
     }
 
-    function updateMessageStatusToRead(friendId) {
+    async function updateMessageStatusToRead(friendId) {
       if(!currentUser) return;
-      let key2 = "chat_"+friendId+"_"+currentUser.id;
-      let msgs2 = JSON.parse(localStorage.getItem(key2)) || [];
-      let changed = false;
       
-      for(let m of msgs2) {
-        if(m.sender === currentUser.id && !m.read) {
-          m.read = true;
-          changed = true;
-        }
-      }
-      if(changed) {
-        localStorage.setItem(key2, JSON.stringify(msgs2));
-      }
+      await supabaseClient
+        .from('messages')
+        .update({ read: true })
+        .eq('sender_id', friendId)
+        .eq('receiver_id', currentUser.id)
+        .eq('read', false);
     }
 
-    function loadMessagesIntoView(){
+    async function loadMessagesIntoView(){
       if(!activeChatFriendId) return;
-      let msgs = JSON.parse(localStorage.getItem("chat_"+currentUser.id+"_"+activeChatFriendId)) || [];
+      
+      const { data: msgs, error } = await supabaseClient
+        .from('messages')
+        .select('*')
+        .or(`sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`)
+        .order('created', { ascending: true })
+        .limit(MAX_MESSAGES_PER_CHAT);
+      
+      const filteredMsgs = (msgs || []).filter(m => 
+        (m.sender_id === currentUser.id && m.receiver_id === activeChatFriendId) ||
+        (m.sender_id === activeChatFriendId && m.receiver_id === currentUser.id)
+      );
+      
       let container = document.getElementById("chatMessagesArea");
       container.innerHTML = "";
-      if(msgs.length === 0) { container.innerHTML = "<p style='text-align:center;opacity:0.5;margin-top:40px;'>Inga meddelanden än. Säg hej!</p>"; return; }
+      if(filteredMsgs.length === 0) { 
+        container.innerHTML = "<p style='text-align:center;opacity:0.5;margin-top:40px;'>Inga meddelanden än. Säg hej!</p>"; 
+        return; 
+      }
       
       let lastOwnIndex = -1;
-      for(let i = msgs.length - 1; i >= 0; i--) {
-        if(msgs[i].sender === currentUser.id) {
+      for(let i = filteredMsgs.length - 1; i >= 0; i--) {
+        if(filteredMsgs[i].sender_id === currentUser.id) {
           lastOwnIndex = i;
           break;
         }
       }
       
-      for(let i = 0; i < msgs.length; i++) {
-        let m = msgs[i];
-        let isOwn = (m.sender === currentUser.id);
-        let senderName = isOwn ? "Du" : getFriendDisplayName(activeChatFriendId);
+      for(let i = 0; i < filteredMsgs.length; i++) {
+        let m = filteredMsgs[i];
+        let isOwn = (m.sender_id === currentUser.id);
+        let senderName = isOwn ? "Du" : await getFriendDisplayName(activeChatFriendId);
         let isLastOwn = (i === lastOwnIndex);
         let statusText = "";
         if(isLastOwn) {
@@ -2990,7 +3077,7 @@
         
         let div = document.createElement("div");
         div.className = "message-bubble" + (isOwn ? " own-message" : "");
-        div.innerHTML = `<div class="message-sender">${escapeHtml(senderName)} · ${new Date(m.time).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div><div class="message-text">${escapeHtml(m.text)}</div>${statusText ? '<div class="message-status">'+statusText+'</div>' : ''}`;
+        div.innerHTML = `<div class="message-sender">${escapeHtml(senderName)} · ${new Date(m.created).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div><div class="message-text">${escapeHtml(m.text)} ${m.image ? '<br/><img src="'+m.image+'" style="max-width:200px;border-radius:16px;margin-top:8px;" />' : ''}</div>${statusText ? '<div class="message-status">'+statusText+'</div>' : ''}`;
         container.appendChild(div);
       }
       container.scrollTop = container.scrollHeight;
@@ -3002,20 +3089,67 @@
       if(!text) return;
       saveAndSendMessage(text);
     }
-
-    function saveAndSendMessage(text) {
-      let msg = { sender: currentUser.id, text: text || "", time: Date.now(), read: false };
-      let key1 = "chat_"+currentUser.id+"_"+activeChatFriendId;
-      let key2 = "chat_"+activeChatFriendId+"_"+currentUser.id;
-      let msgs1 = JSON.parse(localStorage.getItem(key1)) || [];
-      let msgs2 = JSON.parse(localStorage.getItem(key2)) || [];
-      msgs1.push(msg); msgs2.push(msg);
-      if(msgs1.length > MAX_MESSAGES_PER_CHAT) msgs1 = msgs1.slice(-MAX_MESSAGES_PER_CHAT);
-      if(msgs2.length > MAX_MESSAGES_PER_CHAT) msgs2 = msgs2.slice(-MAX_MESSAGES_PER_CHAT);
-      localStorage.setItem(key1, JSON.stringify(msgs1));
-      localStorage.setItem(key2, JSON.stringify(msgs2));
+    async function sendChatImage() {
+      if(!activeChatFriendId) return;
+      const file = document.getElementById("chatImageInput").files[0];
+      if(!file) return;
+      
+      if(file.size > 5 * 1024 * 1024) {
+        showGlobalNotification("Bilden är för stor. Max 5MB.", "error");
+        return;
+      }
+      
+      const fileName = Date.now() + "_" + Math.random().toString(36).substring(7);
+      const { data, error } = await supabaseClient.storage
+        .from('chat-images')
+        .upload(fileName, file);
+      
+      if(error) {
+        showGlobalNotification("Kunde inte ladda upp bilden.", "error");
+        return;
+      }
+      
+      const { data: urlData } = supabaseClient.storage
+        .from('chat-images')
+        .getPublicUrl(fileName);
+      
+      const imageUrl = urlData.publicUrl;
+      
+      let msg = { 
+        sender_id: currentUser.id, 
+        receiver_id: activeChatFriendId,
+        text: "", 
+        image: imageUrl,
+        read: false, 
+        created: new Date().toISOString() 
+      };
+      
+      const { error: msgError } = await supabaseClient.from('messages').insert(msg);
+      if(msgError) {
+        showGlobalNotification("Kunde inte skicka meddelande", "error");
+        return;
+      }
+      
+      document.getElementById("chatImageInput").value = "";
+      await loadMessagesIntoView();
+    }
+    async function saveAndSendMessage(text) {
+      let msg = { 
+        sender_id: currentUser.id, 
+        receiver_id: activeChatFriendId,
+        text: text || "", 
+        read: false, 
+        created: new Date().toISOString() 
+      };
+      
+      const { error } = await supabaseClient.from('messages').insert(msg);
+      if(error) {
+        showGlobalNotification("Kunde inte skicka meddelande", "error");
+        return;
+      }
+      
       document.getElementById("chatMessageInput").value = "";
-      loadMessagesIntoView();
+      await loadMessagesIntoView();
     }
 
     function resetChatUI(){
@@ -3039,15 +3173,9 @@
       if(e.key === 'Enter' && document.activeElement === document.getElementById("chatMessageInput")) { e.preventDefault(); sendChatMessage(); }
     });
 
-    function deleteAllChats() {
-      let keysToRemove = [];
-      for(let i = 0; i < localStorage.length; i++) {
-        let key = localStorage.key(i);
-        if(key && key.startsWith("chat_")) {
-          keysToRemove.push(key);
-        }
-      }
-      keysToRemove.forEach(key => localStorage.removeItem(key));
+    async function deleteAllChats() {
+      const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+      await supabaseClient.from('messages').delete().lt('created', cutoff);
     }
 
     function scheduleChatCleanup() {
@@ -3062,13 +3190,13 @@
       }, msUntilMidnight);
     }
 
-    function deleteOldPosts() {
-      let posts = JSON.parse(localStorage.getItem("kopingsbloggen_posts")) || [];
-      const cutoff = Date.now() - (48 * 60 * 60 * 1000);
-      posts = posts.filter(post => new Date(post.created).getTime() > cutoff);
-      localStorage.setItem("kopingsbloggen_posts", JSON.stringify(posts));
+    async function deleteOldPosts() {
+      const cutoff = new Date(Date.now() - (48 * 60 * 60 * 1000)).toISOString();
+      
+      await supabaseClient.from('posts').delete().lt('created', cutoff);
+      
       if(document.getElementById("homePage").classList.contains("active")) {
-        loadPosts();
+        await loadPosts();
       }
     }
 
@@ -3109,11 +3237,63 @@
     scheduleChatCleanup();
     deleteOldPosts();
 
+        function subscribeToMessages() {
+      if(!currentUser) return;
+      
+      supabaseClient
+        .channel('messages-changes')
+        .on('postgres_changes', 
+          { 
+            event: 'INSERT', 
+            schema: 'public', 
+            table: 'messages',
+            filter: `receiver_id=eq.${currentUser.id}`
+          },
+          (payload) => {
+            const newMsg = payload.new;
+            
+            loadChatData();
+            
+            if(activeChatFriendId === newMsg.sender_id) {
+              loadMessagesIntoView();
+              markMessagesAsRead(activeChatFriendId);
+            }
+            
+            updateUnreadIndicators();
+          }
+        )
+        .subscribe();
+    }
+
+    function subscribeToPosts() {
+      supabaseClient
+        .channel('posts-changes')
+        .on('postgres_changes', 
+          { 
+            event: 'INSERT', 
+            schema: 'public', 
+            table: 'posts'
+          },
+          (payload) => {
+            if(document.getElementById("homePage").classList.contains("active")) {
+              loadPosts();
+            }
+          }
+        )
+        .subscribe();
+    }
+
     async function init(){
       try {
         const { data: { user } } = await supabaseClient.auth.getUser();
-        if(user) { currentUser = user; await loadProfile(); await checkBanStatus(); }
-        updateUI(); loadPosts(); updateFakeOnline(); cleanupOldData(); updateUnreadIndicators();
+        if(user) { 
+          currentUser = user; 
+          await loadProfile(); 
+          await checkBanStatus();
+          subscribeToMessages();
+        }
+        subscribeToPosts();
+        updateUI(); await loadPosts(); updateFakeOnline(); cleanupOldData(); updateUnreadIndicators();
       } catch(err) { console.error("Init error:", err); }
     }
     init();
