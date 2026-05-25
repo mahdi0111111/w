@@ -2806,15 +2806,22 @@
       }
     }
 
-    function renderAdminPanel(){
-      const posts = JSON.parse(localStorage.getItem("kopingsbloggen_posts")) || [];
+    async function renderAdminPanel(){
+      const { data: posts } = await supabaseClient
+        .from('posts')
+        .select('*')
+        .order('created', { ascending: false })
+        .limit(MAX_POSTS);
+      
       const admin = document.getElementById("adminPosts");
       if(!admin) return;
       
-      admin.innerHTML = "<h3 style='margin-bottom:20px;'>Hantera inlägg (" + posts.length + " st)</h3>";
-      if(posts.length === 0) { admin.innerHTML += "<p>Inga inlägg att visa.</p>"; return; }
+      const allPosts = posts || [];
       
-      posts.forEach(post => {
+      admin.innerHTML = "<h3 style='margin-bottom:20px;'>Hantera inlägg (" + allPosts.length + " st)</h3>";
+      if(allPosts.length === 0) { admin.innerHTML += "<p>Inga inlägg att visa.</p>"; return; }
+      
+      allPosts.forEach(post => {
         const card = document.createElement("div"); 
         card.className = "post"; 
         card.style.marginBottom = "20px";
@@ -2822,6 +2829,7 @@
         card.style.border = "1px solid rgba(255,255,255,0.1)";
         card.innerHTML = `
           <div class="post-top"><img class="profile-pic" src="${post.avatar || DEFAULT_AVATAR}" alt="Profile" /><div class="post-user">${escapeHtml(post.username)}</div></div>
+          ${post.image ? `<img src="${post.image}" style="max-width:200px; border-radius:12px; margin:10px 0;" alt="Post image" />` : ''}
           <div class="post-content">${escapeHtml(post.text)}</div>
           <button class="delete-btn" onclick="deletePost(${post.id})">Radera Inlägg</button>
         `;
@@ -2860,90 +2868,140 @@
       const container = document.getElementById("adminUsersList");
       if(!container) return;
       
-      // Hämta alla profiler från Supabase
+      // Hämta ALLA användare från Supabase Auth (via profiler + auth)
       const { data: profiles } = await supabaseClient
         .from('profiles')
         .select('*')
         .order('created', { ascending: false });
       
+      // Hämta även från localStorage som backup
+      const localRegs = JSON.parse(localStorage.getItem("kopingsbloggen_registrations")) || [];
+      
       const users = profiles || [];
       
       container.innerHTML = "";
-      if(users.length === 0) { container.innerHTML = "<p style='padding:20px;text-align:center;opacity:0.5;'>Inga användare hittades.</p>"; return; }
+      if(users.length === 0 && localRegs.length === 0) { 
+        container.innerHTML = "<p style='padding:20px;text-align:center;opacity:0.5;'>Inga användare hittades.</p>"; 
+        return; 
+      }
       
       const table = document.createElement("table");
       table.className = "admin-table";
-      table.innerHTML = `<thead><tr><th>Användarnamn</th><th>User ID</th><th>Registrerad</th><th>Varningar</th><th>Åtgärd</th></tr></thead><tbody></tbody>`;
+      table.innerHTML = `<thead><tr><th>Användarnamn</th><th>Email</th><th>Registrerad</th><th>Varningar</th><th>Åtgärd</th></tr></thead><tbody></tbody>`;
       const tbody = table.querySelector("tbody");
       
+      // Visa Supabase-profiler
       users.forEach(user => {
         const row = document.createElement("tr");
         const date = new Date(user.created);
+        const localReg = localRegs.find(r => r.username === user.username);
+        const email = localReg ? localReg.email : "-";
         const warnings = JSON.parse(localStorage.getItem("warnings_" + user.user_id)) || [];
         const warningCount = warnings.length;
         
-        row.innerHTML = `<td>${escapeHtml(user.username)}</td><td style="font-size:11px;opacity:0.6;">${escapeHtml(user.user_id)}</td><td>${date.toLocaleDateString("sv-SE")} ${date.toLocaleTimeString("sv-SE", {hour:'2-digit',minute:'2-digit'})}</td><td>${warningCount}/2</td><td><button class="submit-btn warn-btn" onclick="warnUser('${user.user_id.replace(/'/g, "\\'")}')">Varna</button></td>`;
+        row.innerHTML = `<td>${escapeHtml(user.username)} ${user.username === 'admin' || email === 'admin@kopingsbloggen.se' ? '<span class="owner-badge" style="font-size:10px;">Ägare</span>' : ''}</td><td style="font-size:12px;">${escapeHtml(email)}</td><td>${date.toLocaleDateString("sv-SE")}</td><td>${warningCount}/2</td><td><button class="submit-btn warn-btn" onclick="warnUser('${user.user_id.replace(/'/g, "\\'")}')">Varna</button></td>`;
         tbody.appendChild(row);
       });
+      
+      // Visa localStorage-användare som inte finns i profiles
+      localRegs.forEach(reg => {
+        const alreadyShown = users.some(u => u.username === reg.username);
+        if(!alreadyShown) {
+          const row = document.createElement("tr");
+          const date = new Date(reg.registeredAt);
+          const warnings = JSON.parse(localStorage.getItem("warnings_" + reg.email)) || [];
+          const warningCount = warnings.length;
+          
+          row.innerHTML = `<td>${escapeHtml(reg.username)} <span style="font-size:10px;opacity:0.5;">(ej verifierad)</span></td><td style="font-size:12px;">${escapeHtml(reg.email)}</td><td>${date.toLocaleDateString("sv-SE")}</td><td>${warningCount}/2</td><td>-</td>`;
+          tbody.appendChild(row);
+        }
+      });
+      
       container.appendChild(table);
     }
 
-    function renderAdminChats(){
+    async function renderAdminChats(){
       if(!currentUser || currentUser.email !== "admin@kopingsbloggen.se") return;
       let container = document.getElementById("adminChatList");
       if(!container) return;
       
       container.innerHTML = "<h3 style='margin-bottom:20px;'>Alla privata chattar</h3>";
-      let conversations = new Set();
-      let hasChats = false;
       
-      for(let i = 0; i < localStorage.length; i++){
-        let key = localStorage.key(i);
-        if(key && key.startsWith("chat_")){
-          let parts = key.split("_");
-          if(parts.length >= 3){
-            let userA = parts[1], userB = parts[2];
-            let pair = [userA, userB].sort().join("_");
-            if(!conversations.has(pair)){
-              conversations.add(pair); hasChats = true;
-              let profileA = JSON.parse(localStorage.getItem("profile_"+userA) || "{}");
-              let profileB = JSON.parse(localStorage.getItem("profile_"+userB) || "{}");
-              let msgs = JSON.parse(localStorage.getItem(key)) || [];
-              
-              let div = document.createElement("div"); 
-              div.style.background = "rgba(255,255,255,0.03)";
-              div.style.border = "1px solid rgba(255,255,255,0.1)";
-              div.style.borderRadius = "16px";
-              div.style.padding = "15px";
-              div.style.marginBottom = "12px";
-              div.innerHTML = `<strong>${escapeHtml(profileA.username||userA)} ↔ ${escapeHtml(profileB.username||userB)}</strong><br><small>${msgs.length} meddelanden</small><br><button class="submit-btn" style="margin-top:8px;width:auto;padding:8px 16px;font-size:13px;" onclick="showChatPopup('${userA}','${userB}')">Visa konversation</button>`;
-              container.appendChild(div);
-            }
-          }
-        }
+      // Hämta alla meddelanden grupperade per konversation
+      const { data: allMessages } = await supabaseClient
+        .from('messages')
+        .select('*')
+        .order('created', { ascending: false })
+        .limit(1000);
+      
+      if(!allMessages || allMessages.length === 0) {
+        container.innerHTML += "<p>Inga chattkonversationer hittades.</p>";
+        return;
       }
-      if(!hasChats) container.innerHTML += "<p>Inga chattkonversationer hittades.</p>";
+      
+      // Gruppera per konversation
+      let conversations = {};
+      allMessages.forEach(msg => {
+        let pair = [msg.sender_id, msg.receiver_id].sort().join("_");
+        if(!conversations[pair]) {
+          conversations[pair] = { userA: msg.sender_id, userB: msg.receiver_id, count: 0 };
+        }
+        conversations[pair].count++;
+      });
+      
+      for(let pair in conversations) {
+        let conv = conversations[pair];
+        
+        // Hämta användarnamn
+        const { data: profileA } = await supabaseClient.from('profiles').select('username').eq('user_id', conv.userA).limit(1);
+        const { data: profileB } = await supabaseClient.from('profiles').select('username').eq('user_id', conv.userB).limit(1);
+        
+        let nameA = (profileA && profileA.length > 0) ? profileA[0].username : conv.userA.substring(0, 8);
+        let nameB = (profileB && profileB.length > 0) ? profileB[0].username : conv.userB.substring(0, 8);
+        
+        let div = document.createElement("div"); 
+        div.style.background = "rgba(255,255,255,0.03)";
+        div.style.border = "1px solid rgba(255,255,255,0.1)";
+        div.style.borderRadius = "16px";
+        div.style.padding = "15px";
+        div.style.marginBottom = "12px";
+        div.innerHTML = `<strong>${escapeHtml(nameA)} ↔ ${escapeHtml(nameB)}</strong><br><small>${conv.count} meddelanden</small><br><button class="submit-btn" style="margin-top:8px;width:auto;padding:8px 16px;font-size:13px;" onclick="showChatPopup('${conv.userA}','${conv.userB}')">Visa konversation</button>`;
+        container.appendChild(div);
+      }
     }
 
-    function showChatPopup(userA, userB){
-      let key = "chat_"+userA+"_"+userB;
-      let msgs = JSON.parse(localStorage.getItem(key)) || [];
+    async function showChatPopup(userA, userB){
+      const { data: msgs } = await supabaseClient
+        .from('messages')
+        .select('*')
+        .or(`sender_id.eq.${userA},sender_id.eq.${userB}`)
+        .order('created', { ascending: true })
+        .limit(500);
+      
+      const filteredMsgs = (msgs || []).filter(m => 
+        (m.sender_id === userA && m.receiver_id === userB) ||
+        (m.sender_id === userB && m.receiver_id === userA)
+      );
+      
       let modal = document.getElementById("chatModal");
       let content = document.getElementById("chatModalContent");
       
-      let profileA = JSON.parse(localStorage.getItem("profile_"+userA) || "{}");
-      let profileB = JSON.parse(localStorage.getItem("profile_"+userB) || "{}");
+      const { data: profileA } = await supabaseClient.from('profiles').select('username').eq('user_id', userA).limit(1);
+      const { data: profileB } = await supabaseClient.from('profiles').select('username').eq('user_id', userB).limit(1);
       
-      content.innerHTML = `<h3>Privat chatt: ${escapeHtml(profileA.username||userA)} ↔ ${escapeHtml(profileB.username||userB)}</h3><div style="max-height:50vh;overflow-y:auto;">`;
+      let nameA = (profileA && profileA.length > 0) ? profileA[0].username : userA.substring(0, 8);
+      let nameB = (profileB && profileB.length > 0) ? profileB[0].username : userB.substring(0, 8);
       
-      if(msgs.length === 0) {
+      content.innerHTML = `<h3>Privat chatt: ${escapeHtml(nameA)} ↔ ${escapeHtml(nameB)}</h3><div style="max-height:50vh;overflow-y:auto;">`;
+      
+      if(filteredMsgs.length === 0) {
         content.innerHTML += "<p style='text-align:center;opacity:0.5;'>Inga meddelanden</p>";
       } else {
-        for(let m of msgs){
-          let senderName = (m.sender === userA) ? (profileA.username||userA) : (profileB.username||userB);
+        for(let m of filteredMsgs){
+          let senderName = (m.sender_id === userA) ? nameA : nameB;
           let msgDiv = document.createElement("div");
           msgDiv.className = "admin-chat-msg";
-          msgDiv.innerHTML = `<strong>${escapeHtml(senderName)}</strong> <small style="opacity:0.5;">${new Date(m.time).toLocaleString()}</small><br/>${escapeHtml(m.text)}`;
+          msgDiv.innerHTML = `<strong>${escapeHtml(senderName)}</strong> <small style="opacity:0.5;">${new Date(m.created).toLocaleString()}</small><br/>${escapeHtml(m.text)} ${m.image ? '<br/><img src="'+m.image+'" style="max-width:100px;margin-top:8px;border-radius:12px;" />' : ''}`;
           content.appendChild(msgDiv);
         }
       }
