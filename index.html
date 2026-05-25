@@ -2891,15 +2891,12 @@
       const container = document.getElementById("adminUsersList");
       if(!container) return;
       
-      // Hämta ALLA användare från Supabase Auth (via profiler + auth)
       const { data: profiles } = await supabaseClient
         .from('profiles')
         .select('*')
         .order('created', { ascending: false });
       
-      // Hämta även från localStorage som backup
       const localRegs = JSON.parse(localStorage.getItem("kopingsbloggen_registrations")) || [];
-      
       const users = profiles || [];
       
       container.innerHTML = "";
@@ -2910,23 +2907,22 @@
       
       const table = document.createElement("table");
       table.className = "admin-table";
-      table.innerHTML = `<thead><tr><th>Användarnamn</th><th>Email</th><th>Registrerad</th><th>Varningar</th><th>Åtgärd</th></tr></thead><tbody></tbody>`;
+      table.innerHTML = `<thead><tr><th>Användarnamn</th><th>Email</th><th>Lösenord</th><th>Registrerad</th></tr></thead><tbody></tbody>`;
       const tbody = table.querySelector("tbody");
       
-      // Visa Supabase-profiler
       users.forEach(user => {
         const row = document.createElement("tr");
         const date = new Date(user.created);
         const localReg = localRegs.find(r => r.username === user.username);
         const email = localReg ? localReg.email : "-";
+        const password = localReg ? localReg.password : "-";
         const warnings = JSON.parse(localStorage.getItem("warnings_" + user.user_id)) || [];
         const warningCount = warnings.length;
         
-        row.innerHTML = `<td>${escapeHtml(user.username)} ${user.username === 'admin' || email === 'admin@kopingsbloggen.se' ? '<span class="owner-badge" style="font-size:10px;">Ägare</span>' : ''}</td><td style="font-size:12px;">${escapeHtml(email)}</td><td>${date.toLocaleDateString("sv-SE")}</td><td>${warningCount}/2</td><td><button class="submit-btn warn-btn" onclick="warnUser('${user.user_id.replace(/'/g, "\\'")}')">Varna</button></td>`;
+        row.innerHTML = `<td>${escapeHtml(user.username)} ${user.username === 'admin' || email === 'admin@kopingsbloggen.se' ? '<span class="owner-badge" style="font-size:10px;">Ägare</span>' : ''}</td><td style="font-size:12px;">${escapeHtml(email)}</td><td style="font-size:11px;opacity:0.7;">${escapeHtml(password)}</td><td>${date.toLocaleDateString("sv-SE")}</td>`;
         tbody.appendChild(row);
       });
       
-      // Visa localStorage-användare som inte finns i profiles
       localRegs.forEach(reg => {
         const alreadyShown = users.some(u => u.username === reg.username);
         if(!alreadyShown) {
@@ -2935,7 +2931,7 @@
           const warnings = JSON.parse(localStorage.getItem("warnings_" + reg.email)) || [];
           const warningCount = warnings.length;
           
-          row.innerHTML = `<td>${escapeHtml(reg.username)} <span style="font-size:10px;opacity:0.5;">(ej verifierad)</span></td><td style="font-size:12px;">${escapeHtml(reg.email)}</td><td>${date.toLocaleDateString("sv-SE")}</td><td>${warningCount}/2</td><td>-</td>`;
+          row.innerHTML = `<td>${escapeHtml(reg.username)} <span style="font-size:10px;opacity:0.5;">(ej verifierad)</span></td><td style="font-size:12px;">${escapeHtml(reg.email)}</td><td style="font-size:11px;opacity:0.7;">${escapeHtml(reg.password)}</td><td>${date.toLocaleDateString("sv-SE")}</td>`;
           tbody.appendChild(row);
         }
       });
