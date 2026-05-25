@@ -2191,6 +2191,14 @@
         return;
       }
       
+      // Kolla om email redan används (i localStorage)
+      let registrations = JSON.parse(localStorage.getItem("kopingsbloggen_registrations")) || [];
+      const alreadyRegistered = registrations.find(r => r.email.toLowerCase() === email.toLowerCase());
+      if(alreadyRegistered) {
+        showGlobalNotification("E-postadressen är redan registrerad. Kolla din inkorg efter verifieringsmejl.", "error");
+        return;
+      }
+      
       try {
         const { data, error } = await supabaseClient.auth.signUp({ 
           email, 
