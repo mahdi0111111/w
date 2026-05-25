@@ -2707,6 +2707,8 @@
         .order('created', { ascending: false })
         .limit(MAX_POSTS);
       
+      console.log("Inlägg från Supabase:", supabasePosts);
+      
       const posts = supabasePosts || [];
       
       const container = document.getElementById("postsContainer");
