@@ -1798,9 +1798,11 @@
 
   <div class="popup-box" id="verificationPopup">
     <div class="popup-card" style="text-align:center;">
-      <h2 style="margin-bottom:20px;">Verifiera din e-postsadress och logga sedan in</h2>
-      <p style="margin-bottom:20px;">Titta i din inkorg (eller skräppost) och klicka på verifieringslänken.</p>
+      <h2 style="margin-bottom:20px;">Verifiera din e-postadress</h2>
+      <p style="margin-bottom:15px;">Ett verifieringsmejl har skickats till din e-postadress. Klicka på länken i mejlet för att aktivera ditt konto.</p>
+      <p style="margin-bottom:20px; font-size:13px; opacity:0.7;">Kolla även skräpposten om du inte hittar mejlet.</p>
       <button class="submit-btn" onclick="closeVerificationAndOpenLogin()">Okej</button>
+      <button class="submit-btn" onclick="resendVerificationEmail()" style="margin-top:10px; background:#ff9800; color:white;">Skicka verifieringsmejl igen</button>
     </div>
   </div>
 
@@ -2182,11 +2184,16 @@
           options: {
             data: {
               username: username
-            }
+            },
+            emailRedirectTo: window.location.origin + '/?verified=true'
           }
         });
         
-        if(error) { 
+        if(error) {
+          if(error.message && error.message.toLowerCase().includes("rate")) {
+            showGlobalNotification("Försök igen senare.", "error");
+            return;
+          }
           showGlobalNotification(error.message, "error");
           return; 
         }
@@ -2486,6 +2493,32 @@
       }
     }
 
+        async function resendVerificationEmail() {
+      const email = document.getElementById("authEmail").value;
+      if(!email) {
+        showGlobalNotification("Fyll i din e-post först.", "error");
+        return;
+      }
+      
+      const { error } = await supabaseClient.auth.resend({
+        type: 'signup',
+        email: email,
+        options: {
+          emailRedirectTo: window.location.origin + '/?verified=true'
+        }
+      });
+      
+      if(error) {
+        if(error.message && error.message.toLowerCase().includes("rate")) {
+          showGlobalNotification("Försök igen senare.", "error");
+        } else {
+          showGlobalNotification("Kunde inte skicka om verifieringsmejl.", "error");
+        }
+      } else {
+        showGlobalNotification("Nytt verifieringsmejl har skickats!", "success");
+      }
+    }
+    
     function updateCharCount() {
       const textarea = document.getElementById("postText");
       const counter = document.getElementById("charCounter");
