@@ -1473,6 +1473,10 @@
         transition:0.4s ease;
         gap:8px;
       }
+          body {
+      background-attachment: scroll;
+      background-size: cover;
+    }
       .nav-links.active { right: 0; }
       .nav-btn { width: 80%; text-align: center; font-size: 16px; padding: 14px; }
       .profile-nav-btn {
@@ -2069,7 +2073,7 @@
         .eq('read', false);
     }
 
-    function showPage(id){
+    async function showPage(id){
       if(id === "chatPage") {
         activeChatFriendId = null;
         document.getElementById("emptyChatState").style.display = "flex";
@@ -2088,6 +2092,9 @@
       }
       
       document.getElementById("postsSection").style.display = (id === "homePage") ? "block" : "none";
+      if(id === "homePage") {
+        await loadPosts();
+      }
       
       const footer = document.getElementById("globalFooter");
       if(id === "createPage" || id === "chatPage" || id === "infoPage" || id === "profilePage") {
@@ -2808,7 +2815,7 @@
           ${post.image ? `<img class="post-image" src="${post.image}" alt="Post image" />` : ""}
           <div class="post-content">${escapeHtml(post.text)}</div>
           <div style="padding:0 20px 15px; display:flex; align-items:center; gap:8px;">
-            <button onclick="toggleLike(${post.id})" style="background:${liked ? '#ff3d3d' : 'transparent'}; border:2px solid ${liked ? '#ff3d3d' : 'rgba(255,255,255,0.3)'}; color:white; padding:5px 14px; border-radius:20px; cursor:pointer; font-size:13px;">
+            <button id="like-btn-${post.id}" onclick="toggleLike(${post.id})" style="background:${liked ? '#ff3d3d' : 'transparent'}; border:2px solid ${liked ? '#ff3d3d' : 'rgba(255,255,255,0.3)'}; color:white; padding:5px 14px; border-radius:20px; cursor:pointer; font-size:13px;">
               ♥ <span id="like-count-${post.id}">${likeCount}</span>
             </button>
           </div>
@@ -3627,6 +3634,8 @@
         .subscribe();
     }
 
+    let postsLoadedOnce = false;
+    
     function subscribeToPosts() {
       supabaseClient
         .channel('posts-changes')
@@ -3648,7 +3657,6 @@
         async function toggleLike(postId) {
       if(!currentUser) { openAuth(); return; }
       
-      // Kolla om redan gillad
       const { data: existing } = await supabaseClient
         .from('likes')
         .select('*')
@@ -3657,14 +3665,28 @@
         .limit(1);
       
       if(existing && existing.length > 0) {
-        // Ta bort like
         await supabaseClient.from('likes').delete().eq('post_id', postId).eq('user_id', currentUser.id);
       } else {
-        // Lägg till like
         await supabaseClient.from('likes').insert({ post_id: postId, user_id: currentUser.id });
       }
       
-      await loadPosts();
+      // Uppdatera bara like-knappen, inte alla inlägg
+      const liked = !(existing && existing.length > 0);
+      const { count } = await supabaseClient
+        .from('likes')
+        .select('*', { count: 'exact', head: true })
+        .eq('post_id', postId);
+      
+      const likeBtn = document.querySelector(`#like-btn-${postId}`);
+      const likeCount = document.querySelector(`#like-count-${postId}`);
+      
+      if(likeBtn) {
+        likeBtn.style.background = liked ? '#ff3d3d' : 'transparent';
+        likeBtn.style.borderColor = liked ? '#ff3d3d' : 'rgba(255,255,255,0.3)';
+      }
+      if(likeCount) {
+        likeCount.innerText = count || 0;
+      }
     }
     
     async function getLikeCount(postId) {
