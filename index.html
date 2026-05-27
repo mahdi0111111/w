@@ -1887,6 +1887,7 @@
     let confirmActionCallback = null;
     let lastFriendsListHTML = "";
     let editingNicknameFor = null;
+    let isLoadingPosts = false;
     
     const DEFAULT_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
     const OWNER_AVATAR = "https://i.ibb.co/JF20ZDcZ/Aa-5.png";
@@ -2780,6 +2781,9 @@
     }
 
         async function loadPosts(){
+      if(isLoadingPosts) return;
+      isLoadingPosts = true;
+      
       const { data: supabasePosts, error } = await supabaseClient
         .from('posts')
         .select('*')
@@ -2793,6 +2797,7 @@
       
       if(posts.length === 0) {
         container.innerHTML = "<p style='text-align:center;opacity:0.5;padding:40px;'>Inga inlägg än. Var först med att skapa ett!</p>";
+        isLoadingPosts = false;
         return;
       }
       
@@ -2822,6 +2827,7 @@
         `;
         container.appendChild(div);
       }
+      isLoadingPosts = false;
     }
 
         function previewEditProfileImage() {
