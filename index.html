@@ -2939,16 +2939,11 @@
 
     async function deletePost(id){
       showConfirmPopup("Radera inlägg", "Är du säker på att du vill radera detta inlägg?", async () => {
-        // Radera från Supabase
         await supabaseClient.from('posts').delete().eq('id', id);
         
-        // Radera från localStorage
-        let posts = JSON.parse(localStorage.getItem("kopingsbloggen_posts")) || [];
-        posts = posts.filter(post => post.id !== id);
-        localStorage.setItem("kopingsbloggen_posts", JSON.stringify(posts));
-        
-        loadPosts(); 
+        await loadPosts(); 
         renderAdminPanel();
+        showGlobalNotification("Inlägg raderat!", "success");
       });
     }
 
@@ -3701,7 +3696,8 @@
           subscribeToMessages();
         }
         subscribeToPosts();
-        updateUI(); await loadPosts(); updateFakeOnline(); cleanupOldData(); updateUnreadIndicators();
+        updateUI(); updateFakeOnline(); cleanupOldData(); updateUnreadIndicators();
+        await loadPosts();
       } catch(err) { console.error("Init error:", err); }
     }
     init();
