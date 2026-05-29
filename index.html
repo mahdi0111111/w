@@ -422,35 +422,39 @@
 
     .kopingtv-coming-soon {
       text-align: center;
-      padding: 60px 20px;
-      background: rgba(0,0,0,0.4);
-      border-radius: 30px;
-      border: 2px solid rgba(255,215,0,0.3);
+      padding: 80px 40px;
+      background: rgba(10,10,15,0.7);
+      backdrop-filter: blur(20px);
+      border-radius: 40px;
+      border: 1px solid rgba(255,255,255,0.08);
+      max-width: 600px;
+      width: 100%;
+    }
+    .kopingtv-coming-soon .tv-label {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 6px;
+      opacity: 0.5;
+      margin-bottom: 25px;
     }
     .kopingtv-coming-soon h2 {
-      font-size: 48px;
-      font-style: italic;
-      letter-spacing: 3px;
-      background: linear-gradient(135deg, #ff6b9d, #c44dff, gold);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 20px;
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 8px;
+      margin-bottom: 15px;
+      color: rgba(255,255,255,0.9);
     }
-    .kopingtv-coming-soon .tv-icon {
-      font-size: 80px;
-      margin-bottom: 20px;
+    .kopingtv-coming-soon .tv-divider {
+      width: 60px;
+      height: 1px;
+      background: rgba(255,255,255,0.2);
+      margin: 25px auto;
     }
     .kopingtv-coming-soon .construction-text {
-      font-size: 18px;
-      opacity: 0.7;
+      font-size: 16px;
+      opacity: 0.5;
       font-style: italic;
-    }
-    .kopingtv-coming-soon .sparkles {
-      font-size: 24px;
-      letter-spacing: 8px;
-      margin-top: 15px;
-      opacity: 0.6;
+      letter-spacing: 1px;
     }
 
     .footer {
@@ -485,6 +489,158 @@
       background: rgba(255,255,255,0.08);
       border-color: rgba(255,255,255,0.35);
       color: rgba(255,255,255,0.9);
+    }
+
+    /* Admin popup */
+    .admin-popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .admin-popup-overlay.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .admin-popup {
+      background: rgba(20,20,25,0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px;
+      padding: 40px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .admin-popup h3 {
+      font-size: 22px;
+      margin-bottom: 25px;
+      font-weight: normal;
+      letter-spacing: 2px;
+      opacity: 0.9;
+    }
+    .admin-popup .input {
+      text-align: center;
+    }
+    .admin-popup .submit-btn {
+      margin-top: 5px;
+    }
+    .admin-popup .close-admin-popup {
+      margin-top: 18px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.5);
+      padding: 10px 24px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: 0.3s;
+    }
+    .admin-popup .close-admin-popup:hover {
+      border-color: rgba(255,255,255,0.4);
+      color: white;
+    }
+
+    /* Admin page */
+    .admin-panel {
+      background: rgba(15,15,20,0.85);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 28px;
+      padding: 40px;
+      max-width: 700px;
+      width: 100%;
+    }
+    .admin-panel h2 {
+      text-align: center;
+      font-size: 28px;
+      font-weight: normal;
+      letter-spacing: 3px;
+      margin-bottom: 30px;
+      opacity: 0.9;
+    }
+
+    /* Ägarinlägg styling */
+    .post.owner-post {
+      background: linear-gradient(135deg, rgba(40,35,50,0.7), rgba(25,20,35,0.85));
+      border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    }
+    .post.owner-post::before {
+      background: linear-gradient(90deg, rgba(255,255,255,0.5), rgba(255,255,255,0.15));
+    }
+    .post.owner-post .post-user {
+      color: rgba(255,255,255,0.95);
+    }
+
+    /* Owner popup (secret phrase) */
+    .owner-popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .owner-popup-overlay.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .owner-popup {
+      background: rgba(20,20,25,0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px;
+      padding: 40px;
+      width: 90%;
+      max-width: 550px;
+      text-align: center;
+    }
+    .owner-popup h3 {
+      font-size: 22px;
+      margin-bottom: 25px;
+      font-weight: normal;
+      letter-spacing: 2px;
+      opacity: 0.9;
+    }
+    .owner-popup .input {
+      text-align: left;
+    }
+    .owner-popup .submit-btn {
+      margin-top: 5px;
+    }
+    .owner-popup .close-owner-popup {
+      margin-top: 18px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.5);
+      padding: 10px 24px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: 0.3s;
+    }
+    .owner-popup .close-owner-popup:hover {
+      border-color: rgba(255,255,255,0.4);
+      color: white;
     }
 
     @media(max-width:768px){
@@ -534,11 +690,22 @@
         font-size: 16px;
       }
 
-      .kopingtv-coming-soon h2 {
-        font-size: 32px;
+      .kopingtv-coming-soon {
+        padding: 50px 25px;
       }
-      .kopingtv-coming-soon .tv-icon {
-        font-size: 50px;
+      .kopingtv-coming-soon h2 {
+        font-size: 28px;
+        letter-spacing: 5px;
+      }
+
+      .admin-popup {
+        padding: 30px 20px;
+      }
+      .admin-panel {
+        padding: 25px 20px;
+      }
+      .owner-popup {
+        padding: 25px 20px;
       }
     }
   </style>
@@ -546,6 +713,32 @@
 <body>
 
   <div class="global-notification" id="globalNotification"></div>
+
+  <!-- Admin popup -->
+  <div class="admin-popup-overlay" id="adminPopupOverlay">
+    <div class="admin-popup">
+      <h3>Admin Inloggning</h3>
+      <input type="text" id="adminUsername" class="input" placeholder="E-post" />
+      <input type="password" id="adminPassword" class="input" placeholder="Lösenord" />
+      <button class="submit-btn" onclick="adminLogin()">Logga in</button>
+      <button class="close-admin-popup" onclick="closeAdminPopup()">Avbryt</button>
+    </div>
+  </div>
+
+  <!-- Owner popup (secret phrase) -->
+  <div class="owner-popup-overlay" id="ownerPopupOverlay">
+    <div class="owner-popup">
+      <h3>Ägarinlägg</h3>
+      <textarea id="ownerPostText" class="input" placeholder="Skriv ett ägarinlägg..."></textarea>
+      <div class="char-counter" id="ownerCharCounter">0 / 500</div>
+      <input type="file" id="ownerPostImage" accept="image/*" style="display:none" onchange="updateOwnerFileName()" />
+      <label for="ownerPostImage" class="custom-file-upload">
+        <span id="ownerFileNameDisplay">Lägg till en bild (valfritt)</span>
+      </label>
+      <button class="submit-btn" onclick="createOwnerPost()">Publicera som Köpingsbloggen</button>
+      <button class="close-owner-popup" onclick="closeOwnerPopup()">Avbryt</button>
+    </div>
+  </div>
 
   <div class="topbar" id="topbar">
     <a href="#" onclick="goHome(); return false;" class="logo-link">
@@ -598,7 +791,7 @@
 
   <div class="posts-wrapper" id="postsSection">
     <div class="section">
-      <h2 class="section-title">&#9670; Senaste Skvallret &#9670;</h2>
+      <h2 class="section-title">Senaste Skvallret</h2>
       <div class="posts" id="postsContainer"></div>
     </div>
   </div>
@@ -606,11 +799,11 @@
   <section class="page" id="videoChatPage">
     <div class="page-content-wrapper">
       <div class="kopingtv-coming-soon">
-        <div class="tv-icon">&#128250;</div>
+        <div class="tv-label">KöpingTV</div>
         <h2>KöpingTV</h2>
-        <p class="construction-text">Håller på att byggas...</p>
-        <p class="construction-text">Snart kan du videochatta med andra från Köping!</p>
-        <div class="sparkles">&#9670; &#8226; &#9670;</div>
+        <div class="tv-divider"></div>
+        <p class="construction-text">Under konstruktion</p>
+        <p class="construction-text">Snart kan du videochatta med andra från Köping</p>
       </div>
     </div>
   </section>
@@ -632,6 +825,23 @@
     </div>
   </section>
 
+  <section class="page" id="adminPage">
+    <div class="page-content-wrapper">
+      <div class="admin-panel">
+        <h2>Admin Panel</h2>
+        <p style="text-align:center;opacity:0.6;margin-bottom:20px;">Inloggad som Köpingsbloggen</p>
+        <textarea id="adminPostText" class="input" placeholder="Skriv ett ägarinlägg..."></textarea>
+        <div class="char-counter" id="adminCharCounter">0 / 500</div>
+        <input type="file" id="adminPostImage" accept="image/*" style="display:none" onchange="updateAdminFileName()" />
+        <label for="adminPostImage" class="custom-file-upload">
+          <span id="adminFileNameDisplay">Lägg till en bild (valfritt)</span>
+        </label>
+        <button class="submit-btn" onclick="createAdminPost()">Publicera som Köpingsbloggen</button>
+        <button class="close-admin-popup" style="margin-top:15px;width:100%;" onclick="goHome()">Tillbaka till startsidan</button>
+      </div>
+    </div>
+  </section>
+
   <div class="footer" id="globalFooter">
     <p>Köpingsbloggen - Din röst, dina hemligheter, ditt Köping</p>
   </div>
@@ -645,8 +855,13 @@
     let isLoadingPosts = false;
     
     const DEFAULT_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+    const ADMIN_AVATAR = "https://i.ibb.co/v6h6DNHH/Aa-9-Photoroom-1.png";
     const MAX_POSTS = 100;
     const POST_RATE_LIMIT = 2;
+
+    // Admin credentials
+    const ADMIN_EMAIL = "admin@kopingsbloggen.se";
+    const ADMIN_PASSWORD = "Mhma1214!";
 
     function showGlobalNotification(message, type) {
       const el = document.getElementById("globalNotification");
@@ -687,10 +902,15 @@
       }
       
       const footer = document.getElementById("globalFooter");
-      if(id === "infoPage" || id === "videoChatPage") {
+      if(id === "infoPage" || id === "videoChatPage" || id === "adminPage") {
         footer.classList.add("no-footer");
       } else {
         footer.classList.remove("no-footer");
+      }
+      
+      if(id === "adminPage") {
+        document.getElementById("postsSection").style.display = "block";
+        await loadPosts();
       }
       
       window.scrollTo({top: 0, behavior: "smooth"});
@@ -714,9 +934,132 @@
       counter.style.color = length > 450 ? "#ff6b6b" : "";
     }
 
+    function updateAdminCharCount() {
+      const textarea = document.getElementById("adminPostText");
+      const counter = document.getElementById("adminCharCounter");
+      const length = textarea.value.length;
+      counter.innerText = length + " / 500";
+      counter.style.color = length > 450 ? "#ff6b6b" : "";
+    }
+
+    function updateOwnerCharCount() {
+      const textarea = document.getElementById("ownerPostText");
+      const counter = document.getElementById("ownerCharCounter");
+      const length = textarea.value.length;
+      counter.innerText = length + " / 500";
+      counter.style.color = length > 450 ? "#ff6b6b" : "";
+    }
+
+    // Admin popup
+    function openAdminPopup() {
+      document.getElementById("adminPopupOverlay").classList.add("show");
+      document.getElementById("adminUsername").value = "";
+      document.getElementById("adminPassword").value = "";
+    }
+
+    function closeAdminPopup() {
+      document.getElementById("adminPopupOverlay").classList.remove("show");
+    }
+
+    function adminLogin() {
+      const username = document.getElementById("adminUsername").value.trim();
+      const password = document.getElementById("adminPassword").value.trim();
+      
+      if(username === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+        closeAdminPopup();
+        document.getElementById("adminPostText").value = "";
+        document.getElementById("adminPostImage").value = "";
+        document.getElementById("adminFileNameDisplay").innerText = "Lägg till en bild (valfritt)";
+        document.getElementById("adminCharCounter").innerText = "0 / 500";
+        showPage("adminPage");
+      } else {
+        showGlobalNotification("Fel e-post eller lösenord.", "error");
+      }
+    }
+
+    // Owner popup (secret phrase)
+    function openOwnerPopup() {
+      document.getElementById("ownerPopupOverlay").classList.add("show");
+      document.getElementById("ownerPostText").value = "";
+      document.getElementById("ownerPostImage").value = "";
+      document.getElementById("ownerFileNameDisplay").innerText = "Lägg till en bild (valfritt)";
+      document.getElementById("ownerCharCounter").innerText = "0 / 500";
+    }
+
+    function closeOwnerPopup() {
+      document.getElementById("ownerPopupOverlay").classList.remove("show");
+    }
+
+    async function createOwnerPost(){
+      const text = document.getElementById("ownerPostText").value.trim();
+      const imageFile = document.getElementById("ownerPostImage").files[0];
+      
+      if(text.length > 500) { showGlobalNotification("Max 500 tecken!", "error"); return; }
+      if(!text && !imageFile) { showGlobalNotification("Skriv något eller ladda upp en bild!", "error"); return; }
+      
+      let imageUrl = "";
+      if(imageFile) {
+        if(imageFile.size > 5 * 1024 * 1024) {
+          showGlobalNotification("Bilden är för stor. Max 5MB.", "error");
+          return;
+        }
+        
+        const fileName = Date.now() + "_" + Math.random().toString(36).substring(7);
+        const { error: uploadError } = await supabaseClient.storage
+          .from('post-images')
+          .upload(fileName, imageFile);
+        
+        if(!uploadError) {
+          const { data: urlData } = supabaseClient.storage
+            .from('post-images')
+            .getPublicUrl(fileName);
+          imageUrl = urlData.publicUrl;
+        }
+      }
+      
+      const post = { 
+        id: Date.now(), 
+        text: text, 
+        image: imageUrl,
+        username: "Köpingsbloggen", 
+        avatar: ADMIN_AVATAR, 
+        is_anonymous: false,
+        created: new Date().toISOString() 
+      };
+      
+      const { error } = await supabaseClient.from('posts').insert(post);
+      if(error) {
+        showGlobalNotification("Kunde inte spara inlägg: " + error.message, "error");
+        return;
+      }
+      
+      closeOwnerPopup();
+      await loadPosts();
+      
+      setTimeout(() => {
+        document.getElementById("postsSection").scrollIntoView({ behavior: "smooth" });
+      }, 300);
+    }
+
     async function createPost(){
       const text = document.getElementById("postText").value.trim();
       const imageFile = document.getElementById("postImage").files[0];
+      
+      // Check for admin trigger phrase
+      if(text === "Logga in på admin") {
+        document.getElementById("postText").value = "";
+        document.getElementById("charCounter").innerText = "0 / 500";
+        openAdminPopup();
+        return;
+      }
+      
+      // Check for owner secret phrase
+      if(text === "hejhejhejdåkatthund1") {
+        document.getElementById("postText").value = "";
+        document.getElementById("charCounter").innerText = "0 / 500";
+        openOwnerPopup();
+        return;
+      }
       
       if(text.length > 500) { showGlobalNotification("Max 500 tecken!", "error"); return; }
       if(!text && !imageFile) { showGlobalNotification("Skriv något eller ladda upp en bild!", "error"); return; }
@@ -770,7 +1113,60 @@
       postsThisMinute++;
       await loadPosts();
       
-      showGlobalNotification("Inlägg publicerat anonymt!", "success");
+      setTimeout(() => {
+        document.getElementById("postsSection").scrollIntoView({ behavior: "smooth" });
+      }, 300);
+    }
+
+    async function createAdminPost(){
+      const text = document.getElementById("adminPostText").value.trim();
+      const imageFile = document.getElementById("adminPostImage").files[0];
+      
+      if(text.length > 500) { showGlobalNotification("Max 500 tecken!", "error"); return; }
+      if(!text && !imageFile) { showGlobalNotification("Skriv något eller ladda upp en bild!", "error"); return; }
+      
+      let imageUrl = "";
+      if(imageFile) {
+        if(imageFile.size > 5 * 1024 * 1024) {
+          showGlobalNotification("Bilden är för stor. Max 5MB.", "error");
+          return;
+        }
+        
+        const fileName = Date.now() + "_" + Math.random().toString(36).substring(7);
+        const { error: uploadError } = await supabaseClient.storage
+          .from('post-images')
+          .upload(fileName, imageFile);
+        
+        if(!uploadError) {
+          const { data: urlData } = supabaseClient.storage
+            .from('post-images')
+            .getPublicUrl(fileName);
+          imageUrl = urlData.publicUrl;
+        }
+      }
+      
+      const post = { 
+        id: Date.now(), 
+        text: text, 
+        image: imageUrl,
+        username: "Köpingsbloggen", 
+        avatar: ADMIN_AVATAR, 
+        is_anonymous: false,
+        created: new Date().toISOString() 
+      };
+      
+      const { error } = await supabaseClient.from('posts').insert(post);
+      if(error) {
+        showGlobalNotification("Kunde inte spara inlägg: " + error.message, "error");
+        return;
+      }
+      
+      document.getElementById("adminPostText").value = ""; 
+      document.getElementById("adminPostImage").value = "";
+      document.getElementById("adminFileNameDisplay").innerText = "Lägg till en bild (valfritt)";
+      document.getElementById("adminCharCounter").innerText = "0 / 500";
+      
+      await loadPosts();
       
       setTimeout(() => {
         document.getElementById("postsSection").scrollIntoView({ behavior: "smooth" });
@@ -802,12 +1198,14 @@
         const date = new Date(post.created);
         const formatted = `${date.getMonth()+1}/${date.getDate()}/${date.getFullYear().toString().slice(-2)} kl. ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
         
+        const isOwner = post.username === "Köpingsbloggen";
+        
         const div = document.createElement("div");
-        div.className = "post";
+        div.className = "post" + (isOwner ? " owner-post" : "");
         div.innerHTML = `
           <div class="post-top">
-            <img class="profile-pic" src="${DEFAULT_AVATAR}" alt="Profile" />
-            <div class="post-user">Anonym</div>
+            <img class="profile-pic" src="${isOwner ? ADMIN_AVATAR : DEFAULT_AVATAR}" alt="Profile" />
+            <div class="post-user">${escapeHtml(post.username || (isOwner ? "Köpingsbloggen" : "Anonym"))}</div>
             <div class="post-date">${formatted}</div>
           </div>
           ${post.image ? `<img src="${post.image}" style="width:100%;max-height:400px;object-fit:cover;" alt="Post image" />` : ""}
@@ -828,6 +1226,26 @@
       }
     }
 
+    function updateAdminFileName() { 
+      const input = document.getElementById("adminPostImage"); 
+      const display = document.getElementById("adminFileNameDisplay"); 
+      if(input.files[0]) {
+        display.innerText = input.files[0].name + " (" + (input.files[0].size / (1024*1024)).toFixed(1) + "MB)";
+      } else {
+        display.innerText = "Lägg till en bild (valfritt)";
+      }
+    }
+
+    function updateOwnerFileName() { 
+      const input = document.getElementById("ownerPostImage"); 
+      const display = document.getElementById("ownerFileNameDisplay"); 
+      if(input.files[0]) {
+        display.innerText = input.files[0].name + " (" + (input.files[0].size / (1024*1024)).toFixed(1) + "MB)";
+      } else {
+        display.innerText = "Lägg till en bild (valfritt)";
+      }
+    }
+
     function updateFakeOnline(){
       const hour = new Date().getHours();
       document.getElementById("onlineCount").innerText = (hour >= 0 && hour < 7) ? Math.floor(Math.random()*4) : Math.floor(Math.random()*8)+3;
@@ -837,8 +1255,24 @@
       const cutoff = new Date(Date.now() - (48 * 60 * 60 * 1000)).toISOString();
       await supabaseClient.from('posts').delete().lt('created', cutoff);
       
-      if(document.getElementById("homePage").classList.contains("active")) {
+      if(document.getElementById("homePage").classList.contains("active") || document.getElementById("adminPage").classList.contains("active")) {
         await loadPosts();
+      }
+    }
+
+    async function enforceMaxPosts() {
+      const { data: allPosts, error } = await supabaseClient
+        .from('posts')
+        .select('id, created')
+        .order('created', { ascending: true });
+      
+      if(allPosts && allPosts.length >= MAX_POSTS) {
+        const postsToDelete = allPosts.slice(0, 20);
+        const idsToDelete = postsToDelete.map(p => p.id);
+        
+        for(let id of idsToDelete) {
+          await supabaseClient.from('posts').delete().eq('id', id);
+        }
       }
     }
 
@@ -848,9 +1282,10 @@
         .on('postgres_changes', 
           { event: 'INSERT', schema: 'public', table: 'posts' },
           (payload) => {
-            if(document.getElementById("homePage").classList.contains("active")) {
+            if(document.getElementById("homePage").classList.contains("active") || document.getElementById("adminPage").classList.contains("active")) {
               loadPosts();
             }
+            enforceMaxPosts();
           }
         )
         .subscribe();
@@ -866,8 +1301,19 @@
       subscribeToPosts();
       updateFakeOnline();
       await loadPosts();
+      await enforceMaxPosts();
       
       document.getElementById("postText").addEventListener("input", updateCharCount);
+      
+      const adminTextarea = document.getElementById("adminPostText");
+      if(adminTextarea) {
+        adminTextarea.addEventListener("input", updateAdminCharCount);
+      }
+      
+      const ownerTextarea = document.getElementById("ownerPostText");
+      if(ownerTextarea) {
+        ownerTextarea.addEventListener("input", updateOwnerCharCount);
+      }
     }
     init();
   </script>
