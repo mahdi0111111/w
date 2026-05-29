@@ -95,40 +95,6 @@
       color:black;
     }
 
-    .nav-btn .unread-dot {
-      position: absolute;
-      top: -3px;
-      right: -3px;
-      width: 10px;
-      height: 10px;
-      background: #ff3d3d;
-      border-radius: 50%;
-      display: none;
-      border: 2px solid rgba(0,0,0,0.8);
-      box-shadow: 0 0 4px rgba(255,0,0,0.3);
-    }
-
-    .nav-btn .unread-dot.show {
-      display: block;
-    }
-
-    .profile-nav-btn {
-      padding:4px;
-      border-radius:50%;
-      width:42px;
-      height:42px;
-      overflow:hidden;
-      background:rgba(255,255,255,0.1);
-      border:1px solid rgba(255,255,255,0.2);
-      flex-shrink: 0;
-    }
-    .profile-nav-btn img {
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      border-radius:50%;
-    }
-
     .hamburger {
       display:none;
       cursor:pointer;
@@ -152,21 +118,6 @@
     }
     .hamburger.active .bar:nth-child(3) {
       transform: translateY(-9px) rotate(-45deg);
-    }
-    .hamburger-dot {
-      position: absolute;
-      top: -6px;
-      right: -8px;
-      width: 12px;
-      height: 12px;
-      background: #ff3d3d;
-      border-radius: 50%;
-      display: none;
-      border: 2px solid rgba(0,0,0,0.8);
-      box-shadow: 0 0 4px rgba(255,0,0,0.3);
-    }
-    .hamburger-dot.show {
-      display: block;
     }
 
     .global-notification {
@@ -198,51 +149,6 @@
     }
     .global-notification.show {
       opacity: 1;
-    }
-
-    .ban-popup-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.9);
-      z-index: 10003;
-      display: none;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-    .ban-popup {
-      background: #1a1a1a;
-      border: 2px solid #ff3d3d;
-      border-radius: 20px;
-      padding: 30px;
-      max-width: 500px;
-      width: 100%;
-      text-align: center;
-    }
-    .ban-popup h2 {
-      color: #ff3d3d;
-      margin-bottom: 15px;
-      font-size: 28px;
-    }
-    .ban-popup .ban-reasons {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px;
-      padding: 15px;
-      margin: 15px 0;
-      text-align: left;
-      line-height: 1.8;
-      font-size: 14px;
-    }
-    .ban-popup .ban-mail-info {
-      background: rgba(255,215,0,0.1);
-      border: 1px solid rgba(255,215,0,0.3);
-      border-radius: 12px;
-      padding: 15px;
-      margin: 15px 0;
-      font-size: 15px;
-      font-weight: bold;
-      color: #ffd700;
     }
 
     .confirm-popup-overlay {
@@ -295,30 +201,6 @@
       color: white;
     }
 
-    .edit-nickname-popup-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.85);
-      z-index: 10002;
-      display: none;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-    .edit-nickname-popup {
-      background: #1a1a1a;
-      border: 2px solid rgba(255,255,255,0.2);
-      border-radius: 20px;
-      padding: 30px;
-      max-width: 400px;
-      width: 100%;
-      text-align: center;
-    }
-    .edit-nickname-popup h3 {
-      margin-bottom: 15px;
-      font-size: 20px;
-    }
-
     .hero{
       background: transparent;
       display:flex;
@@ -335,7 +217,7 @@
       width: 100%;
       display:flex;
       flex-direction:column;
-      gap:60px;
+      gap:40px;
     }
 
     .marquee-wrapper {
@@ -366,42 +248,7 @@
       opacity:0.95;
       line-height:1.8;
       margin: 0;
-    }
-
-    .hero-buttons{
-      display:flex;
-      justify-content:center;
-      flex-wrap:wrap;
-      gap:20px;
-    }
-
-    .hero-btn{
-      padding:16px 32px;
-      border-radius:999px;
-      border:none;
-      cursor:pointer;
-      font-size:16px;
-      transition:0.3s;
-    }
-
-    .primary{
-      background:white;
-      color:black;
-    }
-
-    .secondary{
-      background:transparent;
-      border:1px solid rgba(255,255,255,0.4);
-      color:white;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-    }
-    .instagram-icon {
-      width:22px;
-      height:22px;
-      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM12 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zM12 16c-2.209 0-4-1.791-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4zm7.846-10.405c0 .795-.646 1.441-1.441 1.441s-1.441-.646-1.441-1.441.646-1.441 1.441-1.441 1.441.646 1.441 1.441z"/></svg>') no-repeat center;
-      background-size: contain;
+      font-style: italic;
     }
 
     .online-counter{
@@ -416,6 +263,43 @@
       margin: 0 auto;
     }
 
+    .inline-create-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .inline-create-card {
+      background: rgba(20,20,20,0.8);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 30px;
+      padding: 30px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      width: 100%;
+      text-align: left;
+    }
+
+    .inline-create-title {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: white;
+    }
+
+    .rules-warning {
+      text-align: center;
+      color: rgba(255,255,255,0.4);
+      font-size: 13px;
+      margin-bottom: 25px;
+      font-style: italic;
+    }
+
     .posts-wrapper {
       width: 100%;
       background: transparent;
@@ -425,7 +309,7 @@
     }
 
     .section{
-      padding:0px 20px 40px;
+      padding:40px 20px 40px;
       max-width:900px;
       margin:auto;
       background: transparent;
@@ -435,31 +319,52 @@
       text-align:center;
       font-size:38px;
       margin-bottom:20px;
+      font-style: italic;
+      letter-spacing: 2px;
     }
 
     .posts{
       display:flex;
       flex-direction:column;
-      gap:40px;
+      gap:30px;
       padding-bottom: 60px;
     }
 
     .post{
-      background:rgba(0,0,0,0.3);
-      backdrop-filter:blur(5px);
-      border:1px solid rgba(255,255,255,0.1);
-      border-radius:28px;
+      background: linear-gradient(135deg, rgba(30,30,40,0.6), rgba(20,20,30,0.8));
+      backdrop-filter:blur(10px);
+      border:1px solid rgba(255,255,255,0.12);
+      border-radius:20px;
       overflow:hidden;
       transition:0.3s;
       width:100%;
+      position: relative;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .post::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #ff6b9d, #c44dff, #6b9dff);
+      opacity: 0.8;
+    }
+    .post:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+      border-color: rgba(255,255,255,0.25);
     }
 
     .post.owner-post {
       background: linear-gradient(135deg, rgba(50,40,0,0.5), rgba(0,0,0,0.6));
       border: 2px solid gold;
-      box-shadow: 0 0 20px rgba(255,215,0,0.2);
+      box-shadow: 0 0 30px rgba(255,215,0,0.2);
     }
-
+    .post.owner-post::before {
+      background: linear-gradient(90deg, gold, #ffd700, gold);
+    }
     .post.owner-post .post-user {
       color: gold;
     }
@@ -468,12 +373,12 @@
       display:flex;
       align-items:center;
       gap:14px;
-      padding:20px;
+      padding:20px 20px 10px;
     }
 
     .profile-pic{
-      width:56px;
-      height:56px;
+      width:50px;
+      height:50px;
       border-radius:50%;
       object-fit:cover;
       background:#333;
@@ -481,41 +386,43 @@
     }
 
     .post-user{
-      font-size:18px;
+      font-size:17px;
       font-weight:bold;
+      letter-spacing: 1px;
     }
     .post-date {
-      font-size:12px;
-      opacity:0.6;
+      font-size:11px;
+      opacity:0.5;
       margin-left:auto;
+      font-style: italic;
     }
     .owner-badge {
       background:linear-gradient(135deg, gold, #ffcc00);
       color:black;
-      font-size:11px;
+      font-size:10px;
       border-radius:30px;
-      padding:4px 12px;
+      padding:4px 10px;
       margin-left:10px;
       font-weight:bold;
-      animation: glow 2s ease-in-out infinite;
-    }
-    @keyframes glow {
-      0%, 100% { box-shadow: 0 0 5px gold; }
-      50% { box-shadow: 0 0 20px gold, 0 0 40px gold; }
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .post-you-badge {
       color: #4fc3f7;
-      font-size: 12px;
-      font-weight: normal;
-      margin-left: 6px;
+      font-size: 13px;
+      font-weight: bold;
+      margin-left: 8px;
+      font-style: italic;
     }
 
     .post-content{
-      padding:0 20px 20px;
-      line-height:1.7;
+      padding:10px 20px 20px;
+      line-height:1.8;
       word-wrap:break-word;
       font-size:16px;
+      font-style: italic;
+      color: rgba(255,255,255,0.9);
     }
 
     .page{
@@ -534,48 +441,6 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
-    }
-
-    .create-page-wrapper {
-      max-width: 700px;
-      width: 100%;
-    }
-
-    .create-card {
-      background: rgba(20,20,20,0.8);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 30px;
-      padding: 40px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-      width: 100%;
-    }
-
-    .create-card .section-title {
-      margin-bottom: 10px;
-      font-size: 32px;
-    }
-
-    .rules-warning {
-      text-align: center;
-      color: rgba(255,255,255,0.4);
-      font-size: 13px;
-      margin-bottom: 25px;
-      font-style: italic;
-    }
-
-    .anonymous-checkbox-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 18px;
-      font-size: 15px;
-    }
-    .anonymous-checkbox-wrapper input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      cursor: pointer;
-      accent-color: gold;
     }
 
     .input{
@@ -624,84 +489,6 @@
       background: #f0f0f0;
     }
 
-    .red-btn {
-      background:#ff3d3d !important;
-      color:white !important;
-    }
-    .red-btn:hover {
-      background: #ff2020 !important;
-    }
-
-    .warn-btn {
-      background: #ff9800 !important;
-      color: white !important;
-      width: auto !important;
-      padding: 8px 14px !important;
-      font-size: 12px !important;
-      border-radius: 8px !important;
-    }
-
-    .profile-wrapper{
-      max-width:700px;
-      width: 100%;
-      margin:auto;
-      text-align:center;
-      background:transparent;
-    }
-
-    .big-profile{
-      width:130px;
-      height:130px;
-      border-radius:50%;
-      object-fit:cover;
-      margin:auto;
-      background:transparent;
-      border:2px solid rgba(255,255,255,0.3);
-    }
-
-    .profile-name{
-      margin-top:18px;
-      font-size:30px;
-    }
-
-    .profile-email{
-      margin-top:8px;
-      opacity:0.8;
-    }
-
-    .profile-registered {
-      margin-top: 6px;
-      opacity: 0.6;
-      font-size: 14px;
-    }
-
-    .owner-profile-badge {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 6px 14px;
-      border-radius: 999px;
-      background: gold;
-      color: black;
-      font-size: 13px;
-      font-weight: bold;
-    }
-
-    .edit-profile-btn {
-      margin-top: 30px;
-      padding: 12px 30px;
-      border: 2px solid rgba(255,255,255,0.3);
-      background: transparent;
-      color: white;
-      border-radius: 30px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: 0.3s;
-    }
-    .edit-profile-btn:hover {
-      background: rgba(255,255,255,0.1);
-      border-color: white;
-    }
-
     .info-box{
       background:rgba(11,11,11,0.8);
       backdrop-filter:blur(10px);
@@ -714,674 +501,47 @@
       width: 100%;
     }
 
-    .edit-profile-modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.9);
-      z-index: 10000;
-      display: none;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-    .edit-profile-card {
-      background: #0b0b0b;
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 30px;
-      padding: 40px;
+    /* Video Chat CSS */
+    .video-chat-container {
+      max-width: 1200px;
       width: 100%;
-      max-width: 500px;
-      max-height: 90vh;
-      overflow-y: auto;
-      position: relative;
-    }
-    .edit-profile-close {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: none;
-      border: none;
-      color: white;
-      font-size: 24px;
-      cursor: pointer;
-      opacity: 0.7;
-    }
-    .edit-profile-close:hover {
-      opacity: 1;
-    }
-
-    .auth-box, .popup-box{
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,0.88);
-      z-index:9999;
-      display:none;
-      justify-content:center;
-      align-items:center;
-      padding:20px;
-    }
-
-    .auth-card, .popup-card{
-      width:100%;
-      max-width:420px;
-      background:#0b0b0b;
-      border-radius:24px;
-      padding:30px;
-      border:1px solid rgba(255,255,255,0.1);
-      position:relative;
-    }
-
-    .auth-title{
-      text-align:center;
-      font-size:30px;
-      margin-bottom:24px;
-    }
-
-    .close-auth{
-      position:absolute;
-      top: 20px;
-      right: 20px;
-      cursor:pointer;
-      font-size:20px;
-    }
-
-    .auth-tabs {
-      display:flex;
-      margin-bottom:20px;
-      gap:10px;
-    }
-    .auth-tab-btn {
-      flex:1;
-      padding:10px;
-      background:transparent;
-      border:1px solid rgba(255,255,255,0.2);
-      color:white;
-      cursor:pointer;
-      border-radius:10px;
-      transition:0.3s;
-    }
-    .auth-tab-btn.active {
-      background:white;
-      color:black;
-    }
-
-    .admin-badge{
-      display:inline-block;
-      margin-top:10px;
-      padding:6px 14px;
-      border-radius:999px;
-      background:white;
-      color:black;
-      font-size:13px;
-    }
-
-    .delete-btn{
-      margin-top:14px;
-      background:#ff3d3d;
-      border:none;
-      color:white;
-      width:100%;
-      padding:12px;
-      cursor:pointer;
-      border-radius:12px;
-    }
-
-    .admin-search-input {
-      width: 100%;
-      background:rgba(10,10,10,0.6);
-      border:1px solid rgba(255,255,255,0.2);
-      color:white;
-      padding:12px;
-      border-radius:10px;
-      margin-bottom:15px;
-      font-size:14px;
-    }
-    
-    .admin-table-wrapper {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      max-width: 100%;
-    }
-    .admin-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-      font-size: 14px;
-      min-width: 600px;
-    }
-    
-    .admin-table th {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 2px solid rgba(255,255,255,0.3);
-      font-weight: bold;
-    }
-    
-    .admin-table td {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .admin-create-section {
-      background: linear-gradient(135deg, rgba(50,40,0,0.4), rgba(20,20,20,0.6));
-      border: 2px solid gold;
-      border-radius: 24px;
-      padding: 25px;
-      margin-top: 30px;
-      text-align: left;
-    }
-    .admin-create-section .section-title {
-      color: gold;
-      font-size: 24px;
-      margin-bottom: 15px;
-    }
-
-    .admin-action-buttons {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-      flex-wrap: wrap;
-    }
-    .admin-action-btn {
-      padding: 10px 18px;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: bold;
-      transition: 0.3s;
-      background: rgba(255,255,255,0.1);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-    .admin-action-btn:hover {
-      background: rgba(255,255,255,0.2);
-    }
-    .admin-action-btn.danger {
-      background: #ff3d3d;
-      border-color: #ff3d3d;
-    }
-
-    /* Chat CSS */
-    .chat-page-layout {
-      display:flex;
-      gap:0;
-      height:calc(100vh - 100px);
-      background:transparent;
-      align-items:stretch;
-      margin: 0;
-      padding: 0;
-      position: fixed;
-      top: 100px;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
-    
-    .friends-sidebar {
-      width:350px;
-      background:rgba(10,10,10,0.95);
-      backdrop-filter:blur(20px);
-      border-right:1px solid rgba(255,255,255,0.1);
-      padding:20px;
-      overflow-y:auto;
-      display:flex;
-      flex-direction:column;
-      gap:15px;
-      height:100%;
-      flex-shrink:0;
-    }
-    
-    .friends-sidebar::-webkit-scrollbar {
-      width: 6px;
-    }
-    
-    .friends-sidebar::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.05);
-    }
-    
-    .friends-sidebar::-webkit-scrollbar-thumb {
-      background: rgba(255,255,255,0.2);
-      border-radius: 3px;
-    }
-    
-    .chat-main-area {
-      flex:1;
-      background:rgba(15,15,15,0.95);
-      backdrop-filter:blur(20px);
-      display:flex;
-      flex-direction:column;
-      height:100%;
-      overflow: hidden;
-    }
-    
-    .chat-messages-area {
-      flex:1;
-      overflow-y:auto;
-      padding:20px;
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-    }
-    
-    .chat-messages-area::-webkit-scrollbar {
-      width: 6px;
-    }
-    
-    .chat-messages-area::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.05);
-    }
-    
-    .chat-messages-area::-webkit-scrollbar-thumb {
-      background: rgba(255,255,255,0.2);
-      border-radius: 3px;
-    }
-    
-    .empty-chat-state {
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      height:100%;
-      text-align:center;
-      gap:20px;
-    }
-    .empty-chat-state img {
-      width:120px;
-      height:120px;
-      border-radius:50%;
-      border:3px solid rgba(255,255,255,0.3);
-    }
-    .empty-chat-state h3 {
-      font-size:28px;
-    }
-    .empty-chat-state p {
-      opacity:0.7;
-    }
-    
-    .chat-header {
-      padding:20px;
-      border-bottom:1px solid rgba(255,255,255,0.1);
-      font-size:20px;
-      font-weight:bold;
-      background:rgba(0,0,0,0.3);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      flex-shrink: 0;
-    }
-
-    .chat-header-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .chat-header-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid rgba(255,255,255,0.3);
-    }
-    
-    .close-chat-btn {
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-      font-size: 24px;
-      padding: 5px 10px;
-      border-radius: 8px;
-      transition: 0.3s;
-    }
-    .close-chat-btn:hover {
-      background: rgba(255,255,255,0.1);
-    }
-    
-    .message-bubble {
-      max-width:70%;
-      padding:12px 18px;
-      border-radius:20px;
-      background:rgba(40,40,40,0.8);
-      align-self:flex-start;
-      position: relative;
-    }
-    .message-bubble.own-message {
-      align-self:flex-end;
-      background:rgba(255,255,255,0.15);
-    }
-    .message-sender {
-      font-size:12px;
-      opacity:0.7;
-      margin-bottom:4px;
-    }
-    .message-text {
-      word-wrap:break-word;
-    }
-    .message-status {
-      font-size: 10px;
-      opacity: 0.5;
-      text-align: right;
-      margin-top: 4px;
-    }
-    
-    .chat-input-area-bottom {
-      padding:15px 20px;
-      border-top:1px solid rgba(255,255,255,0.1);
-      display:flex;
-      gap:10px;
-      background:rgba(0,0,0,0.3);
-      align-items:center;
-      flex-shrink: 0;
-    }
-    .chat-input {
-      flex:1;
-      background:rgba(20,20,20,0.8);
-      border:1px solid rgba(255,255,255,0.2);
-      border-radius:30px;
-      padding:12px 18px;
-      color:white;
-      font-size:15px;
-    }
-    .chat-input:focus {
-      outline: none;
-      border-color: rgba(255,255,255,0.4);
-    }
-    .send-btn {
-      width: auto;
-      padding: 12px 24px;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      background: white;
-      color: black;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-    .send-btn:hover {
-      background: #f0f0f0;
-    }
-
-    .add-friend-btn-wrapper {
-      position: relative;
-      display: inline-block;
-    }
-    .add-friend-btn-wrapper .unread-dot {
-      position: absolute;
-      top: -4px;
-      right: -4px;
-      width: 10px;
-      height: 10px;
-      background: #ff3d3d;
-      border-radius: 50%;
-      display: none;
-      border: 2px solid rgba(0,0,0,0.8);
-    }
-    .add-friend-btn-wrapper .unread-dot.show {
-      display: block;
-    }
-    
-    .friend-item {
-      display:flex;
-      align-items:center;
-      gap:12px;
-      padding:12px;
-      background:rgba(255,255,255,0.03);
-      cursor:pointer;
-      transition:0.2s;
-      border: 1px solid transparent;
-      position: relative;
-    }
-    .friend-item:hover {
-      background:rgba(255,255,255,0.08);
-    }
-    .friend-item.active-friend {
-      background:rgba(255,255,255,0.12);
-      border-left:3px solid gold;
-    }
-    .friend-item .unread-dot {
-      position: absolute;
-      top: 6px;
-      left: 6px;
-      width: 10px;
-      height: 10px;
-      background: #ff3d3d;
-      border-radius: 50%;
-      display: none;
-      border: 2px solid rgba(0,0,0,0.8);
-      z-index: 5;
-      box-shadow: 0 0 4px rgba(255,0,0,0.3);
-    }
-    .friend-item .unread-dot.show {
-      display: block;
-    }
-    .friend-avatar {
-      width:48px;
-      height:48px;
-      border-radius:50%;
-      object-fit:cover;
-      border: 2px solid rgba(255,255,255,0.2);
-    }
-    .friend-info {
-      flex:1;
-      cursor: pointer;
-      min-width: 0;
-    }
-    .friend-name {
-      font-weight:bold;
-      font-size: 15px;
-    }
-    .friend-last-message {
-      font-size: 12px;
-      opacity: 0.6;
-      margin-top: 2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .friend-last-message.unread {
-      opacity: 1;
-      color: #fff;
-      font-weight: bold;
-    }
-    .friend-remove-btn {
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      color: white;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: 0.3s;
-      flex-shrink: 0;
-    }
-    .friend-remove-btn:hover {
-      background: #ff3d3d;
-      border-color: #ff3d3d;
-    }
-    .friend-edit-nick-btn {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
-      color: white;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: 0.3s;
-      flex-shrink: 0;
-      margin-right: 4px;
-    }
-    .friend-edit-nick-btn:hover {
-      background: rgba(255,255,255,0.2);
-    }
-    .section-title-chat {
-      font-size:20px;
-      font-weight: bold;
-    }
-    .no-friends {
-      opacity:0.6;
-      text-align:center;
-      padding:20px;
-    }
-
-    .friends-popup-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.8);
-      z-index: 9998;
-      display: none;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-    .friends-popup {
-      background: rgba(15,15,15,0.98);
-      backdrop-filter: blur(30px);
-      border: 1px solid rgba(255,255,255,0.15);
-      padding: 25px;
-      width: 420px;
-      max-width: 90vw;
-      height: 500px;
+      margin: 0 auto;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-    }
-    .friends-popup-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      flex-shrink: 0;
-    }
-    .friends-popup-body {
-      flex: 1;
-      overflow-y: auto;
-      min-height: 0;
-    }
-    .friends-popup-body::-webkit-scrollbar {
-      width: 5px;
-    }
-    .friends-popup-body::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.05);
-    }
-    .friends-popup-body::-webkit-scrollbar-thumb {
-      background: rgba(255,255,255,0.2);
-      border-radius: 3px;
-    }
-    .search-input {
-      width: 100%;
-      background: rgba(10,10,10,0.8);
-      border: 1px solid rgba(255,255,255,0.15);
-      padding: 14px;
-      color: white;
-      font-size: 15px;
-      margin-bottom: 15px;
-      flex-shrink: 0;
-    }
-    .search-result-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      background: rgba(255,255,255,0.03);
-      margin-bottom: 8px;
-      transition: 0.2s;
-    }
-    .search-result-item:hover {
-      background: rgba(255,255,255,0.06);
-    }
-    .search-result-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-    .search-result-name {
-      flex: 1;
-      font-weight: bold;
-    }
-    .add-friend-btn {
-      padding: 8px 16px;
-      border: none;
-      background: white;
-      color: black;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-    .add-friend-btn:hover {
-      background: #f0f0f0;
-    }
-    .add-friend-btn.sent {
-      background: rgba(255,255,255,0.2);
-      color: white;
-      cursor: default;
-    }
-    .add-friend-btn.friend {
-      background: rgba(255,255,255,0.1);
-      color: white;
-      cursor: default;
+      gap: 20px;
     }
 
-    .request-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-    .reject-request-btn {
-      width: 28px;
-      height: 28px;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      color: white;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: 0.3s;
-      flex-shrink: 0;
-    }
-    .reject-request-btn:hover {
-      background: #ff3d3d;
-      border-color: #ff3d3d;
-    }
-
-    .admin-chat-popup {
-      background: #0b0b0b;
-      border: 2px solid gold;
-      border-radius: 20px;
-      padding: 25px;
-      max-width: 600px;
-      width: 90%;
-      max-height: 80vh;
-      overflow-y: auto;
-    }
-    .admin-chat-popup h3 {
-      color: gold;
+    .kopingtv-coming-soon {
       text-align: center;
+      padding: 60px 20px;
+      background: rgba(0,0,0,0.4);
+      border-radius: 30px;
+      border: 2px solid rgba(255,215,0,0.3);
+    }
+    .kopingtv-coming-soon h2 {
+      font-size: 48px;
+      font-style: italic;
+      letter-spacing: 3px;
+      background: linear-gradient(135deg, #ff6b9d, #c44dff, gold);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       margin-bottom: 20px;
     }
-    .admin-chat-msg {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 10px;
+    .kopingtv-coming-soon .tv-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
     }
-    .admin-chat-msg strong {
-      color: #ccc;
+    .kopingtv-coming-soon .construction-text {
+      font-size: 18px;
+      opacity: 0.7;
+      font-style: italic;
+    }
+    .kopingtv-coming-soon .sparkles {
+      font-size: 24px;
+      letter-spacing: 8px;
+      margin-top: 15px;
+      opacity: 0.6;
     }
 
     .footer {
@@ -1393,42 +553,6 @@
     }
     .no-footer {
       display:none;
-    }
-
-    .mobile-back-btn {
-      display: none;
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-      font-size: 24px;
-      padding: 5px 10px;
-      border-radius: 8px;
-      transition: 0.3s;
-    }
-    .mobile-back-btn:hover {
-      background: rgba(255,255,255,0.1);
-    }
-
-        .attach-btn {
-      width: 40px;
-      height: 40px;
-      background: rgba(255,255,255,0.06);
-      border: 2px solid rgba(255,255,255,0.15);
-      border-radius: 50%;
-      color: rgba(255,255,255,0.7);
-      cursor: pointer;
-      font-size: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-      flex-shrink: 0;
-    }
-    .attach-btn:hover {
-      background: rgba(255,255,255,0.15);
-      border-color: rgba(255,255,255,0.4);
-      color: white;
     }
 
     .custom-file-upload {
@@ -1473,120 +597,39 @@
         transition:0.4s ease;
         gap:8px;
       }
-          body {
-      background-attachment: scroll;
-      background-size: cover;
-    }
+      body {
+        background-attachment: fixed;
+        background-size: cover;
+        background-position: center center;
+      }
       .nav-links.active { right: 0; }
       .nav-btn { width: 80%; text-align: center; font-size: 16px; padding: 14px; }
-      .profile-nav-btn {
-        width: 42px;
-        height: 42px;
-        border-radius: 50%;
-        padding: 4px;
-        margin: 0 auto;
-      }
       .marquee-text { font-size: 36px; padding-right: 60px; letter-spacing: 4px; word-spacing: 20px; }
       .hero p{ font-size:18px; }
-      .section-title{ font-size:30px; }
-      .section{ padding: 0px 15px 30px; }
+      .section-title{ font-size:28px; }
+      .section{ padding: 30px 15px 30px; }
       .posts-wrapper { margin-top: -100px; }
       .page{ padding-top:80px; }
       .page-content-wrapper { min-height: calc(100vh - 80px); padding: 15px; }
-      .hero-buttons { flex-direction:column-reverse; align-items:center; }
-      
-      .create-card {
-        padding: 25px 20px;
+
+      .inline-create-card {
+        padding: 20px 15px;
         border-radius: 20px;
       }
-      .create-card .section-title {
-        font-size: 24px;
+      .inline-create-title {
+        font-size: 20px;
       }
 
-      .profile-wrapper {
-        padding: 0 10px;
-      }
-      .big-profile {
-        width: 100px;
-        height: 100px;
-      }
-      .profile-name {
-        font-size: 24px;
-      }
       .info-box {
         padding: 25px 20px;
         font-size: 16px;
       }
 
-      .admin-table-wrapper {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        max-width: 100vw;
-        margin: 0 -10px;
-        padding: 0 10px;
+      .kopingtv-coming-soon h2 {
+        font-size: 32px;
       }
-      .admin-table {
-        min-width: 600px;
-      }
-
-      .chat-page-layout { 
-        flex-direction:column;
-        padding: 0;
-        top: 80px;
-        height: calc(100vh - 80px);
-      }
-      .friends-sidebar { 
-        width:100%;
-        height: 100%;
-        max-height: none;
-        display: block;
-        border-right: none;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 10;
-      }
-      .chat-main-area { 
-        height: 100%;
-        display: none;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 20;
-      }
-      .chat-main-area.mobile-active {
-        display: flex;
-      }
-      .friends-sidebar.mobile-hidden {
-        display: none;
-      }
-      .mobile-back-btn {
-        display: flex;
-      }
-      .close-chat-btn {
-        display: none;
-      }
-      .chat-header {
-        font-size: 18px;
-        padding: 15px;
-      }
-      .chat-input-area-bottom {
-        padding: 10px 15px;
-      }
-      .chat-input {
-        padding: 10px 14px;
-        font-size: 14px;
-      }
-      .send-btn {
-        padding: 10px 16px;
-        font-size: 13px;
-      }
-      .message-bubble {
-        max-width: 85%;
+      .kopingtv-coming-soon .tv-icon {
+        font-size: 50px;
       }
     }
   </style>
@@ -1594,45 +637,6 @@
 <body>
 
   <div class="global-notification" id="globalNotification"></div>
-
-  <div class="confirm-popup-overlay" id="confirmPopupOverlay">
-    <div class="confirm-popup">
-      <h3 id="confirmPopupTitle">Bekräfta</h3>
-      <p id="confirmPopupMessage"></p>
-      <div class="confirm-popup-buttons">
-        <button class="confirm-popup-btn cancel" onclick="closeConfirmPopup()">Avbryt</button>
-        <button class="confirm-popup-btn confirm" id="confirmPopupBtn" onclick="executeConfirmAction()">Ta bort</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="ban-popup-overlay" id="banPopupOverlay">
-    <div class="ban-popup">
-      <h2>Du har blivit bannad</h2>
-      <p>Ditt konto har stängts av på grund av regelbrott.</p>
-      <div class="ban-mail-info">
-        Ett mejl med detaljerad information om avstängningen har skickats till din e-postadress. Vänligen kontrollera din inkorg (och skräppost) för mer information om avstängningens längd och anledning.
-      </div>
-      <div class="ban-reasons">
-        <strong>Sannolika skäl:</strong><br>
-        - Upprepade regelbrott<br>
-        - Olämpligt beteende<br>
-        - Brott mot communityns riktlinjer
-      </div>
-      <button class="submit-btn" style="margin-top:15px;" onclick="closeBanPopup()">Stäng</button>
-    </div>
-  </div>
-
-  <div class="edit-nickname-popup-overlay" id="editNicknamePopupOverlay">
-    <div class="edit-nickname-popup">
-      <h3>Redigera visningsnamn</h3>
-      <input type="text" id="editNicknameInput" class="input" placeholder="Nytt visningsnamn..." />
-      <div class="confirm-popup-buttons">
-        <button class="confirm-popup-btn cancel" onclick="closeEditNicknamePopup()">Avbryt</button>
-        <button class="confirm-popup-btn confirm" id="saveNicknameBtn" style="background:#4fc3f7;">Spara</button>
-      </div>
-    </div>
-  </div>
 
   <div class="topbar" id="topbar">
     <a href="#" onclick="goHome(); return false;" class="logo-link">
@@ -1643,18 +647,12 @@
       <div class="bar"></div>
       <div class="bar"></div>
       <div class="bar"></div>
-      <div class="hamburger-dot" id="hamburgerDot"></div>
     </div>
 
     <div class="nav-links" id="navLinks">
       <button class="nav-btn" onclick="goHome(); closeMenu();">Hem</button>
-      <button class="nav-btn" id="chatNavBtn" onclick="showPage('chatPage'); closeMenu();">Chatt<span class="unread-dot" id="chatUnreadDot"></span></button>
-      <button class="nav-btn" id="createNavBtn" style="display:none;" onclick="showPage('createPage'); closeMenu();">Skapa Inlägg</button>
+      <button class="nav-btn" onclick="showPage('videoChatPage'); closeMenu();">KöpingTV</button>
       <button class="nav-btn" onclick="showPage('infoPage'); closeMenu();">Info</button>
-      <button class="nav-btn" id="loginNavBtn" onclick="openAuth(); closeMenu();">Logga In</button>
-      <button class="nav-btn profile-nav-btn" id="profileNavBtn" style="display:none;" onclick="showPage('profilePage'); closeMenu();">
-        <img id="navProfilePic" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile" />
-      </button>
     </div>
   </div>
 
@@ -1662,115 +660,61 @@
     <div class="hero-content">
       <div class="marquee-wrapper">
         <div class="marquee-content">
-          <div class="marquee-text">Anonymt. Lokalt. Dramatiskt. Äkta. Köping.</div>
-          <div class="marquee-text">Anonymt. Lokalt. Dramatiskt. Äkta. Köping.</div>
+          <div class="marquee-text">Anonymt.   Lokalt.   Dramatiskt.   Äkta.   Köping.</div>
+          <div class="marquee-text">Anonymt.   Lokalt.   Dramatiskt.   Äkta.   Köping.</div>
         </div>
       </div>
       <p>
         Skvaller. Hemligheter. Kaos.<br>
         Köpings ungdomar har nu en plats där allt sägs.
       </p>
-      <div class="hero-buttons">
-        <button class="hero-btn primary" id="heroMainBtn" onclick="heroAction()">Logga In</button>
-        <a href="https://www.instagram.com/kopingsbloggen/" target="_blank">
-          <button class="hero-btn secondary"><span class="instagram-icon"></span> Instagram</button>
-        </a>
-      </div>
+      
       <div class="online-counter">Online nu: <span id="onlineCount">0</span></div>
+      
+      <div class="inline-create-section" id="inlineCreateSection">
+        <div class="inline-create-card">
+          <h3 class="inline-create-title">Skapa Inlägg</h3>
+          <p class="rules-warning">Alla inlägg publiceras anonymt. Följer du inte reglerna så blockeras du.</p>
+          <textarea id="postText" class="input" placeholder="Vad vill du dela med dig av?"></textarea>
+          <div class="char-counter" id="charCounter">0 / 500</div>
+          <input type="file" id="postImage" accept="image/*" style="display:none" onchange="updateFileName()" />
+          <label for="postImage" class="custom-file-upload">
+            <span id="fileNameDisplay">Lägg till en bild (valfritt)</span>
+          </label>
+          <button class="submit-btn" onclick="createPost()">Publicera Anonymt</button>
+        </div>
+      </div>
     </div>
   </section>
 
   <div class="posts-wrapper" id="postsSection">
     <div class="section">
-      <h2 class="section-title">Senaste Inlägg</h2>
+      <h2 class="section-title">&#9670; Senaste Skvallret &#9670;</h2>
       <div class="posts" id="postsContainer"></div>
     </div>
   </div>
 
-  <section class="page" id="createPage">
+  <section class="page" id="videoChatPage">
     <div class="page-content-wrapper">
-      <div class="create-page-wrapper">
-        <div class="create-card">
-          <h2 class="section-title">Skapa Inlägg</h2>
-          <p class="rules-warning">Följer du inte reglerna så blir ditt konto bannat</p>
-          <textarea id="postText" class="input" placeholder="Vad vill du dela med dig av?" rows="5" maxlength="500" oninput="updateCharCount()"></textarea>
-          <div class="char-counter" id="charCounter">0 / 500</div>
-          <div class="anonymous-checkbox-wrapper">
-            <input type="checkbox" id="anonymousCheckbox" />
-            <label for="anonymousCheckbox">Publicera anonymt</label>
-          </div>
-          <input type="file" id="postImage" accept="image/*" style="display:none" onchange="updateFileName()" />
-          <label for="postImage" class="custom-file-upload">
-            <span id="fileNameDisplay">Lägg till en bild (valfritt)</span>
-          </label>
-          <button class="submit-btn" onclick="createPost()">Publicera</button>
-        </div>
+      <div class="kopingtv-coming-soon">
+        <div class="tv-icon">&#128250;</div>
+        <h2>KöpingTV</h2>
+        <p class="construction-text">Håller på att byggas...</p>
+        <p class="construction-text">Snart kan du videochatta med andra från Köping!</p>
+        <div class="sparkles">&#9670; &#8226; &#9670;</div>
       </div>
     </div>
   </section>
-
-  <section class="page" id="profilePage">
-    <div class="page-content-wrapper">
-      <div class="profile-wrapper">
-        <img id="profileImagePreview" class="big-profile" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile" />
-        <h2 class="profile-name" id="profileUsername">Användare</h2>
-        <div class="profile-email" id="profileEmail"></div>
-        <div class="profile-registered" id="profileRegistered"></div>
-        <div id="adminBadgeContainer"></div>
-        <div id="ownerProfileBadgeContainer"></div>
-        
-        <button class="edit-profile-btn" id="editProfileBtn" onclick="openEditProfile()">Redigera profil</button>
-        <button class="submit-btn red-btn" style="max-width:300px; margin:20px auto 0; display:block;" onclick="confirmLogout()">Logga Ut</button>
-        
-        <div id="adminCreateSection" class="admin-create-section" style="display:none;">
-          <h2 class="section-title">Skapa Ägarinlägg</h2>
-          <textarea id="adminPostText" class="input" placeholder="Skriv ett ägarinlägg..." rows="4" maxlength="500" oninput="updateAdminCharCount()"></textarea>
-          <div class="char-counter" id="adminCharCounter">0 / 500</div>
-          <button class="submit-btn" onclick="createOwnerPost()" style="background: gold; color: black;">Publicera som Ägare</button>
-        </div>
-        
-        <div id="adminPanel" style="display:none; margin-top:40px;">
-          <h2 class="section-title">Adminpanel</h2>
-          <div id="adminPosts"></div>
-          <div class="admin-action-buttons">
-            <button class="admin-action-btn danger" onclick="deleteAllPosts()">Radera alla inlägg</button>
-            <button class="admin-action-btn" onclick="deleteOldestHalfPosts()">Radera äldsta hälften</button>
-          </div>
-          <h2 class="section-title" style="margin-top:40px;">Chattöversikt</h2>
-          <div id="adminChatList"></div>
-          <h2 class="section-title" style="margin-top:40px;">Registrerade Användare</h2>
-          <input type="text" class="admin-search-input" id="adminUserSearch" placeholder="Sök användare..." oninput="filterAdminUsers()" />
-          <div class="admin-table-wrapper">
-            <div id="adminUsersList"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="edit-profile-modal" id="editProfileModal">
-    <div class="edit-profile-card">
-      <button class="edit-profile-close" onclick="closeEditProfile()">✕</button>
-      <h2 style="text-align:center; margin-bottom:20px;">Redigera profil</h2>
-      <input type="text" id="editUsernameInput" class="input" placeholder="Användarnamn" />
-      <input type="password" id="editPasswordInput" class="input" placeholder="Nytt lösenord (lämna tomt för att behålla)" />
-      <input type="file" id="editProfileImageInput" accept="image/*" style="display:none" onchange="previewEditProfileImage()" />
-      <label for="editProfileImageInput" class="custom-file-upload" style="margin-bottom:18px;">
-        <span id="editFileNameDisplay">Byt profilbild (valfritt)</span>
-      </label>
-      <button class="submit-btn" onclick="saveEditProfile()">Spara ändringar</button>
-    </div>
-  </div>
 
   <section class="page" id="infoPage">
     <div class="page-content-wrapper">
       <div class="info-box">
         <h2 style="font-size:40px;margin-bottom:30px;">Hur fungerar anonymiteten?</h2>
         <p>På Köpingsbloggen är anonymiteten det viktigaste. Varje röst förtjänar att höras utan rädsla.</p><br/>
-        <h3>Viktig regel: Om du bryter mot reglerna blir du bannad för livet.</h3>
-        <p>Inga hot, inget doxxing, ingen olaglighet. Respektera andra annars är du borta för alltid.</p><br/>
+        <h3>Viktig regel: Om du bryter mot reglerna blir du blockerad.</h3>
+        <p>Inga hot, inget doxxing, ingen olaglighet. Respektera andra.</p><br/>
         <h3>Ingen vet vem du är</h3>
-        <p>Inte ens vi. Det enda som syns är ditt meddelande.</p><br/>
+        <p>Alla inlägg är helt anonyma.</p><br/>
         <h3>Köpingsbloggen. Din röst, dina hemligheter, ditt Köping.</h3>
         <br/><br/>
         <h3>Kontakta support:</h3>
@@ -1779,94 +723,8 @@
     </div>
   </section>
 
-  <section class="page" id="chatPage">
-    <div class="chat-page-layout" id="chatLayout">
-      <div class="friends-sidebar" id="friendsSidebar">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-          <div class="section-title-chat">Vänner</div>
-          <div class="add-friend-btn-wrapper">
-            <button class="submit-btn" style="width:auto;padding:10px 16px;font-size:14px;" onclick="toggleFriendsPopup()">+ Lägg till</button>
-            <span class="unread-dot" id="addFriendDot"></span>
-          </div>
-        </div>
-        <div id="friendsListContainer"></div>
-      </div>
-
-      <div class="chat-main-area" id="chatMainArea">
-        <div id="emptyChatState" class="empty-chat-state">
-          <img id="emptyProfileImg" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile" />
-          <h3 id="emptyUsername">Användare</h3>
-          <p>Välj en vän för att börja chatta</p>
-        </div>
-
-        <div id="activeChatView" style="display:none; height:100%; flex-direction:column;">
-          <div class="chat-header">
-            <div class="chat-header-left">
-              <button class="mobile-back-btn" onclick="closeCurrentChatMobile()">←</button>
-              <img class="chat-header-avatar" id="chatHeaderAvatar" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Avatar" />
-              <span id="chatHeaderName">Välj en vän</span>
-            </div>
-            <button class="close-chat-btn" onclick="closeCurrentChat()" title="Stäng chatt">✕</button>
-          </div>
-
-          <div class="chat-messages-area" id="chatMessagesArea"></div>
-
-          <div class="chat-input-area-bottom">
-            <input type="text" id="chatMessageInput" class="chat-input" placeholder="Skriv ett meddelande..." />
-                        <input type="file" id="chatImageInput" accept="image/*" style="display:none" onchange="sendChatImage()" />
-            <button class="attach-btn" onclick="document.getElementById('chatImageInput').click()" title="Bifoga bild">📎</button>
-            <button class="send-btn" onclick="sendChatMessage()">Skicka</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="friends-popup-overlay" id="friendsPopupOverlay">
-    <div class="friends-popup">
-      <div class="friends-popup-header">
-        <div class="section-title-chat">Hitta vänner</div>
-        <button onclick="toggleFriendsPopup()" style="background:none; border:none; color:white; cursor:pointer; font-size:24px; opacity:0.7;">✕</button>
-      </div>
-      <input type="text" id="searchUsername" class="search-input" placeholder="Skriv ett användarnamn..." oninput="searchUsers()" />
-      <div class="friends-popup-body">
-        <div id="searchResults" class="search-results"></div>
-        <div id="friendRequestsContainer"></div>
-      </div>
-    </div>
-  </div>
-
   <div class="footer" id="globalFooter">
     <p>Köpingsbloggen - Din röst, dina hemligheter, ditt Köping</p>
-  </div>
-
-  <div class="auth-box" id="authBox">
-    <div class="auth-card">
-      <div class="close-auth" onclick="closeAuth()">✕</div>
-      <h2 class="auth-title">Köpingsbloggen</h2>
-      <div class="auth-tabs">
-        <button class="auth-tab-btn active" id="tabLogin" onclick="setAuthMode('login')">Logga In</button>
-        <button class="auth-tab-btn" id="tabSignup" onclick="setAuthMode('signup')">Skapa Konto</button>
-      </div>
-      <input type="text" id="authUsername" class="input" placeholder="Användarnamn" style="display:none;" />
-      <input type="email" id="authEmail" class="input" placeholder="Mail" />
-      <input type="password" id="authPassword" class="input" placeholder="Lösenord" />
-      <button class="submit-btn" id="authActionBtn" onclick="executeAuth()">Logga In</button>
-    </div>
-  </div>
-
-  <div class="popup-box" id="verificationPopup">
-    <div class="popup-card" style="text-align:center;">
-      <h2 style="margin-bottom:20px;">Verifiera din e-postadress</h2>
-      <p style="margin-bottom:15px;">Ett verifieringsmejl har skickats till din e-postadress. Klicka på länken i mejlet för att aktivera ditt konto.</p>
-      <p style="margin-bottom:20px; font-size:13px; opacity:0.7;">Kolla även skräpposten om du inte hittar mejlet.</p>
-      <button class="submit-btn" onclick="closeVerificationAndOpenLogin()">Okej</button>
-      <button class="submit-btn" onclick="resendVerificationEmail()" style="margin-top:10px; background:#ff9800; color:white;">Skicka verifieringsmejl igen</button>
-    </div>
-  </div>
-
-  <div id="chatModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10000; justify-content:center; align-items:center;">
-    <div class="admin-chat-popup" id="chatModalContent"></div>
   </div>
 
   <script>
@@ -1874,37 +732,118 @@
     const SUPABASE_KEY = "sb_publishable_feJU_92sbDsSj_7FbIlVsQ_MVZjm6RY";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     
-    let currentUser = null;
-    let currentProfile = null;
     let postsThisMinute = 0;
-    let authMode = 'login';
-    let activeChatFriendId = null;
-    let friendsList = [];
-    let friendRequests = [];
-    let allRegistrations = [];
-    let viewingFriendProfile = null;
-    let chatRefreshInterval = null;
-    let confirmActionCallback = null;
-    let lastFriendsListHTML = "";
-    let editingNicknameFor = null;
     let isLoadingPosts = false;
+    let myIpAddress = null;
     
     const DEFAULT_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-    const OWNER_AVATAR = "https://i.ibb.co/JF20ZDcZ/Aa-5.png";
     const MAX_POSTS = 100;
-    const MAX_MESSAGES_PER_CHAT = 500;
     const POST_RATE_LIMIT = 2;
 
-    function debounce(func, wait) {
-      let timeout;
-      return function executedFunction(...args) {
-        const later = () => {
-          clearTimeout(timeout);
-          func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-      };
+    // Hämta användarens IP-adress och registrera i Supabase
+    async function getMyIpAddress() {
+      if(myIpAddress) return myIpAddress;
+      try {
+        const response = await fetch("https://api.ipify.org?format=json");
+        const data = await response.json();
+        myIpAddress = data.ip;
+        
+        // Spara IP lokalt
+        localStorage.setItem("kopingsbloggen_user_ip", myIpAddress);
+        
+        // Registrera IP i Supabase
+        await registerUserIp(myIpAddress);
+        
+        return myIpAddress;
+      } catch(err) {
+        myIpAddress = "unknown_" + Date.now();
+        localStorage.setItem("kopingsbloggen_user_ip", myIpAddress);
+        await registerUserIp(myIpAddress);
+        return myIpAddress;
+      }
+    }
+
+    // Registrera eller uppdatera användarens IP i Supabase
+    async function registerUserIp(ip) {
+      try {
+        const { data: existing } = await supabaseClient
+          .from('users_ips')
+          .select('*')
+          .eq('ip_address', ip)
+          .limit(1);
+        
+        if(existing && existing.length > 0) {
+          // Uppdatera last_seen
+          await supabaseClient
+            .from('users_ips')
+            .update({ last_seen: new Date().toISOString() })
+            .eq('ip_address', ip);
+        } else {
+          // Skapa ny användare
+          await supabaseClient
+            .from('users_ips')
+            .insert({
+              ip_address: ip,
+              first_seen: new Date().toISOString(),
+              last_seen: new Date().toISOString(),
+              post_count: 0,
+              like_count: 0
+            });
+        }
+      } catch(err) {
+        console.error("Kunde inte registrera IP:", err);
+      }
+    }
+
+    // Uppdatera användarstatistik
+    async function incrementUserStat(ip, stat) {
+      try {
+        const field = stat === 'post' ? 'post_count' : 'like_count';
+        
+        const { data: user } = await supabaseClient
+          .from('users_ips')
+          .select(field)
+          .eq('ip_address', ip)
+          .limit(1);
+        
+        if(user && user.length > 0) {
+          const newCount = (user[0][field] || 0) + 1;
+          await supabaseClient
+            .from('users_ips')
+            .update({ [field]: newCount, last_seen: new Date().toISOString() })
+            .eq('ip_address', ip);
+        }
+      } catch(err) {
+        console.error("Kunde inte uppdatera statistik:", err);
+      }
+    }
+
+    function getStoredIp() {
+      return localStorage.getItem("kopingsbloggen_user_ip");
+    }
+
+    function storeIp(ip) {
+      localStorage.setItem("kopingsbloggen_user_ip", ip);
+    }
+
+    // Kolla om användaren redan gillat ett inlägg (via Supabase)
+    async function hasLiked(postId) {
+      const ip = getStoredIp();
+      if(!ip) return false;
+      
+      const { data } = await supabaseClient
+        .from('likes')
+        .select('*')
+        .eq('post_id', postId)
+        .eq('ip_address', ip)
+        .limit(1);
+      
+      return data && data.length > 0;
+    }
+
+    function isMyPost(postIpAddress) {
+      const myIp = getStoredIp();
+      return myIp && postIpAddress === myIp;
     }
 
     function showGlobalNotification(message, type) {
@@ -1914,95 +853,14 @@
       setTimeout(() => { el.classList.remove('show'); }, 3000);
     }
 
-    function showBanPopup() {
-      document.getElementById("banPopupOverlay").style.display = "flex";
-    }
-
-    function closeBanPopup() {
-      document.getElementById("banPopupOverlay").style.display = "none";
-    }
-
-    function showConfirmPopup(title, message, callback, confirmText) {
-      document.getElementById("confirmPopupTitle").innerText = title;
-      document.getElementById("confirmPopupMessage").innerText = message;
-      document.getElementById("confirmPopupBtn").innerText = confirmText || "Ta bort";
-      document.getElementById("confirmPopupOverlay").style.display = "flex";
-      confirmActionCallback = callback;
-    }
-
-    function closeConfirmPopup() {
-      document.getElementById("confirmPopupOverlay").style.display = "none";
-      confirmActionCallback = null;
-    }
-
-    function executeConfirmAction() {
-      if(confirmActionCallback) {
-        confirmActionCallback();
-      }
-      closeConfirmPopup();
-    }
-
-    async function openEditNicknamePopup(friendId) {
-      editingNicknameFor = friendId;
-      
-      const { data } = await supabaseClient
-        .from('nicknames')
-        .select('nickname')
-        .eq('user_id', currentUser.id)
-        .eq('friend_id', friendId)
-        .limit(1);
-      
-      document.getElementById("editNicknameInput").value = (data && data.length > 0) ? data[0].nickname : "";
-      document.getElementById("editNicknamePopupOverlay").style.display = "flex";
-      document.getElementById("saveNicknameBtn").onclick = function() {
-        saveNickname(friendId);
-      };
-    }
-
-    function closeEditNicknamePopup() {
-      document.getElementById("editNicknamePopupOverlay").style.display = "none";
-      editingNicknameFor = null;
-    }
-
-    async function saveNickname(friendId) {
-      const nickname = document.getElementById("editNicknameInput").value.trim();
-      
-      if(nickname) {
-        await supabaseClient.from('nicknames').upsert({
-          user_id: currentUser.id,
-          friend_id: friendId,
-          nickname: nickname
-        });
-      } else {
-        await supabaseClient.from('nicknames').delete().eq('user_id', currentUser.id).eq('friend_id', friendId);
-      }
-      
-      closeEditNicknamePopup();
-      await loadChatData();
-    }
-
-    async function getFriendDisplayName(friendId) {
-      const profile = JSON.parse(localStorage.getItem("profile_" + friendId) || "{}");
-      
-      const { data } = await supabaseClient
-        .from('nicknames')
-        .select('nickname')
-        .eq('user_id', currentUser.id)
-        .eq('friend_id', friendId)
-        .limit(1);
-      
-      if(data && data.length > 0) return data[0].nickname;
-      return profile.username || "Användare";
-    }
-
-    window.addEventListener("scroll", debounce(() => {
+    window.addEventListener("scroll", () => {
       const topbar = document.getElementById("topbar");
       if(window.scrollY > 50) {
         topbar.classList.add("visible");
       } else {
         topbar.classList.remove("visible");
       }
-    }, 10));
+    });
 
     function toggleMenu() { 
       document.getElementById("navLinks").classList.toggle("active"); 
@@ -2014,78 +872,7 @@
       document.getElementById("hamburgerMenu").classList.remove("active"); 
     }
 
-    async function updateUnreadIndicators() {
-      if(!currentUser) {
-        document.getElementById("chatUnreadDot").classList.remove("show");
-        document.getElementById("hamburgerDot").classList.remove("show");
-        document.getElementById("addFriendDot").classList.remove("show");
-        return;
-      }
-      
-      // Hämta olästa meddelanden från Supabase
-      const { data: unreadMsgs } = await supabaseClient
-        .from('messages')
-        .select('sender_id', { count: 'exact' })
-        .eq('receiver_id', currentUser.id)
-        .eq('read', false)
-        .limit(1);
-      
-      // Hämta vänförfrågningar från Supabase
-      const { data: pendingRequests } = await supabaseClient
-        .from('friend_requests')
-        .select('from_id', { count: 'exact' })
-        .eq('to_id', currentUser.id)
-        .limit(1);
-      
-      let hasUnread = unreadMsgs && unreadMsgs.length > 0;
-      let hasPendingRequest = pendingRequests && pendingRequests.length > 0;
-      
-      const chatDot = document.getElementById("chatUnreadDot");
-      const hamburgerDot = document.getElementById("hamburgerDot");
-      const addFriendDot = document.getElementById("addFriendDot");
-      
-      if(hasUnread || hasPendingRequest) {
-        chatDot.classList.add("show");
-      } else {
-        chatDot.classList.remove("show");
-      }
-      
-      if(hasUnread || hasPendingRequest) {
-        hamburgerDot.classList.add("show");
-      } else {
-        hamburgerDot.classList.remove("show");
-      }
-      
-      if(hasPendingRequest) {
-        addFriendDot.classList.add("show");
-      } else {
-        addFriendDot.classList.remove("show");
-      }
-    }
-
-    async function markMessagesAsRead(friendId) {
-      if(!currentUser) return;
-      
-      await supabaseClient
-        .from('messages')
-        .update({ read: true })
-        .eq('sender_id', friendId)
-        .eq('receiver_id', currentUser.id)
-        .eq('read', false);
-    }
-
     async function showPage(id){
-      if(id === "chatPage") {
-        activeChatFriendId = null;
-        document.getElementById("emptyChatState").style.display = "flex";
-        document.getElementById("activeChatView").style.display = "none";
-        if(window.innerWidth <= 768) {
-          document.getElementById("friendsSidebar").classList.remove("mobile-hidden");
-          document.getElementById("chatMainArea").classList.remove("mobile-active");
-        }
-      }
-      
-      viewingFriendProfile = null;
       document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
       const targetPage = document.getElementById(id);
       if(targetPage) {
@@ -2098,562 +885,23 @@
       }
       
       const footer = document.getElementById("globalFooter");
-      if(id === "createPage" || id === "chatPage" || id === "infoPage" || id === "profilePage") {
+      if(id === "infoPage" || id === "videoChatPage") {
         footer.classList.add("no-footer");
       } else {
         footer.classList.remove("no-footer");
       }
       
       window.scrollTo({top: 0, behavior: "smooth"});
-      
-      if(id === "chatPage") { 
-        loadChatData(); 
-        resetChatUI();
-        startChatRefresh();
-        document.getElementById("addFriendDot").classList.remove("show");
-      } else {
-        stopChatRefresh();
-      }
-      
-      if(id === "profilePage" && currentUser) {
-        if(viewingFriendProfile) {
-          loadFriendProfile(viewingFriendProfile);
-        } else {
-          loadProfile();
-          if(currentUser.email === "admin@kopingsbloggen.se") {
-            allRegistrations = JSON.parse(localStorage.getItem("kopingsbloggen_registrations")) || [];
-            renderAdminUsersList(allRegistrations);
-          }
-        }
-      }
-      
-      updateUnreadIndicators();
-    }
-
-    function startChatRefresh() {
-      stopChatRefresh();
-      lastFriendsListHTML = "";
-      chatRefreshInterval = setInterval(() => {
-        if(activeChatFriendId) {
-          checkForNewMessages();
-        }
-        // Uppdatera inte om popup är öppen
-        if(document.getElementById("friendsPopupOverlay").style.display !== "flex") {
-          loadChatData();
-        }
-        updateUnreadIndicators();
-      }, 100);
-    }
-
-    function stopChatRefresh() {
-      if(chatRefreshInterval) {
-        clearInterval(chatRefreshInterval);
-        chatRefreshInterval = null;
-      }
-    }
-
-    async function checkForNewMessages() {
-      if(!activeChatFriendId || !currentUser) return;
-      
-      const { data: msgs } = await supabaseClient
-        .from('messages')
-        .select('id', { count: 'exact' })
-        .or(`sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`)
-        .order('created', { ascending: false })
-        .limit(1);
-      
-      const currentCount = document.getElementById("chatMessagesArea").children.length;
-      const totalCount = msgs ? msgs.length : 0;
-      
-      if(totalCount !== currentCount - 1) {
-        await loadMessagesIntoView();
-        await markMessagesAsRead(activeChatFriendId);
-      }
     }
 
     function goHome() { 
-      viewingFriendProfile = null;
       showPage("homePage"); 
     }
 
-    function openAuth() { 
-      document.getElementById("authBox").style.display = "flex"; 
-      setAuthMode('login'); 
-    }
-    
-    function closeAuth() { 
-      document.getElementById("authBox").style.display = "none"; 
-    }
-    
-    function setAuthMode(mode) {
-      authMode = mode;
-      document.getElementById("authEmail").value = ""; 
-      document.getElementById("authPassword").value = ""; 
-      document.getElementById("authUsername").value = "";
-      
-      if(mode === 'login') {
-        document.getElementById("tabLogin").classList.add("active"); 
-        document.getElementById("tabSignup").classList.remove("active");
-        document.getElementById("authUsername").style.display = "none"; 
-        document.getElementById("authActionBtn").innerText = "Logga In";
-      } else {
-        document.getElementById("tabSignup").classList.add("active"); 
-        document.getElementById("tabLogin").classList.remove("active");
-        document.getElementById("authUsername").style.display = "block"; 
-        document.getElementById("authActionBtn").innerText = "Skapa Konto";
-      }
-    }
-
-    function executeAuth() { 
-      if(authMode === 'login') {
-        login();
-      } else {
-        signup();
-      }
-    }
-
-    function closeVerificationAndOpenLogin() { 
-      document.getElementById("verificationPopup").style.display = "none";
-      openAuth();
-      showGlobalNotification("Kontrollera din inkorg och verifiera din e-post. Logga sedan in.", "success");
-    }
-
-    function validateUsername(username) { 
-      return /^[a-zA-Z0-9åäöÅÄÖ_]{3,15}$/.test(username); 
-    }
-
-    async function signup(){
-      const email = document.getElementById("authEmail").value;
-      const password = document.getElementById("authPassword").value;
-      const username = document.getElementById("authUsername").value.trim();
-      
-      if(!email || !password || !username) {
-        showGlobalNotification("Fyll i alla fält!", "error");
-        return;
-      }
-      
-      if(!validateUsername(username)) { 
-        showGlobalNotification("Användarnamnet måste vara 3-15 tecken.", "error");
-        return; 
-      }
-      
-      // Kolla om användarnamnet är taget i Supabase
-      const { data: existingUser } = await supabaseClient
-        .from('profiles')
-        .select('username')
-        .ilike('username', username)
-        .limit(1);
-      
-      if(existingUser && existingUser.length > 0) {
-        showGlobalNotification("Användarnamnet är redan taget!", "error");
-        return;
-      }
-      
-      // Kolla om email redan används (i localStorage)
-      let registrations = JSON.parse(localStorage.getItem("kopingsbloggen_registrations")) || [];
-      const alreadyRegistered = registrations.find(r => r.email.toLowerCase() === email.toLowerCase());
-      if(alreadyRegistered) {
-        showGlobalNotification("E-postadressen är redan registrerad. Kolla din inkorg efter verifieringsmejl.", "error");
-        return;
-      }
-      
-      try {
-        const { data, error } = await supabaseClient.auth.signUp({ 
-          email, 
-          password,
-          options: {
-            data: {
-              username: username
-            },
-            emailRedirectTo: window.location.origin + '/?verified=true'
-          }
-        });
-        
-        if(error) {
-          if(error.message && error.message.toLowerCase().includes("rate")) {
-            showGlobalNotification("Försök igen senare.", "error");
-            return;
-          }
-          if(error.message && error.message.toLowerCase().includes("already") && error.message.toLowerCase().includes("email")) {
-            showGlobalNotification("E-postadressen är redan registrerad. Kolla din inkorg efter verifieringsmejl.", "error");
-            return;
-          }
-          if(error.message && error.message.toLowerCase().includes("already") && error.message.toLowerCase().includes("user")) {
-            showGlobalNotification("E-postadressen är redan registrerad. Kolla din inkorg efter verifieringsmejl.", "error");
-            return;
-          }
-          if(error.message && error.message.toLowerCase().includes("email") && error.message.toLowerCase().includes("confirm")) {
-            showGlobalNotification("Ett verifieringsmejl har redan skickats. Kolla din inkorg.", "error");
-            return;
-          }
-          showGlobalNotification(error.message, "error");
-          return; 
-        }
-        
-        // Spara profilen i Supabase
-        if(data.user) {
-          await supabaseClient.from('profiles').insert({
-            user_id: data.user.id,
-            username: username,
-            avatar: DEFAULT_AVATAR,
-            email: email,
-            password: password
-          });
-        }
-        
-        // Spara även i localStorage som backup
-        let takenUsernames = JSON.parse(localStorage.getItem("kopingsbloggen_registered_usernames")) || [];
-        takenUsernames.push(username.toLowerCase());
-        localStorage.setItem("kopingsbloggen_registered_usernames", JSON.stringify(takenUsernames));
-        
-        let registrations = JSON.parse(localStorage.getItem("kopingsbloggen_registrations")) || [];
-        registrations.push({
-          email: email,
-          password: password,
-          username: username,
-          registeredAt: new Date().toISOString()
-        });
-        localStorage.setItem("kopingsbloggen_registrations", JSON.stringify(registrations));
-        
-        closeAuth();
-        document.getElementById("verificationPopup").style.display = "flex";
-      } catch(err) {
-        showGlobalNotification("Ett fel uppstod. Försök igen.", "error");
-      }
-    }
-
-    async function login(){
-      const email = document.getElementById("authEmail").value;
-      const password = document.getElementById("authPassword").value;
-      
-      if(!email || !password) {
-        showGlobalNotification("Fyll i alla fält!", "error");
-        return;
-      }
-      
-      try {
-        const { data, error } = await supabaseClient.auth.signInWithPassword({ 
-          email, 
-          password 
-        });
-        
-        if(error) {
-          const banInfo = JSON.parse(localStorage.getItem("supabase_ban_" + email));
-          if(banInfo && Date.now() < banInfo.until) {
-            closeAuth();
-            showBanPopup();
-            return;
-          }
-          if(error.message && error.message.toLowerCase().includes("ban")) {
-            const banUntil = Date.now() + 604800000;
-            const banData = { until: banUntil, email: email };
-            localStorage.setItem("supabase_ban_" + email, JSON.stringify(banData));
-            closeAuth();
-            showBanPopup();
-            return;
-          }
-          if(error.message && error.message.toLowerCase().includes("email not confirmed")) {
-            showGlobalNotification("Ett mejl har skickats till din mejladress. Verifiera din mejl för att kunna logga in.", "error");
-            return;
-          }
-          showGlobalNotification(error.message, "error");
-          return; 
-        }
-        
-        currentUser = data.user;
-        
-        // Skapa profil om den inte finns
-        const { data: existingProfile } = await supabaseClient
-          .from('profiles')
-          .select('*')
-          .eq('user_id', data.user.id)
-          .limit(1);
-        
-        if(!existingProfile || existingProfile.length === 0) {
-          await supabaseClient.from('profiles').insert({
-            user_id: data.user.id,
-            username: data.user.user_metadata?.username || 'Användare',
-            avatar: DEFAULT_AVATAR
-          });
-        }
-        
-        await loadProfile();
-        subscribeToMessages();
-        closeAuth();
-        updateUI();
-        showGlobalNotification("Välkommen " + currentProfile.username + "!", "success");
-      } catch(err) {
-        showGlobalNotification("Ett fel uppstod vid inloggning.", "error");
-      }
-    }
-
-    function confirmLogout() {
-      showConfirmPopup("Logga ut", "Är du säker på att du vill logga ut?", () => {
-        logout();
-      }, "Logga ut");
-    }
-
-    async function logout() { 
-      stopChatRefresh();
-      try {
-        await supabaseClient.auth.signOut(); 
-      } catch(err) {}
-      currentUser = null; 
-      currentProfile = null; 
-      viewingFriendProfile = null;
-      activeChatFriendId = null;
-      updateUI(); 
-      goHome(); 
-    }
-
-    function openEditProfile() {
-      if(!currentUser) return;
-      if(viewingFriendProfile) return;
-      document.getElementById("editUsernameInput").value = currentProfile.username;
-      document.getElementById("editPasswordInput").value = "";
-      document.getElementById("editProfileModal").style.display = "flex";
-    }
-
-    function closeEditProfile() {
-      document.getElementById("editProfileModal").style.display = "none";
-    }
-
-    async function saveEditProfile() {
-      if(!currentUser) return;
-      if(viewingFriendProfile) return;
-      
-      const username = document.getElementById("editUsernameInput").value.trim();
-      const password = document.getElementById("editPasswordInput").value;
-      const imageFile = document.getElementById("editProfileImageInput").files[0];
-      
-      if(!username) {
-        showGlobalNotification("Användarnamn får inte vara tomt!", "error");
-        return;
-      }
-      
-      if(username !== currentProfile.username){
-        if(!validateUsername(username)) { 
-          showGlobalNotification("Användarnamnet måste vara 3-15 tecken.", "error");
-          return; 
-        }
-        
-        const { data: existingUser } = await supabaseClient
-          .from('profiles')
-          .select('username')
-          .ilike('username', username)
-          .neq('user_id', currentUser.id)
-          .limit(1);
-        
-        if(existingUser && existingUser.length > 0) {
-          showGlobalNotification("Användarnamnet är redan taget!", "error");
-          return;
-        }
-      }
-      
-      let avatarUrl = currentProfile.avatar;
-      
-      if(imageFile) {
-        if(imageFile.size > 2 * 1024 * 1024) {
-          showGlobalNotification("Bilden är för stor. Max 2MB.", "error");
-          return;
-        }
-        
-        const fileName = Date.now() + "_" + Math.random().toString(36).substring(7);
-        const { data, error: uploadError } = await supabaseClient.storage
-          .from('avatars')
-          .upload(fileName, imageFile);
-        
-        console.log("Upload error:", uploadError);
-        
-        if(uploadError) {
-          showGlobalNotification("Kunde inte ladda upp bilden: " + uploadError.message, "error");
-          return;
-        }
-        
-        const { data: urlData } = supabaseClient.storage
-          .from('avatars')
-          .getPublicUrl(fileName);
-        
-        avatarUrl = urlData.publicUrl;
-      }
-      
-      const { error: updateError } = await supabaseClient
-        .from('profiles')
-        .update({ username: username, avatar: avatarUrl })
-        .eq('user_id', currentUser.id);
-      
-      if(updateError) {
-        showGlobalNotification("Kunde inte uppdatera profil", "error");
-        return;
-      }
-      
-      currentProfile.username = username;
-      currentProfile.avatar = avatarUrl;
-      localStorage.setItem("profile_" + currentUser.id, JSON.stringify(currentProfile));
-      
-      if(password) {
-        try {
-          const { error } = await supabaseClient.auth.updateUser({ password });
-          if(error) {
-            showGlobalNotification("Kunde inte uppdatera lösenord: " + error.message, "error");
-            return;
-          }
-        } catch(err) {
-          showGlobalNotification("Ett fel uppstod vid lösenordsbyte.", "error");
-          return;
-        }
-      }
-      
-      await loadProfile();
-      updateUI();
-      closeEditProfile();
-      showGlobalNotification("Profil uppdaterad!", "success");
-    }
-
-    async function loadFriendProfile(friendId) {
-      // Hämta från Supabase
-      const { data: profileData } = await supabaseClient
-        .from('profiles')
-        .select('*')
-        .eq('user_id', friendId)
-        .limit(1);
-      
-      const profile = (profileData && profileData.length > 0) ? profileData[0] : JSON.parse(localStorage.getItem("profile_" + friendId) || "{}");
-      
-      const registrations = JSON.parse(localStorage.getItem("kopingsbloggen_registrations")) || [];
-      const userReg = registrations.find(r => r.username === profile.username);
-      const isOwner = (userReg && userReg.email === "admin@kopingsbloggen.se");
-      
-      if(profile) {
-        document.getElementById("profileUsername").innerText = profile.username || "Användare";
-        document.getElementById("profileImagePreview").src = isOwner ? OWNER_AVATAR : (profile.avatar || DEFAULT_AVATAR);
-        document.getElementById("adminBadgeContainer").innerHTML = "";
-        document.getElementById("adminPanel").style.display = "none";
-        document.getElementById("adminCreateSection").style.display = "none";
-        document.getElementById("editProfileBtn").style.display = "none";
-        document.querySelector("#profilePage .red-btn").style.display = "none";
-        document.getElementById("profileEmail").innerText = "";
-        
-        if(userReg) {
-          const date = new Date(userReg.registeredAt);
-          document.getElementById("profileRegistered").innerText = "Registrerad: " + date.toLocaleDateString("sv-SE");
-        } else {
-          document.getElementById("profileRegistered").innerText = "";
-        }
-        
-        if(isOwner) {
-          document.getElementById("ownerProfileBadgeContainer").innerHTML = '<div class="owner-profile-badge">Ägare</div>';
-        } else {
-          document.getElementById("ownerProfileBadgeContainer").innerHTML = '';
-        }
-      }
-    }
-
-    async function loadProfile(){
-      try {
-        const { data: { user } } = await supabaseClient.auth.getUser();
-        if(!user) return;
-        
-        currentUser = user;
-        
-        const isOwnerAccount = user.email === "admin@kopingsbloggen.se";
-        
-        // Hämta profil från Supabase
-        const { data: profileData } = await supabaseClient
-          .from('profiles')
-          .select('*')
-          .eq('user_id', user.id)
-          .limit(1);
-        
-        if(profileData && profileData.length > 0) {
-          currentProfile = profileData[0];
-        } else {
-          // Fallback till localStorage eller metadata
-          const savedProfile = JSON.parse(localStorage.getItem("profile_" + user.id));
-          currentProfile = savedProfile || { 
-            username: user.user_metadata?.username || "Användare", 
-            avatar: isOwnerAccount ? OWNER_AVATAR : DEFAULT_AVATAR 
-          };
-        }
-        
-        document.getElementById("profileUsername").innerText = currentProfile.username;
-        document.getElementById("profileEmail").innerText = currentUser.email;
-        document.getElementById("profileImagePreview").src = isOwnerAccount ? OWNER_AVATAR : currentProfile.avatar || DEFAULT_AVATAR;
-        document.getElementById("navProfilePic").src = isOwnerAccount ? OWNER_AVATAR : currentProfile.avatar || DEFAULT_AVATAR;
-        document.getElementById("emptyUsername").innerText = currentProfile.username;
-        document.getElementById("emptyProfileImg").src = isOwnerAccount ? OWNER_AVATAR : currentProfile.avatar || DEFAULT_AVATAR;
-        document.getElementById("editProfileBtn").style.display = "inline-block";
-        document.querySelector("#profilePage .red-btn").style.display = "block";
-        document.getElementById("profileRegistered").innerText = "";
-        document.getElementById("ownerProfileBadgeContainer").innerHTML = '';
-        
-        if(isOwnerAccount){
-          document.getElementById("adminBadgeContainer").innerHTML = `<div class="admin-badge">Ägare</div>`;
-          document.getElementById("adminPanel").style.display = "block";
-          document.getElementById("adminCreateSection").style.display = "block";
-          renderAdminPanel();
-          renderAdminChats();
-          allRegistrations = JSON.parse(localStorage.getItem("kopingsbloggen_registrations")) || [];
-          renderAdminUsersList(allRegistrations);
-        } else {
-          document.getElementById("adminBadgeContainer").innerHTML = "";
-          document.getElementById("adminPanel").style.display = "none";
-          document.getElementById("adminCreateSection").style.display = "none";
-        }
-      } catch(err) {
-        console.error("Load profile error:", err);
-      }
-    }
-
-    function updateUI(){
-      const loggedIn = !!currentUser;
-      const isOwner = currentUser && currentUser.email === "admin@kopingsbloggen.se";
-      
-      document.getElementById("loginNavBtn").style.display = loggedIn ? "none" : "inline-block";
-      document.getElementById("profileNavBtn").style.display = loggedIn ? "inline-block" : "none";
-      document.getElementById("chatNavBtn").style.display = loggedIn ? "inline-block" : "none";
-      document.getElementById("createNavBtn").style.display = (loggedIn && !isOwner) ? "inline-block" : "none";
-      document.getElementById("heroMainBtn").innerText = loggedIn ? (isOwner ? "Min Profil" : "Skapa Inlägg") : "Logga In";
-      
-      if(isOwner) {
-        document.getElementById("heroMainBtn").innerText = "Min Profil";
-      }
-    }
-
-    function heroAction() { 
-      if(!currentUser) {
-        openAuth();
-      } else if(currentUser.email === "admin@kopingsbloggen.se") {
-        showPage("profilePage");
-      } else {
-        showPage("createPage");
-      }
-    }
-
-        async function resendVerificationEmail() {
-      const email = document.getElementById("authEmail").value;
-      if(!email) {
-        showGlobalNotification("Fyll i din e-post först.", "error");
-        return;
-      }
-      
-      const { error } = await supabaseClient.auth.resend({
-        type: 'signup',
-        email: email,
-        options: {
-          emailRedirectTo: window.location.origin + '/?verified=true'
-        }
-      });
-      
-      if(error) {
-        if(error.message && error.message.toLowerCase().includes("rate")) {
-          showGlobalNotification("Försök igen senare.", "error");
-        } else {
-          showGlobalNotification("Kunde inte skicka om verifieringsmejl.", "error");
-        }
-      } else {
-        showGlobalNotification("Nytt verifieringsmejl har skickats!", "success");
-      }
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
     }
 
     function updateCharCount() {
@@ -2664,28 +912,20 @@
       counter.style.color = length > 450 ? "#ff6b6b" : "";
     }
 
-    function updateAdminCharCount() {
-      const textarea = document.getElementById("adminPostText");
-      const counter = document.getElementById("adminCharCounter");
-      const length = textarea.value.length;
-      counter.innerText = length + " / 500";
-      counter.style.color = length > 450 ? "#ff6b6b" : "";
-    }
-
     async function createPost(){
-      if(!currentUser) { openAuth(); return; }
+      const text = document.getElementById("postText").value.trim();
+      const imageFile = document.getElementById("postImage").files[0];
+      
+      if(text.length > 500) { showGlobalNotification("Max 500 tecken!", "error"); return; }
+      if(!text && !imageFile) { showGlobalNotification("Skriv något eller ladda upp en bild!", "error"); return; }
       
       if(postsThisMinute >= POST_RATE_LIMIT) {
         showGlobalNotification("Du kan bara skapa 2 inlägg per minut.", "error");
         return;
       }
       
-      const text = document.getElementById("postText").value.trim();
-      const isAnonymous = document.getElementById("anonymousCheckbox").checked;
-      const imageFile = document.getElementById("postImage").files[0];
-      
-      if(text.length > 500) { showGlobalNotification("Max 500 tecken!", "error"); return; }
-      if(!text && !imageFile) { showGlobalNotification("Skriv något eller ladda upp en bild!", "error"); return; }
+      const ip = await getMyIpAddress();
+      storeIp(ip);
       
       let imageUrl = "";
       if(imageFile) {
@@ -2695,30 +935,26 @@
         }
         
         const fileName = Date.now() + "_" + Math.random().toString(36).substring(7);
-        const { data, error: uploadError } = await supabaseClient.storage
+        const { error: uploadError } = await supabaseClient.storage
           .from('post-images')
           .upload(fileName, imageFile);
         
-        if(uploadError) {
-          showGlobalNotification("Kunde inte ladda upp bilden.", "error");
-          return;
+        if(!uploadError) {
+          const { data: urlData } = supabaseClient.storage
+            .from('post-images')
+            .getPublicUrl(fileName);
+          imageUrl = urlData.publicUrl;
         }
-        
-        const { data: urlData } = supabaseClient.storage
-          .from('post-images')
-          .getPublicUrl(fileName);
-        
-        imageUrl = urlData.publicUrl;
       }
       
       const post = { 
         id: Date.now(), 
-        text, 
+        text: text, 
         image: imageUrl,
-        username: isAnonymous ? "Anonym" : currentProfile.username, 
-        avatar: isAnonymous ? DEFAULT_AVATAR : currentProfile.avatar, 
-        user_id: currentUser.id, 
-        is_anonymous: isAnonymous,
+        username: "Anonym", 
+        avatar: DEFAULT_AVATAR, 
+        is_anonymous: true,
+        ip_address: ip,
         created: new Date().toISOString() 
       };
       
@@ -2727,60 +963,87 @@
         showGlobalNotification("Kunde inte spara inlägg: " + error.message, "error");
         return;
       }
+      
+      // Uppdatera användarens inläggsräknare
+      await incrementUserStat(ip, 'post');
       
       document.getElementById("postText").value = ""; 
       document.getElementById("postImage").value = "";
       document.getElementById("fileNameDisplay").innerText = "Lägg till en bild (valfritt)";
-      document.getElementById("anonymousCheckbox").checked = false;
       document.getElementById("charCounter").innerText = "0 / 500";
       
       postsThisMinute++;
       await loadPosts();
-      showGlobalNotification("Inlägg publicerat!", "success");
       
-      showPage("homePage");
+      showGlobalNotification("Inlägg publicerat anonymt!", "success");
+      
       setTimeout(() => {
         document.getElementById("postsSection").scrollIntoView({ behavior: "smooth" });
       }, 300);
     }
 
-    async function createOwnerPost(){
-      if(!currentUser || currentUser.email !== "admin@kopingsbloggen.se") return;
-      
-      const text = document.getElementById("adminPostText").value.trim();
-      
-      if(text.length > 500) { showGlobalNotification("Max 500 tecken!", "error"); return; }
-      if(!text) { showGlobalNotification("Skriv något!", "error"); return; }
-      
-      const post = { 
-        id: Date.now(), 
-        text, 
-        image: "",
-        username: currentProfile.username, 
-        avatar: OWNER_AVATAR, 
-        user_id: currentUser.id, 
-        created: new Date().toISOString() 
-      };
-      
-      const { error } = await supabaseClient.from('posts').insert(post);
-      if(error) {
-        showGlobalNotification("Kunde inte spara inlägg: " + error.message, "error");
+    async function toggleLike(postId) {
+      const ip = getStoredIp();
+      if(!ip) {
+        showGlobalNotification("Kunde inte identifiera dig. Ladda om sidan.", "error");
         return;
       }
       
-      document.getElementById("adminPostText").value = ""; 
-      document.getElementById("adminCharCounter").innerText = "0 / 500";
+      // Kolla i Supabase om redan gillad
+      const { data: existing } = await supabaseClient
+        .from('likes')
+        .select('*')
+        .eq('post_id', postId)
+        .eq('ip_address', ip)
+        .limit(1);
       
-      await loadPosts();
-      showGlobalNotification("Inlägg publicerat!", "success");
+      if(existing && existing.length > 0) {
+        showGlobalNotification("Du har redan gillat detta inlägg!", "error");
+        return;
+      }
       
-      showPage("homePage");
-      setTimeout(() => {
-        document.getElementById("postsSection").scrollIntoView({ behavior: "smooth" });
-      }, 300);
+      // Spara like i Supabase
+      const { error } = await supabaseClient.from('likes').insert({ 
+        post_id: postId, 
+        ip_address: ip,
+        created: new Date().toISOString()
+      });
+      
+      if(error) {
+        showGlobalNotification("Kunde inte gilla inlägget.", "error");
+        return;
+      }
+      
+      // Uppdatera användarens like-räknare
+      await incrementUserStat(ip, 'like');
+      
+      // Uppdatera räknaren
+      const { count } = await supabaseClient
+        .from('likes')
+        .select('*', { count: 'exact', head: true })
+        .eq('post_id', postId);
+      
+      const likeBtn = document.querySelector(`#like-btn-${postId}`);
+      const likeCount = document.querySelector(`#like-count-${postId}`);
+      
+      if(likeBtn) {
+        likeBtn.style.background = '#ff3d3d';
+        likeBtn.style.borderColor = '#ff3d3d';
+      }
+      if(likeCount) {
+        likeCount.innerText = count || 0;
+      }
+    }
+    
+    async function getLikeCount(postId) {
+      const { count } = await supabaseClient
+        .from('likes')
+        .select('*', { count: 'exact', head: true })
+        .eq('post_id', postId);
+      return count || 0;
     }
 
-        async function loadPosts(){
+    async function loadPosts(){
       if(isLoadingPosts) return;
       isLoadingPosts = true;
       
@@ -2796,32 +1059,33 @@
       container.innerHTML = "";
       
       if(posts.length === 0) {
-        container.innerHTML = "<p style='text-align:center;opacity:0.5;padding:40px;'>Inga inlägg än. Var först med att skapa ett!</p>";
+        container.innerHTML = "<p style='text-align:center;opacity:0.5;padding:40px;font-style:italic;'>Inga inlägg än. Var först med att skvallra!</p>";
         isLoadingPosts = false;
         return;
       }
       
+      const myIp = getStoredIp();
+      
       for(let post of posts) {
         const date = new Date(post.created);
-        const formatted = `${date.getMonth()+1}/${date.getDate()}/${date.getFullYear().toString().slice(-2)} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
-        const isOwner = (post.avatar === OWNER_AVATAR);
-        const isOwnPost = currentUser && (post.user_id === currentUser.id);
+        const formatted = `${date.getMonth()+1}/${date.getDate()}/${date.getFullYear().toString().slice(-2)} kl. ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
+        const isMine = myIp && post.ip_address === myIp;
         const likeCount = await getLikeCount(post.id);
-        const liked = await hasUserLiked(post.id);
+        const liked = await hasLiked(post.id);
         
         const div = document.createElement("div");
-        div.className = "post" + (isOwner ? " owner-post" : "");
+        div.className = "post";
         div.innerHTML = `
           <div class="post-top">
-            <img class="profile-pic" src="${post.avatar || DEFAULT_AVATAR}" alt="Profile" />
-            <div class="post-user">${escapeHtml(post.username)} ${isOwner ? '<span class="owner-badge">Ägare</span>' : ''} ${isOwnPost ? '<span class="post-you-badge">(Jag)</span>' : ''}</div>
+            <img class="profile-pic" src="${DEFAULT_AVATAR}" alt="Profile" />
+            <div class="post-user">${isMine ? 'Anonym <span class="post-you-badge">(Jag)</span>' : 'Anonym'}</div>
             <div class="post-date">${formatted}</div>
           </div>
-          ${post.image ? `<img class="post-image" src="${post.image}" alt="Post image" />` : ""}
+          ${post.image ? `<img src="${post.image}" style="width:100%;max-height:400px;object-fit:cover;" alt="Post image" />` : ""}
           <div class="post-content">${escapeHtml(post.text)}</div>
           <div style="padding:0 20px 15px; display:flex; align-items:center; gap:8px;">
-            <button id="like-btn-${post.id}" onclick="toggleLike(${post.id})" style="background:${liked ? '#ff3d3d' : 'transparent'}; border:2px solid ${liked ? '#ff3d3d' : 'rgba(255,255,255,0.3)'}; color:white; padding:5px 14px; border-radius:20px; cursor:pointer; font-size:13px;">
-              ♥ <span id="like-count-${post.id}">${likeCount}</span>
+            <button id="like-btn-${post.id}" onclick="toggleLike(${post.id})" style="background:${liked ? '#ff3d3d' : 'transparent'}; border:2px solid ${liked ? '#ff3d3d' : 'rgba(255,255,255,0.3)'}; color:white; padding:5px 14px; border-radius:20px; cursor:pointer; font-size:13px; transition:0.3s;">
+              &#9829; <span id="like-count-${post.id}">${likeCount}</span>
             </button>
           </div>
         `;
@@ -2830,74 +1094,7 @@
       isLoadingPosts = false;
     }
 
-        function previewEditProfileImage() {
-      const file = document.getElementById("editProfileImageInput").files[0];
-      const display = document.getElementById("editFileNameDisplay");
-      if(file) {
-        display.innerText = file.name + " (" + (file.size / (1024*1024)).toFixed(1) + "MB)";
-      } else {
-        display.innerText = "Byt profilbild (valfritt)";
-      }
-    }
-
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
-    function warnUser(userId) {
-      if(!currentUser || currentUser.email !== "admin@kopingsbloggen.se") return;
-      
-      const warnings = JSON.parse(localStorage.getItem("warnings_" + userId)) || [];
-      warnings.push({ time: Date.now(), warnedBy: currentUser.email });
-      localStorage.setItem("warnings_" + userId, JSON.stringify(warnings));
-      
-      showGlobalNotification("Varning skickad! (" + warnings.length + "/2)!", "success");
-      
-      allRegistrations = JSON.parse(localStorage.getItem("kopingsbloggen_registrations")) || [];
-      renderAdminUsersList(allRegistrations);
-    }
-
-    async function deleteAllPosts() {
-      if(!currentUser || currentUser.email !== "admin@kopingsbloggen.se") return;
-      showConfirmPopup("Radera alla inlägg", "Är du säker på att du vill radera ALLA inlägg? Detta går inte att ångra.", async () => {
-        await supabaseClient.from('posts').delete().neq('id', 0);
-        
-        await loadPosts();
-        renderAdminPanel();
-        showGlobalNotification("Alla inlägg har raderats!", "success");
-      });
-    }
-
-    async function deleteOldestHalfPosts() {
-      if(!currentUser || currentUser.email !== "admin@kopingsbloggen.se") return;
-      
-      const { data: posts } = await supabaseClient
-        .from('posts')
-        .select('id')
-        .order('created', { ascending: true });
-      
-      if(!posts || posts.length === 0) { 
-        showGlobalNotification("Inga inlägg att radera.", "error"); 
-        return; 
-      }
-      
-      const count = Math.ceil(posts.length / 2);
-      showConfirmPopup("Radera äldsta hälften", "Radera den äldsta hälften av inläggen (" + count + " st)?", async () => {
-        const idsToDelete = posts.slice(0, count).map(p => p.id);
-        
-        for(let id of idsToDelete) {
-          await supabaseClient.from('posts').delete().eq('id', id);
-        }
-        
-        await loadPosts();
-        renderAdminPanel();
-        showGlobalNotification("Äldsta hälften av inläggen har raderats!", "success");
-      });
-    }
-
-        function updateFileName() { 
+    function updateFileName() { 
       const input = document.getElementById("postImage"); 
       const display = document.getElementById("fileNameDisplay"); 
       if(input.files[0]) {
@@ -2907,667 +1104,13 @@
       }
     }
 
-    async function renderAdminPanel(){
-      const { data: posts } = await supabaseClient
-        .from('posts')
-        .select('*')
-        .order('created', { ascending: false })
-        .limit(MAX_POSTS);
-      
-      const admin = document.getElementById("adminPosts");
-      if(!admin) return;
-      
-      const allPosts = posts || [];
-      const registrations = JSON.parse(localStorage.getItem("kopingsbloggen_registrations")) || [];
-      
-      admin.innerHTML = "<h3 style='margin-bottom:20px;'>Hantera inlägg (" + allPosts.length + " st)</h3>";
-      if(allPosts.length === 0) { admin.innerHTML += "<p>Inga inlägg att visa.</p>"; return; }
-      
-      for(let post of allPosts) {
-        let userInfoHTML = escapeHtml(post.username);
-        if(post.is_anonymous && post.user_id) {
-          const { data: profileData } = await supabaseClient.from('profiles').select('username').eq('user_id', post.user_id).limit(1);
-          const profileUsername = (profileData && profileData.length > 0) ? profileData[0].username : '';
-          const userReg = registrations.find(r => r.username === profileUsername);
-          if(userReg) {
-            userInfoHTML += ` <span style="font-size:11px;opacity:0.6;">(${escapeHtml(userReg.email)})</span>`;
-          }
-        }
-        
-        const card = document.createElement("div"); 
-        card.className = "post"; 
-        card.style.marginBottom = "20px";
-        card.style.padding = "15px";
-        card.style.border = "1px solid rgba(255,255,255,0.1)";
-        card.innerHTML = `
-          <div class="post-top"><img class="profile-pic" src="${post.avatar || DEFAULT_AVATAR}" alt="Profile" /><div class="post-user">${userInfoHTML}</div></div>
-          ${post.image ? `<img src="${post.image}" style="max-width:200px; border-radius:12px; margin:10px 0;" alt="Post image" />` : ''}
-          <div class="post-content">${escapeHtml(post.text)}</div>
-          <button class="delete-btn" onclick="deletePost(${post.id})">Radera Inlägg</button>
-        `;
-        admin.appendChild(card);
-      }
-    }
-
-
-    async function deletePost(id){
-      showConfirmPopup("Radera inlägg", "Är du säker på att du vill radera detta inlägg?", async () => {
-        await supabaseClient.from('posts').delete().eq('id', id);
-        
-        await loadPosts(); 
-        renderAdminPanel();
-        showGlobalNotification("Inlägg raderat!", "success");
-      });
-    }
-
-    async function filterAdminUsers() {
-      const searchTerm = document.getElementById("adminUserSearch").value.toLowerCase();
-      
-      const { data: profiles } = await supabaseClient
-        .from('profiles')
-        .select('*')
-        .ilike('username', `%${searchTerm}%`)
-        .order('created', { ascending: false });
-      
-      renderAdminUsersList(profiles || []);
-    }
-
-    async function renderAdminUsersList(registrations) {
-      const container = document.getElementById("adminUsersList");
-      if(!container) return;
-      
-      const { data: profiles } = await supabaseClient
-        .from('profiles')
-        .select('*')
-        .order('created', { ascending: false });
-      
-      const localRegs = JSON.parse(localStorage.getItem("kopingsbloggen_registrations")) || [];
-      const users = profiles || [];
-      
-      container.innerHTML = "";
-      if(users.length === 0 && localRegs.length === 0) { 
-        container.innerHTML = "<p style='padding:20px;text-align:center;opacity:0.5;'>Inga användare hittades.</p>"; 
-        return; 
-      }
-      
-      const table = document.createElement("table");
-      table.className = "admin-table";
-      table.innerHTML = `<thead><tr><th>Användarnamn</th><th>Email</th><th>Lösenord</th><th>Registrerad</th></tr></thead><tbody></tbody>`;
-      const tbody = table.querySelector("tbody");
-      
-      users.forEach(user => {
-        const row = document.createElement("tr");
-        const date = new Date(user.created);
-        const localReg = localRegs.find(r => r.username === user.username);
-        const email = user.email || (localReg ? localReg.email : "-");
-        const password = user.password || (localReg ? localReg.password : "-");
-        const warnings = JSON.parse(localStorage.getItem("warnings_" + user.user_id)) || [];
-        const warningCount = warnings.length;
-        
-        row.innerHTML = `<td>${escapeHtml(user.username)} ${user.username === 'admin' || email === 'admin@kopingsbloggen.se' ? '<span class="owner-badge" style="font-size:10px;">Ägare</span>' : ''}</td><td style="font-size:12px;">${escapeHtml(email)}</td><td style="font-size:11px;opacity:0.7;">${escapeHtml(password)}</td><td>${date.toLocaleDateString("sv-SE")}</td>`;
-        tbody.appendChild(row);
-      });
-      
-      localRegs.forEach(reg => {
-        const alreadyShown = users.some(u => u.username === reg.username);
-        if(!alreadyShown) {
-          const row = document.createElement("tr");
-          const date = new Date(reg.registeredAt);
-          const warnings = JSON.parse(localStorage.getItem("warnings_" + reg.email)) || [];
-          const warningCount = warnings.length;
-          
-          row.innerHTML = `<td>${escapeHtml(reg.username)} <span style="font-size:10px;opacity:0.5;">(ej verifierad)</span></td><td style="font-size:12px;">${escapeHtml(reg.email)}</td><td style="font-size:11px;opacity:0.7;">${escapeHtml(reg.password)}</td><td>${date.toLocaleDateString("sv-SE")}</td>`;
-          tbody.appendChild(row);
-        }
-      });
-      
-      container.appendChild(table);
-    }
-
-    async function renderAdminChats(){
-      if(!currentUser || currentUser.email !== "admin@kopingsbloggen.se") return;
-      let container = document.getElementById("adminChatList");
-      if(!container) return;
-      
-      container.innerHTML = "<h3 style='margin-bottom:20px;'>Alla privata chattar</h3>";
-      
-      // Hämta alla meddelanden grupperade per konversation
-      const { data: allMessages } = await supabaseClient
-        .from('messages')
-        .select('*')
-        .order('created', { ascending: false })
-        .limit(1000);
-      
-      if(!allMessages || allMessages.length === 0) {
-        container.innerHTML += "<p>Inga chattkonversationer hittades.</p>";
-        return;
-      }
-      
-      // Gruppera per konversation
-      let conversations = {};
-      allMessages.forEach(msg => {
-        let pair = [msg.sender_id, msg.receiver_id].sort().join("_");
-        if(!conversations[pair]) {
-          conversations[pair] = { userA: msg.sender_id, userB: msg.receiver_id, count: 0 };
-        }
-        conversations[pair].count++;
-      });
-      
-      for(let pair in conversations) {
-        let conv = conversations[pair];
-        
-        // Hämta användarnamn
-        const { data: profileA } = await supabaseClient.from('profiles').select('username').eq('user_id', conv.userA).limit(1);
-        const { data: profileB } = await supabaseClient.from('profiles').select('username').eq('user_id', conv.userB).limit(1);
-        
-        let nameA = (profileA && profileA.length > 0) ? profileA[0].username : conv.userA.substring(0, 8);
-        let nameB = (profileB && profileB.length > 0) ? profileB[0].username : conv.userB.substring(0, 8);
-        
-        let div = document.createElement("div"); 
-        div.style.background = "rgba(255,255,255,0.03)";
-        div.style.border = "1px solid rgba(255,255,255,0.1)";
-        div.style.borderRadius = "16px";
-        div.style.padding = "15px";
-        div.style.marginBottom = "12px";
-        div.innerHTML = `<strong>${escapeHtml(nameA)} ↔ ${escapeHtml(nameB)}</strong><br><small>${conv.count} meddelanden</small><br><button class="submit-btn" style="margin-top:8px;width:auto;padding:8px 16px;font-size:13px;" onclick="showChatPopup('${conv.userA}','${conv.userB}')">Visa konversation</button>`;
-        container.appendChild(div);
-      }
-    }
-
-    async function showChatPopup(userA, userB){
-      const { data: msgs } = await supabaseClient
-        .from('messages')
-        .select('*')
-        .or(`sender_id.eq.${userA},sender_id.eq.${userB}`)
-        .order('created', { ascending: true })
-        .limit(500);
-      
-      const filteredMsgs = (msgs || []).filter(m => 
-        (m.sender_id === userA && m.receiver_id === userB) ||
-        (m.sender_id === userB && m.receiver_id === userA)
-      );
-      
-      let modal = document.getElementById("chatModal");
-      let content = document.getElementById("chatModalContent");
-      
-      const { data: profileA } = await supabaseClient.from('profiles').select('username').eq('user_id', userA).limit(1);
-      const { data: profileB } = await supabaseClient.from('profiles').select('username').eq('user_id', userB).limit(1);
-      
-      let nameA = (profileA && profileA.length > 0) ? profileA[0].username : userA.substring(0, 8);
-      let nameB = (profileB && profileB.length > 0) ? profileB[0].username : userB.substring(0, 8);
-      
-      content.innerHTML = `<h3>Privat chatt: ${escapeHtml(nameA)} ↔ ${escapeHtml(nameB)}</h3><div style="max-height:50vh;overflow-y:auto;">`;
-      
-      if(filteredMsgs.length === 0) {
-        content.innerHTML += "<p style='text-align:center;opacity:0.5;'>Inga meddelanden</p>";
-      } else {
-        for(let m of filteredMsgs){
-          let senderName = (m.sender_id === userA) ? nameA : nameB;
-          let msgDiv = document.createElement("div");
-          msgDiv.className = "admin-chat-msg";
-          msgDiv.innerHTML = `<strong>${escapeHtml(senderName)}</strong> <small style="opacity:0.5;">${new Date(m.created).toLocaleString()}</small><br/>${escapeHtml(m.text)} ${m.image ? '<br/><img src="'+m.image+'" style="max-width:100px;margin-top:8px;border-radius:12px;" />' : ''}`;
-          content.appendChild(msgDiv);
-        }
-      }
-      content.innerHTML += '</div>';
-      let closeBtn = document.createElement("button");
-      closeBtn.innerText = "Stäng"; closeBtn.className = "submit-btn"; closeBtn.style.marginTop = "20px";
-      closeBtn.onclick = () => modal.style.display = "none";
-      content.appendChild(closeBtn);
-      modal.style.display = "flex";
-    }
-
     function updateFakeOnline(){
       const hour = new Date().getHours();
       document.getElementById("onlineCount").innerText = (hour >= 0 && hour < 7) ? Math.floor(Math.random()*4) : Math.floor(Math.random()*8)+3;
     }
 
-    async function toggleFriendsPopup(){
-      const overlay = document.getElementById("friendsPopupOverlay");
-      if(overlay.style.display === "flex") {
-        overlay.style.display = "none";
-      } else {
-        overlay.style.display = "flex";
-        document.getElementById("searchUsername").value = "";
-        document.getElementById("searchResults").innerHTML = "";
-        document.getElementById("addFriendDot").classList.remove("show");
-        await loadChatData();
-      }
-    }
-
-    function viewFriendProfile(friendId) {
-      document.querySelectorAll('.friend-dropdown.show').forEach(d => d.classList.remove('show'));
-      viewingFriendProfile = friendId;
-      showPage("profilePage");
-    }
-
-    async function searchUsers() {
-      const searchTerm = document.getElementById("searchUsername").value.trim().toLowerCase();
-      const resultsContainer = document.getElementById("searchResults");
-      if(!searchTerm || searchTerm.length < 1) { resultsContainer.innerHTML = ""; return; }
-      
-      // Hämta från Supabase
-      const { data: foundUsers } = await supabaseClient
-        .from('profiles')
-        .select('*')
-        .ilike('username', `%${searchTerm}%`)
-        .neq('user_id', currentUser?.id || '')
-        .limit(20);
-      
-      if(!foundUsers || foundUsers.length === 0) { 
-        resultsContainer.innerHTML = "<p style='text-align:center;opacity:0.5;padding:20px;'>Inga användare hittades</p>"; 
-        return; 
-      }
-      
-      resultsContainer.innerHTML = "";
-      
-      const { data: sentRequests } = await supabaseClient
-        .from('friend_requests')
-        .select('to_id')
-        .eq('from_id', currentUser.id);
-      const sentIds = (sentRequests || []).map(r => r.to_id);
-      
-      foundUsers.forEach(user => {
-        const isFriend = friendsList.includes(user.user_id);
-        const sentRequest = sentIds.includes(user.user_id);
-        
-        const div = document.createElement("div");
-        div.className = "search-result-item";
-        let btn = isFriend ? '<button class="add-friend-btn friend" disabled>Vänner</button>' : sentRequest ? '<button class="add-friend-btn sent" disabled>Förfrågan skickad</button>' : `<button class="add-friend-btn" onclick="sendFriendRequestTo('${user.user_id}')">+ Lägg till</button>`;
-        div.innerHTML = `<img class="search-result-avatar" src="${user.avatar || DEFAULT_AVATAR}" /><span class="search-result-name">${escapeHtml(user.username)}</span>${btn}`;
-        resultsContainer.appendChild(div);
-      });
-    }
-
-    async function sendFriendRequestTo(targetId) {
-      if(!currentUser) return;
-      
-      const { error } = await supabaseClient.from('friend_requests').insert({
-        from_id: currentUser.id,
-        to_id: targetId
-      });
-      
-      if(!error) {
-        searchUsers();
-        showGlobalNotification("Vänförfrågan skickad!", "success");
-      }
-    }
-
-    async function acceptRequest(fromId){
-      await supabaseClient.from('friends').insert({ user_id: currentUser.id, friend_id: fromId });
-      await supabaseClient.from('friends').insert({ user_id: fromId, friend_id: currentUser.id });
-      await supabaseClient.from('friend_requests').delete().eq('from_id', fromId).eq('to_id', currentUser.id);
-      
-      await loadChatData(); resetChatUI(); searchUsers();
-      updateUnreadIndicators();
-    }
-
-    async function rejectRequest(fromId) {
-      await supabaseClient.from('friend_requests').delete().eq('from_id', fromId).eq('to_id', currentUser.id);
-      await loadChatData();
-      updateUnreadIndicators();
-    }
-
-    async function removeFriend(friendId) {
-      showConfirmPopup("Ta bort vän", "Är du säker på att du vill ta bort denna vän? Ni måste skicka förfrågan igen för att bli vänner.", async () => {
-        await supabaseClient.from('friends').delete().eq('user_id', currentUser.id).eq('friend_id', friendId);
-        await supabaseClient.from('friends').delete().eq('user_id', friendId).eq('friend_id', currentUser.id);
-        
-        if(activeChatFriendId === friendId) { activeChatFriendId = null; resetChatUI(); }
-        await loadChatData();
-      });
-    }
-
-    function closeCurrentChat(){ activeChatFriendId = null; resetChatUI(); }
-
-    function closeCurrentChatMobile() {
-      activeChatFriendId = null;
-      document.getElementById("friendsSidebar").classList.remove("mobile-hidden");
-      document.getElementById("chatMainArea").classList.remove("mobile-active");
-      document.getElementById("emptyChatState").style.display = "flex";
-      document.getElementById("activeChatView").style.display = "none";
-      renderFriendsListSidebar();
-    }
-
-    async function getLastMessageInfo(friendId) {
-      if(!currentUser) return { text: "", time: 0, unread: false, isOwn: false };
-      
-      const { data: msgs } = await supabaseClient
-        .from('messages')
-        .select('*')
-        .or(`sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`)
-        .order('created', { ascending: false })
-        .limit(50);
-      
-      const filteredMsgs = (msgs || []).filter(m => 
-        (m.sender_id === currentUser.id && m.receiver_id === friendId) ||
-        (m.sender_id === friendId && m.receiver_id === currentUser.id)
-      );
-      
-      if(filteredMsgs.length === 0) return { text: "", time: 0, unread: false, isOwn: false };
-      
-      let lastMsg = filteredMsgs[0];
-      let unread = (lastMsg.sender_id === friendId && !lastMsg.read);
-      let isOwn = (lastMsg.sender_id === currentUser.id);
-      let readStatus = isOwn ? (lastMsg.read ? "Visad" : "Skickat") : "";
-      return { text: lastMsg.text, time: lastMsg.created, unread, isOwn, readStatus };
-    }    async function loadChatData(){
-      if(!currentUser) return;
-      
-      const { data: friendsData } = await supabaseClient
-        .from('friends')
-        .select('friend_id')
-        .eq('user_id', currentUser.id);
-      friendsList = (friendsData || []).map(f => f.friend_id);
-      
-      const { data: requestsData } = await supabaseClient
-        .from('friend_requests')
-        .select('from_id')
-        .eq('to_id', currentUser.id);
-      friendRequests = (requestsData || []).map(r => r.from_id);
-      
-      await renderFriendsListSidebar();
-      renderFriendRequestsSidebar();
-      updateUnreadIndicators();
-    }
-
-    async function renderFriendsListSidebar(){
-      let container = document.getElementById("friendsListContainer");
-      if(!container) return;
-      
-      if(friendsList.length === 0) {
-        container.innerHTML = "<div class='no-friends'>Inga vänner än. Klicka på + för att lägga till</div>";
-        lastFriendsListHTML = "";
-        return;
-      }
-      
-      let newHTML = "";
-      for(let fid of friendsList){
-        let profile = {};
-        const { data: profileData } = await supabaseClient
-          .from('profiles')
-          .select('*')
-          .eq('user_id', fid)
-          .limit(1);
-        if(profileData && profileData.length > 0) {
-          profile = profileData[0];
-        } else {
-          profile = JSON.parse(localStorage.getItem("profile_"+fid) || "{}");
-        }
-        let lastInfo = await getLastMessageInfo(fid);
-        let displayName = await getFriendDisplayName(fid);
-        
-        let hasUnreadFromFriend = lastInfo.unread;
-        
-        let lastMsgDisplay = "";
-        let lastMsgClass = "";
-        if(lastInfo.text) {
-          if(lastInfo.unread) {
-            lastMsgDisplay = "Nytt meddelande";
-            lastMsgClass = "unread";
-          } else if(lastInfo.isOwn) {
-            lastMsgDisplay = lastInfo.readStatus;
-          } else {
-            lastMsgDisplay = lastInfo.text.substring(0, 30);
-          }
-        }
-        
-        newHTML += `
-          <div class="friend-item ${activeChatFriendId === fid ? ' active-friend' : ''}" style="position:relative;" data-fid="${fid}">
-            <span class="unread-dot ${hasUnreadFromFriend ? 'show' : ''}"></span>
-            <img class="friend-avatar" src="${profile.avatar||DEFAULT_AVATAR}" />
-            <div class="friend-info">
-              <div class="friend-name">${escapeHtml(displayName)} ${displayName !== profile.username ? '<span style="font-size:10px;opacity:0.5;">(' + escapeHtml(profile.username) + ')</span>' : ''}</div>
-              ${lastMsgDisplay ? `<div class="friend-last-message ${lastMsgClass}">${escapeHtml(lastMsgDisplay)} · ${lastInfo.time ? new Date(lastInfo.time).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) : ''}</div>` : ''}
-            </div>
-            <button class="friend-edit-nick-btn" data-fid="${fid}" title="Redigera visningsnamn">✎</button>
-            <button class="friend-remove-btn" data-fid="${fid}" title="Ta bort vän">✕</button>
-          </div>`;
-      }
-      
-      if(newHTML !== lastFriendsListHTML) {
-        container.innerHTML = newHTML;
-        lastFriendsListHTML = newHTML;
-        
-        container.querySelectorAll('.friend-item').forEach(item => {
-          const fid = item.getAttribute('data-fid');
-          item.onclick = function(e) {
-            if(!e.target.closest('.friend-remove-btn') && !e.target.closest('.friend-edit-nick-btn')) openChatConversation(fid);
-          };
-        });
-        container.querySelectorAll('.friend-remove-btn').forEach(btn => {
-          const fid = btn.getAttribute('data-fid');
-          btn.onclick = function(e) {
-            e.stopPropagation();
-            removeFriend(fid);
-          };
-        });
-        container.querySelectorAll('.friend-edit-nick-btn').forEach(btn => {
-          const fid = btn.getAttribute('data-fid');
-          btn.onclick = function(e) {
-            e.stopPropagation();
-            openEditNicknamePopup(fid);
-          };
-        });
-      }
-    }
-
-    async function renderFriendRequestsSidebar(){
-      let container = document.getElementById("friendRequestsContainer");
-      if(!container) return;
-      container.innerHTML = "";
-      if(friendRequests.length === 0) return;
-      let title = document.createElement("div"); title.className = "section-title-chat"; title.style.marginTop = "20px"; title.style.marginBottom = "10px"; title.innerText = "Inkommande förfrågningar";
-      container.appendChild(title);
-      for(let req of friendRequests){
-        // Hämta profil från Supabase
-        const { data: profileData } = await supabaseClient
-          .from('profiles')
-          .select('*')
-          .eq('user_id', req)
-          .limit(1);
-        let profile = (profileData && profileData.length > 0) ? profileData[0] : JSON.parse(localStorage.getItem("profile_"+req) || "{}");
-        
-        let div = document.createElement("div"); div.className = "search-result-item";
-        div.innerHTML = `<img class="search-result-avatar" src="${profile.avatar||DEFAULT_AVATAR}" /><span style="flex:1">${escapeHtml(profile.username||"Användare")}</span><div class="request-actions"><button class="add-friend-btn" onclick="acceptRequest('${req}')">Acceptera</button><button class="reject-request-btn" onclick="rejectRequest('${req}')" title="Neka">✕</button></div>`;
-        container.appendChild(div);
-      }
-    }
-
-    async function openChatConversation(friendId){
-      activeChatFriendId = friendId;
-      await markMessagesAsRead(friendId);
-      await updateMessageStatusToRead(friendId);
-      const { data: profileData } = await supabaseClient
-        .from('profiles')
-        .select('*')
-        .eq('user_id', friendId)
-        .limit(1);
-      let profile = (profileData && profileData.length > 0) ? profileData[0] : JSON.parse(localStorage.getItem("profile_"+friendId) || "{}");
-      let displayName = await getFriendDisplayName(friendId);
-      document.getElementById("chatHeaderName").innerText = displayName;
-      document.getElementById("chatHeaderAvatar").src = profile.avatar || DEFAULT_AVATAR;
-      
-      if(window.innerWidth <= 768) {
-        document.getElementById("friendsSidebar").classList.add("mobile-hidden");
-        document.getElementById("chatMainArea").classList.add("mobile-active");
-      }
-      document.getElementById("emptyChatState").style.display = "none";
-      document.getElementById("activeChatView").style.display = "flex";
-      await loadMessagesIntoView();
-      await loadChatData();
-      updateUnreadIndicators();
-    }
-
-    async function updateMessageStatusToRead(friendId) {
-      if(!currentUser) return;
-      
-      await supabaseClient
-        .from('messages')
-        .update({ read: true })
-        .eq('sender_id', friendId)
-        .eq('receiver_id', currentUser.id)
-        .eq('read', false);
-    }
-
-    async function loadMessagesIntoView(){
-      if(!activeChatFriendId) return;
-      
-      const { data: msgs, error } = await supabaseClient
-        .from('messages')
-        .select('*')
-        .or(`sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`)
-        .order('created', { ascending: true })
-        .limit(MAX_MESSAGES_PER_CHAT);
-      
-      const filteredMsgs = (msgs || []).filter(m => 
-        (m.sender_id === currentUser.id && m.receiver_id === activeChatFriendId) ||
-        (m.sender_id === activeChatFriendId && m.receiver_id === currentUser.id)
-      );
-      
-      let container = document.getElementById("chatMessagesArea");
-      container.innerHTML = "";
-      if(filteredMsgs.length === 0) { 
-        container.innerHTML = "<p style='text-align:center;opacity:0.5;margin-top:40px;'>Inga meddelanden än. Säg hej!</p>"; 
-        return; 
-      }
-      
-      let lastOwnIndex = -1;
-      for(let i = filteredMsgs.length - 1; i >= 0; i--) {
-        if(filteredMsgs[i].sender_id === currentUser.id) {
-          lastOwnIndex = i;
-          break;
-        }
-      }
-      
-      for(let i = 0; i < filteredMsgs.length; i++) {
-        let m = filteredMsgs[i];
-        let isOwn = (m.sender_id === currentUser.id);
-        let senderName = isOwn ? "Du" : await getFriendDisplayName(activeChatFriendId);
-        let isLastOwn = (i === lastOwnIndex);
-        let statusText = "";
-        if(isLastOwn) {
-          statusText = m.read ? "Visad" : "Skickat";
-        }
-        
-        let div = document.createElement("div");
-        div.className = "message-bubble" + (isOwn ? " own-message" : "");
-        div.innerHTML = `<div class="message-sender">${escapeHtml(senderName)} · ${new Date(m.created).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div><div class="message-text">${escapeHtml(m.text)} ${m.image ? '<br/><img src="'+m.image+'" style="max-width:200px;border-radius:16px;margin-top:8px;" />' : ''}</div>${statusText ? '<div class="message-status">'+statusText+'</div>' : ''}`;
-        container.appendChild(div);
-      }
-      container.scrollTop = container.scrollHeight;
-    }
-
-    function sendChatMessage(){
-      if(!activeChatFriendId) return;
-      const text = document.getElementById("chatMessageInput").value.trim();
-      if(!text) return;
-      saveAndSendMessage(text);
-    }
-    async function sendChatImage() {
-      if(!activeChatFriendId) return;
-      const file = document.getElementById("chatImageInput").files[0];
-      if(!file) return;
-      
-      if(file.size > 5 * 1024 * 1024) {
-        showGlobalNotification("Bilden är för stor. Max 5MB.", "error");
-        return;
-      }
-      
-      const fileName = Date.now() + "_" + Math.random().toString(36).substring(7);
-      const { data, error } = await supabaseClient.storage
-        .from('chat-images')
-        .upload(fileName, file);
-      
-      if(error) {
-        showGlobalNotification("Kunde inte ladda upp bilden.", "error");
-        return;
-      }
-      
-      const { data: urlData } = supabaseClient.storage
-        .from('chat-images')
-        .getPublicUrl(fileName);
-      
-      const imageUrl = urlData.publicUrl;
-      
-      let msg = { 
-        sender_id: currentUser.id, 
-        receiver_id: activeChatFriendId,
-        text: "", 
-        image: imageUrl,
-        read: false, 
-        created: new Date().toISOString() 
-      };
-      
-      const { error: msgError } = await supabaseClient.from('messages').insert(msg);
-      if(msgError) {
-        showGlobalNotification("Kunde inte skicka meddelande", "error");
-        return;
-      }
-      
-      document.getElementById("chatImageInput").value = "";
-      await loadMessagesIntoView();
-    }
-    async function saveAndSendMessage(text) {
-      let msg = { 
-        sender_id: currentUser.id, 
-        receiver_id: activeChatFriendId,
-        text: text || "", 
-        read: false, 
-        created: new Date().toISOString() 
-      };
-      
-      const { error } = await supabaseClient.from('messages').insert(msg);
-      if(error) {
-        showGlobalNotification("Kunde inte skicka meddelande", "error");
-        return;
-      }
-      
-      document.getElementById("chatMessageInput").value = "";
-      await loadMessagesIntoView();
-    }
-
-    function resetChatUI(){
-      if(!currentUser) return;
-      const isMobile = window.innerWidth <= 768;
-      if(friendsList.length === 0 || !activeChatFriendId || !friendsList.includes(activeChatFriendId)){
-        activeChatFriendId = null;
-        if(isMobile) { document.getElementById("friendsSidebar").classList.remove("mobile-hidden"); document.getElementById("chatMainArea").classList.remove("mobile-active"); }
-        document.getElementById("emptyChatState").style.display = "flex";
-        document.getElementById("activeChatView").style.display = "none";
-      } else {
-        if(isMobile) { document.getElementById("friendsSidebar").classList.add("mobile-hidden"); document.getElementById("chatMainArea").classList.add("mobile-active"); }
-        document.getElementById("emptyChatState").style.display = "none";
-        document.getElementById("activeChatView").style.display = "flex";
-        loadMessagesIntoView();
-      }
-      renderFriendsListSidebar();
-    }
-
-    document.addEventListener('keypress', function(e) {
-      if(e.key === 'Enter' && document.activeElement === document.getElementById("chatMessageInput")) { e.preventDefault(); sendChatMessage(); }
-    });
-
-    async function deleteAllChats() {
-      const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-      await supabaseClient.from('messages').delete().lt('created', cutoff);
-    }
-
-    function scheduleChatCleanup() {
-      const now = new Date();
-      const midnight = new Date(now);
-      midnight.setHours(24, 0, 0, 0);
-      const msUntilMidnight = midnight - now;
-      
-      setTimeout(() => {
-        deleteAllChats();
-        scheduleChatCleanup();
-      }, msUntilMidnight);
-    }
-
     async function deleteOldPosts() {
       const cutoff = new Date(Date.now() - (48 * 60 * 60 * 1000)).toISOString();
-      
       await supabaseClient.from('posts').delete().lt('created', cutoff);
       
       if(document.getElementById("homePage").classList.contains("active")) {
@@ -3575,82 +1118,11 @@
       }
     }
 
-    function cleanupOldData() {
-      try {
-        let posts = JSON.parse(localStorage.getItem("kopingsbloggen_posts")) || [];
-        if(posts.length > MAX_POSTS) { posts = posts.slice(0, MAX_POSTS); localStorage.setItem("kopingsbloggen_posts", JSON.stringify(posts)); }
-        for(let i = 0; i < localStorage.length; i++) {
-          let key = localStorage.key(i);
-          if(key && key.startsWith("chat_")) {
-            try { let msgs = JSON.parse(localStorage.getItem(key)) || []; if(msgs.length > MAX_MESSAGES_PER_CHAT) { msgs = msgs.slice(-MAX_MESSAGES_PER_CHAT); localStorage.setItem(key, JSON.stringify(msgs)); } } catch(e) {}
-          }
-        }
-      } catch(err) {}
-    }
-
-    async function checkBanStatus() {
-      if(!currentUser) return;
-      const banInfo = JSON.parse(localStorage.getItem("supabase_ban_" + currentUser.email));
-      if(banInfo && Date.now() < banInfo.until) {
-        await logout();
-        showBanPopup();
-      }
-    }
-
-    window.addEventListener('resize', debounce(() => { resetChatUI(); }, 250));
-
-    setInterval(updateFakeOnline, 10000);
-    setInterval(() => { postsThisMinute = 0; }, 60000);
-    setInterval(cleanupOldData, 3600000);
-    setInterval(deleteOldPosts, 3600000);
-    setInterval(checkBanStatus, 100);
-    
-    setInterval(() => {
-      updateUnreadIndicators();
-    }, 100);
-
-    scheduleChatCleanup();
-    deleteOldPosts();
-
-        function subscribeToMessages() {
-      if(!currentUser) return;
-      
-      supabaseClient
-        .channel('messages-changes')
-        .on('postgres_changes', 
-          { 
-            event: 'INSERT', 
-            schema: 'public', 
-            table: 'messages',
-            filter: `receiver_id=eq.${currentUser.id}`
-          },
-          (payload) => {
-            const newMsg = payload.new;
-            
-            loadChatData();
-            
-            if(activeChatFriendId === newMsg.sender_id) {
-              loadMessagesIntoView();
-              markMessagesAsRead(activeChatFriendId);
-            }
-            
-            updateUnreadIndicators();
-          }
-        )
-        .subscribe();
-    }
-
-    let postsLoadedOnce = false;
-    
     function subscribeToPosts() {
       supabaseClient
         .channel('posts-changes')
         .on('postgres_changes', 
-          { 
-            event: 'INSERT', 
-            schema: 'public', 
-            table: 'posts'
-          },
+          { event: 'INSERT', schema: 'public', table: 'posts' },
           (payload) => {
             if(document.getElementById("homePage").classList.contains("active")) {
               loadPosts();
@@ -3660,73 +1132,24 @@
         .subscribe();
     }
 
-        async function toggleLike(postId) {
-      if(!currentUser) { openAuth(); return; }
-      
-      const { data: existing } = await supabaseClient
-        .from('likes')
-        .select('*')
-        .eq('post_id', postId)
-        .eq('user_id', currentUser.id)
-        .limit(1);
-      
-      if(existing && existing.length > 0) {
-        await supabaseClient.from('likes').delete().eq('post_id', postId).eq('user_id', currentUser.id);
-      } else {
-        await supabaseClient.from('likes').insert({ post_id: postId, user_id: currentUser.id });
-      }
-      
-      // Uppdatera bara like-knappen, inte alla inlägg
-      const liked = !(existing && existing.length > 0);
-      const { count } = await supabaseClient
-        .from('likes')
-        .select('*', { count: 'exact', head: true })
-        .eq('post_id', postId);
-      
-      const likeBtn = document.querySelector(`#like-btn-${postId}`);
-      const likeCount = document.querySelector(`#like-count-${postId}`);
-      
-      if(likeBtn) {
-        likeBtn.style.background = liked ? '#ff3d3d' : 'transparent';
-        likeBtn.style.borderColor = liked ? '#ff3d3d' : 'rgba(255,255,255,0.3)';
-      }
-      if(likeCount) {
-        likeCount.innerText = count || 0;
-      }
-    }
-    
-    async function getLikeCount(postId) {
-      const { count } = await supabaseClient
-        .from('likes')
-        .select('*', { count: 'exact', head: true })
-        .eq('post_id', postId);
-      return count || 0;
-    }
-    
-    async function hasUserLiked(postId) {
-      if(!currentUser) return false;
-      const { data } = await supabaseClient
-        .from('likes')
-        .select('*')
-        .eq('post_id', postId)
-        .eq('user_id', currentUser.id)
-        .limit(1);
-      return data && data.length > 0;
-    }
+    setInterval(updateFakeOnline, 10000);
+    setInterval(() => { postsThisMinute = 0; }, 60000);
+    setInterval(deleteOldPosts, 3600000);
+
+    deleteOldPosts();
 
     async function init(){
-      try {
-        const { data: { user } } = await supabaseClient.auth.getUser();
-        if(user) { 
-          currentUser = user; 
-          await loadProfile(); 
-          await checkBanStatus();
-          subscribeToMessages();
-        }
-        subscribeToPosts();
-        updateUI(); updateFakeOnline(); cleanupOldData(); updateUnreadIndicators();
-        await loadPosts();
-      } catch(err) { console.error("Init error:", err); }
+      await getMyIpAddress();
+      const ip = myIpAddress;
+      if(ip) {
+        storeIp(ip);
+      }
+      
+      subscribeToPosts();
+      updateFakeOnline();
+      await loadPosts();
+      
+      document.getElementById("postText").addEventListener("input", updateCharCount);
     }
     init();
   </script>
