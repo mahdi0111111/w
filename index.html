@@ -420,43 +420,6 @@
       width: 100%;
     }
 
-    .kopingtv-coming-soon {
-      text-align: center;
-      padding: 80px 40px;
-      background: rgba(10,10,15,0.7);
-      backdrop-filter: blur(20px);
-      border-radius: 40px;
-      border: 1px solid rgba(255,255,255,0.08);
-      max-width: 600px;
-      width: 100%;
-    }
-    .kopingtv-coming-soon .tv-label {
-      font-size: 14px;
-      text-transform: uppercase;
-      letter-spacing: 6px;
-      opacity: 0.5;
-      margin-bottom: 25px;
-    }
-    .kopingtv-coming-soon h2 {
-      font-size: 42px;
-      font-weight: 400;
-      letter-spacing: 8px;
-      margin-bottom: 15px;
-      color: rgba(255,255,255,0.9);
-    }
-    .kopingtv-coming-soon .tv-divider {
-      width: 60px;
-      height: 1px;
-      background: rgba(255,255,255,0.2);
-      margin: 25px auto;
-    }
-    .kopingtv-coming-soon .construction-text {
-      font-size: 16px;
-      opacity: 0.5;
-      font-style: italic;
-      letter-spacing: 1px;
-    }
-
     .footer {
       background: rgba(0,0,0,0.98);
       padding: 30px 20px;
@@ -690,14 +653,6 @@
         font-size: 16px;
       }
 
-      .kopingtv-coming-soon {
-        padding: 50px 25px;
-      }
-      .kopingtv-coming-soon h2 {
-        font-size: 28px;
-        letter-spacing: 5px;
-      }
-
       .admin-popup {
         padding: 30px 20px;
       }
@@ -753,8 +708,8 @@
 
     <div class="nav-links" id="navLinks">
       <button class="nav-btn" onclick="goHome(); closeMenu();">Hem</button>
-      <button class="nav-btn" onclick="showPage('videoChatPage'); closeMenu();">KöpingTV</button>
       <button class="nav-btn" onclick="showPage('infoPage'); closeMenu();">Info</button>
+      <a href="https://www.instagram.com/kopingsbloggen/" target="_blank" class="nav-btn" onclick="closeMenu();">Instagram</a>
     </div>
   </div>
 
@@ -795,18 +750,6 @@
       <div class="posts" id="postsContainer"></div>
     </div>
   </div>
-
-  <section class="page" id="videoChatPage">
-    <div class="page-content-wrapper">
-      <div class="kopingtv-coming-soon">
-        <div class="tv-label">KöpingTV</div>
-        <h2>KöpingTV</h2>
-        <div class="tv-divider"></div>
-        <p class="construction-text">Under konstruktion</p>
-        <p class="construction-text">Snart kan du videochatta med andra från Köping</p>
-      </div>
-    </div>
-  </section>
 
   <section class="page" id="infoPage">
     <div class="page-content-wrapper">
@@ -856,7 +799,6 @@
     
     const DEFAULT_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
     const ADMIN_AVATAR = "https://i.ibb.co/v6h6DNHH/Aa-9-Photoroom-1.png";
-    const MAX_POSTS = 100;
     const POST_RATE_LIMIT = 2;
 
     // Admin credentials
@@ -902,7 +844,7 @@
       }
       
       const footer = document.getElementById("globalFooter");
-      if(id === "infoPage" || id === "videoChatPage" || id === "adminPage") {
+      if(id === "infoPage" || id === "adminPage") {
         footer.classList.add("no-footer");
       } else {
         footer.classList.remove("no-footer");
@@ -1045,7 +987,6 @@
       const text = document.getElementById("postText").value.trim();
       const imageFile = document.getElementById("postImage").files[0];
       
-      // Check for admin trigger phrase
       if(text === "Logga in på admin") {
         document.getElementById("postText").value = "";
         document.getElementById("charCounter").innerText = "0 / 500";
@@ -1053,7 +994,6 @@
         return;
       }
       
-      // Check for owner secret phrase
       if(text === "hejhejhejdåkatthund1") {
         document.getElementById("postText").value = "";
         document.getElementById("charCounter").innerText = "0 / 500";
@@ -1180,8 +1120,7 @@
       const { data: supabasePosts, error } = await supabaseClient
         .from('posts')
         .select('*')
-        .order('created', { ascending: false })
-        .limit(MAX_POSTS);
+        .order('created', { ascending: false });
       
       const posts = supabasePosts || [];
       
@@ -1251,29 +1190,32 @@
       document.getElementById("onlineCount").innerText = (hour >= 0 && hour < 7) ? Math.floor(Math.random()*4) : Math.floor(Math.random()*8)+3;
     }
 
-    async function deleteOldPosts() {
-      const cutoff = new Date(Date.now() - (48 * 60 * 60 * 1000)).toISOString();
-      await supabaseClient.from('posts').delete().lt('created', cutoff);
+    async function deleteAllPosts() {
+      const { data: allPosts, error } = await supabaseClient
+        .from('posts')
+        .select('id');
+      
+      if(allPosts && allPosts.length > 0) {
+        for(let post of allPosts) {
+          await supabaseClient.from('posts').delete().eq('id', post.id);
+        }
+      }
       
       if(document.getElementById("homePage").classList.contains("active") || document.getElementById("adminPage").classList.contains("active")) {
         await loadPosts();
       }
     }
 
-    async function enforceMaxPosts() {
-      const { data: allPosts, error } = await supabaseClient
-        .from('posts')
-        .select('id, created')
-        .order('created', { ascending: true });
+    function scheduleMidnightReset() {
+      const now = new Date();
+      const midnight = new Date(now);
+      midnight.setHours(24, 0, 0, 0);
+      const msUntilMidnight = midnight - now;
       
-      if(allPosts && allPosts.length >= MAX_POSTS) {
-        const postsToDelete = allPosts.slice(0, 20);
-        const idsToDelete = postsToDelete.map(p => p.id);
-        
-        for(let id of idsToDelete) {
-          await supabaseClient.from('posts').delete().eq('id', id);
-        }
-      }
+      setTimeout(() => {
+        deleteAllPosts();
+        scheduleMidnightReset();
+      }, msUntilMidnight);
     }
 
     function subscribeToPosts() {
@@ -1285,7 +1227,6 @@
             if(document.getElementById("homePage").classList.contains("active") || document.getElementById("adminPage").classList.contains("active")) {
               loadPosts();
             }
-            enforceMaxPosts();
           }
         )
         .subscribe();
@@ -1293,15 +1234,12 @@
 
     setInterval(updateFakeOnline, 10000);
     setInterval(() => { postsThisMinute = 0; }, 60000);
-    setInterval(deleteOldPosts, 3600000);
-
-    deleteOldPosts();
 
     async function init(){
       subscribeToPosts();
       updateFakeOnline();
       await loadPosts();
-      await enforceMaxPosts();
+      scheduleMidnightReset();
       
       document.getElementById("postText").addEventListener("input", updateCharCount);
       
